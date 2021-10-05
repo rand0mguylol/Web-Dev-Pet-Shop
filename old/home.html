@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="app.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <title>Home</title>
+</head>
+<body>
+
+  <div class = "main-wrapper">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div>
+          Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+        </div>
+      </div>
+    </div>
+    <!-- Cart pffcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartCanvas" aria-labelledby="cartCanvasLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div>
+          Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+        </div>
+      </div>
+    </div>
+    <section class = "main-section">
+      <nav class="navbar navbar-expand-lg navbar-light fw-bolder" id = "home-nav">
+        <div class="container">
+          <a class="navbar-brand logo" href="#"><img src="./images/Logo2.png" alt=""></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-between"  id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pets</a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Dogs</a></li>
+                  <li><a class="dropdown-item" href="#">Cats</a></li>
+                  <li><a class="dropdown-item" href="#">Hamster</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Products</a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Pet Food</a></li>
+                  <li><a class="dropdown-item" href="#">Pet Accessories</a></li>
+                  <li><a class="dropdown-item" href="#">Care Products</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About Us</a>
+              </li>
+            </ul>
+            <div class = "navbar-nav align-self-center d-flex">
+              <a class = "nav-link " data-bs-toggle="offcanvas" href="#accountCanvas" role="button" aria-controls="accountCanvasExample"><img class = "me-2" src="./svg/person-circle.svg" alt="">Account</a>
+              <a class = "nav-link"data-bs-toggle="offcanvas" href="#cartCanvas" role="button" aria-controls="cartCanvasExample"><img class = "me-2" src="./svg/cart.svg" alt="">Cart</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class = "container lead-content">
+        <div class = "row">
+          <div class =  "col-12 col-lg-6 ">
+            <h1 class = "lead-header">Defining<span class = "together">Relationships</span></h1>
+            <p class = "lead-paragraph lead mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, molestias quas? Soluta voluptatibus inventore veniam omnis ipsa eum ad et!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class = "companion-section mt-5">
+      <div class = "container text-center">
+        <h2 class = "sub-header">Choosing the right companion</h2>
+        <div class = " animal-showcase">
+          <div class = "row justify-content-between align-items-center" data-aos ="fade-right" data-aos-delay="100">
+            <div class = "col-12 col-lg-7 animal-showcase-text">
+              <h3>Men's Best Friend</h3>
+              <p >Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus in recusandae sed impedit, voluptatum tempore magnam laudantium vero quos. Cum!</p>
+              <a href="#" class="btn btn-danger mt-3">Browse Now</a>
+            </div>
+            <div class = "col-12 col-lg-4 animal-showcase-img">
+              <img src="./images/home/home_dog_square_300_300.jpg" alt="" class = "img-fluid shadow rounded-circle ">
+            </div>
+          </div>
+          <div class = "row justify-content-between align-items-center" data-aos ="fade-left" data-aos-delay="100">
+            <div class = "col-12 col-lg-8 animal-showcase-text">
+              <h3>Purrfect Pawtner</h3>
+              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus in recusandae sed impedit, voluptatum tempore magnam laudantium vero quos. Cum!</p>
+              <a href="#" class="btn btn-danger mt-3">Browse Now</a>
+            </div>
+            <div class = "col-12 col-lg-4 animal-showcase-img">
+              <img src="./images/home/home_cat_square_300_300.jpg" alt="" class = "img-fluid shadow rounded-circle ">
+            </div>
+          </div>
+          <div class = "row justify-content-between align-items-center" data-aos ="fade-right" data-aos-delay="100">
+            <div class = "col-12 col-lg-8 animal-showcase-text">
+              <h3>Ball of Fur</h3>
+              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus in recusandae sed impedit, voluptatum tempore magnam laudantium vero quos. Cum!</p>
+              <a href="#" class="btn btn-danger mt-3">Browse Now</a>
+            </div>
+            <div class = "col-12 col-lg-4 animal-showcase-img">
+              <img src="./images/home/home_hamster_square_300_300.jpg" alt="" class = "img-fluid shadow rounded-circle ">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class = "recommendation">
+      <div class="container text-center">
+        <h2 class="sub-header">Enhance The Relationship</h2>
+        <div class="row mt-5 justify-content-between  align-items-center">
+          <div class = "col-12 col-lg-3 recommend-indi">
+            <div class="card-w card custom" data-aos="fade-up" data-aos-delay="100">
+              <img src="./images/home/showcase_pomeranian_200_112.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h4 class="card-title">Pet Accessories</h4>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Shop Now</a>
+              </div>
+            </div>
+          </div>
+          <div class = "col-12 col-lg-3 recommend-indi">
+            <div class="card-w card custom second " data-aos="fade-up" data-aos-delay="200">
+              <img src="./images/home/showcase_shampoo_200_112.jpg" class="card-img-top" alt="...">
+              <div class="card-body ">
+                <h4 class="card-title">Care Products</h4>
+                <p class="card-text align-self-end">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" style = "width: auto;" class ="btn btn-primary">Shop Now</a>
+              </div>
+            </div>
+          </div>
+          <div class = "col-12 col-lg-3 recommend-indi">
+            <div class="card-w card custom" data-aos="fade-up" data-aos-delay="300">
+              <img src="./images/home/showcase_food_200_112.jpg" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h4 class="card-title">Pet Food</h4>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Shop Now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class = " our-trust py-5">
+      <div class = "container  ">
+        <div class="row justify-content-center align-items-start">
+          <div class="col-12 col-md-4 text-center our-trust-indi">
+            <div class = "mb-3 icon headphone"><svg  xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-headset" viewBox="0 0 16 16">
+              <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
+            </svg></div>
+            <div class = "our-trust-text">
+              <h5 class = "mb-3">24/7 Service</h5>
+              <p>Lorem, ipsum et consectetur adipisicing elit. Accusamus, excepturi!</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 text-center our-trust-indi">
+            <div class = "mb-3 icon dollar"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#228B22" class="bi bi-currency-dollar" viewBox="0 0 16 16">
+              <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"/>
+            </svg></div>
+            <div class = "our-trust-text">
+              <h5 class = "mb-3">Affordable Pricing</h5>
+              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, excepturi!</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 text-center our-trust-indi">
+            <div class = "mb-3 icon thumbup"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#FFD700" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+              <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+            </svg></div>
+            <div class = "our-trust-text">
+              <h5 class = "mb-3">Certified Branding</h5>
+              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, excepturi!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <footer class = "text-light py-4">
+      <div class="container">
+        <div class="row justify-content-center text-center">
+          <div class="col-12 col-md-4 footer-indi">
+            <h6>Our Partners</h6>
+            <ul>
+              <li>J&T</li>
+              <li>PosLaju</li>
+              <li>NinjaVan</li>
+            </ul>
+          </div>
+          <div class="col-12 col-md-4 footer-indi"">
+            <h6>Our Services</h6>
+            <ul>
+              <li>Express Delivery</li>
+              <li>Home Delivery</li>
+            </ul>
+          </div>
+          <div class="col-12 col-md-4 footer-indi"">
+            <h6>Contact Us</h6>
+            <div>
+              <ul class ="social p-0">
+                <li><img src="./svg/telephone-fill.svg" alt="Phone Logo"> 012-367-2831</li>
+                <li><img src="./svg/envelope-fill.svg" alt="Email Logo"> pettertogether@gmail.com</li>
+              </ul>
+            </div>
+          <div>
+            <h6>We Accept</h6>
+            <div>
+              <img src="./images/home/visa.png" alt="VISA" style="width:50px;height:25px;">
+              <img src="./images/home/mastercard_logo.png" alt="MasterCard" style="width:50px;height:25px;">
+              <img src="./images/home/FPX_logo.png" alt="FPX" style="width:50px;height:25px;">
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="row justify-content-center text-center mt-4">
+          <div class="col-12 col-md-4 align-self-end mt-1 copy-right">
+            <p>Copyright &copy 2021 Petter Together</p>
+          </div>
+          <div class="col-12 col-md-4"></div>
+          <div class="col-12 col-md-4 align-self-end follow-us">
+            <div class = "d-flex flex-row justify-content-center">
+              <h6 class= "mt-1">Follow Us</h6>
+              <ul class="social d-flex flex-row justify-content-around list-group-horizontal" style = "width: 125px">
+                  <li class = "list-item"><a href="#"><img src="./svg/facebook.svg" alt="Facebook Logo"></a></li>
+                  <li class = "list-item"><a href="#"><img src="./svg/instagram.svg" alt="Instagram Logo"></a></li>
+                  <li class = "list-item"><a href="#"><img src="./svg/twitter.svg" alt="Twitter Logo"></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init(
+      {
+        offset: 200,
+      }
+    )
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+  <script src="./script.js"></script>
+</body>
+</html>

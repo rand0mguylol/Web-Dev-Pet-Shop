@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.css">
+  <link rel="stylesheet" href="newapp.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Specific Item</title>
+</head>
+<body>
+  
+  <div class = "main-wrapper specific">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">PetterTogether</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between"  id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pets</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Dogs</a></li>
+                <li><a class="dropdown-item" href="#">Cats</a></li>
+                <li><a class="dropdown-item" href="#">Hamster</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Products</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Pet Food</a></li>
+                <li><a class="dropdown-item" href="#">Pet Accessories</a></li>
+                <li><a class="dropdown-item" href="#">Care Products</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About Us</a>
+            </li>
+          </ul>
+          <div class = "navbar-nav align-self-center d-flex">
+            <a class = "nav-link " data-bs-toggle="offcanvas" href="#accountCanvas" role="button" aria-controls="accountCanvasExample"><img class = "me-2" src="./svg/person-circle.svg" alt="">Account</a>
+            <a class = "nav-link"data-bs-toggle="offcanvas" href="#cartCanvas" role="button" aria-controls="cartCanvasExample"><img class = "me-2" src="./svg/cart.svg" alt="">Cart</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+
+    <section class = "container item-section mt-5">
+      <nav class = "mb-5" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-start">
+          <li class="breadcrumb-item"><a href="./index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Dogs</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Pomeranian</li>
+        </ol>
+      </nav>
+
+      <div class = "row">
+       
+
+        <div class = "col-12 col-md-9 col-lg-6 col-xl-5 order-lg-1">
+          <div class="glider-contain">
+            <div class="glider-gallery-view">
+              <div><img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid"></div>
+              <div><img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid"></div>
+              <div><img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid"></div>
+            </div>
+        
+          </div>
+        </div>
+
+        <div class = "col-12 col-md-3 col-lg-12 col-xl-1 thumbnail-col order-lg-0">
+          <div role="tablist" class="thumbnail "></div>
+        </div>
+        
+        <div class = "col-12 col-lg-6 col-xl-6 item-inner-section order-5">
+          <div class = " item-info-section mb-4">
+            <h1 class = "item-info-header"><span class = "fw-bold">Pomeranian</span></h1>
+            
+            <div class = "d-flex justify-content-between align-items-baseline" >
+              <p  class = "d-inline mt-2 item-info-price lead fs-3">MYR 1000</p>
+              <div class = "item-stars d-inline me-5">
+                  <img src="./svg/star-fill.svg" alt="">
+                  <img src="./svg/star-fill.svg" alt="">
+                  <img src="./svg/star-fill.svg" alt="">
+                  <img src="./svg/star-fill.svg" alt="">
+                  <img src="./svg/star-fill.svg" alt="">
+                  <span class = "ms-2">(4)</span>
+              </div>
+            </div>
+
+            <p class = "item-info-description">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, cumque?</p>
+          </div>
+          
+          <hr>
+
+          <div>
+            <div class = " item-quantity-section mb-5">
+              <label for="quantity" class ="mb-3">Quantity</label>
+              <input type="number" name="" id="" min = "1" id ="quantity" class = "d-block">
+            </div>
+           
+            <div>
+              <button class = " rounded-pill btn btn-success add-to-cart-btn">Add to Cart</button>
+            </div>
+
+          </div>
+
+          <div class = "item-share-section mt-4">
+            <h6 class = "fw-bold mb-3">SHARE</h6>
+            <div class = "share ">
+              <a href=""><img src="./svg/facebook_share.svg" class = "me-3" alt=""></a>
+              <a href=""><img src="./svg/twitter_share.svg" class = "me-3" alt=""></a>
+              <a href=""><img src="./svg/instagram_share.svg" class = "me-3" alt=""></a>
+            </div>
+            <div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class = "container mt-5">
+      <nav class = "specific-tabs-section">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class=" nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pet Info</button>
+          <button class=" nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Description</button>
+          <button class=" nav-link" id="nav-review-tab" data-bs-toggle="tab" data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review" aria-selected="false">Review</button>
+    
+        </div>
+      </nav>
+
+      <div class="tab-content mt-3" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+          <div>
+            <div class="specific-item-info">
+              <div>
+                <p class = "specific-item-property fw-bold">Breed</p>
+                <p>Fox Face Pomeranian</p>
+              </div>
+              <div>
+                <p class = "specific-item-property fw-bold">Profile</p>
+                <p class = "col">Male, 4 Months</p>
+              </div>
+              <div>
+                <p class = "specific-item-property fw-bold">Weight</p>
+                <p class = "col">2 kg</p>
+              </div>
+              <div>
+                <p class = "specific-item-property fw-bold">Color</p>
+                <p class = "col">White, Black</p>
+              </div>
+              <div>
+                <p class = "specific-item-property fw-bold">Condition</p>
+                <p class = "col">Healthy</p>
+              </div>
+              <div>
+                <p class = "specific-item-property fw-bold">Vaccinated</p>
+                <p class = "col">Yes</p>
+              </div>
+              <div>
+                <p class = "specific-item-property fw-bold">Dewormed</p>
+                <p class = "col">Yes</p>
+              </div>
+              <div>
+                <p class = "specific-item-property fw-bold">Posted Date</p>
+                <p class = "col">16 Sep 2021</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+          <p>Small, fox-faced Pomeranians descended from large breeds of sled dogs and are active, capable, competitive and obedient creatures. Pomeranians have triangle-shaped heads and pointed ears. They have dark-colored eyes and noses that can be either deep in color or match the shade of their coats.
+          <p>They also have a distinctive plumed tail that fans out over their back. They come in a variety of solid colors, including red, orange, white, brown, or black. In rare cases, you may see a white Pomeranian with colored markings or one with a different combination of colors. The prominent double coat of Pomeranians stands out from their bodies, with rough white fur around their chest. Although the Pomeranian (also called the Zwergspitz, Dwarf Spitz, Loulou, or Pom for short) only weighs between three and seven pounds, this lively dog has a very bold demeanor. Learn more about Pomeranians and their unique temperament and personality traits to see if Poms are the right dog breed for you!</p>
+        </div>
+
+        <div class="tab-pane fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
+          <div class = "">
+            <div class = "review-inner-section">
+              <div class = "review-header-section">
+
+                <div class = "ratings align-self-start">
+                  
+                  <h3>Ratings</h3>
+                  <div class = "mb-2">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <span class = "ms-2">(5)</span>
+                  </div>
+
+                  <div class = "mb-2">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <span class = "ms-2">(5)</span>
+
+                  </div>
+
+                  <div class = "mb-2">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <span class = "ms-2">(5)</span>
+
+                  </div>
+
+                  <div class = "mb-2">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <span class = "ms-2">(5)</span>
+
+                  </div>
+
+                  <div class = "mb-2">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <span class = "ms-2">(5)</span>
+
+                  </div>
+
+                </div>
+
+                <button class = "btn btn-warning mt-4">WRITE A REVIEW</button>
+
+              </div>
+    
+              <!-- <div class = "review-body-section"> -->
+                <div class = "review-indi">
+                  <div class = "review-indi-info mb-3">
+                    <h5 class = "d-inline me-3">John Doe</h5>
+                    <small >09/09/09</small>
+                  </div>
+                  <div class = "review-stars mb-3">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                  </div>
+                  <div class = "review-indi-description">
+                    <h4 class = "fw-bold">Fast</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. In expedita blanditiis totam laborum reiciendis esse iusto vitae, dicta modi quas, deleniti ut harum similique? Vero magnam hic ducimus accusantium sunt.</p>
+                  </div>
+                </div>
+    
+                <div class = "review-indi">
+                  <div class = "review-indi-info mb-3">
+                    <h5 class = "d-inline  me-3">Kate</h5>
+                    <small>09/09/09</small>
+                  </div>
+                  <div class = "review-stars mb-3">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                  </div>
+                  <div class = "review-indi-description">
+                    <h4  class = "fw-bold">Not Good Boy</h4>
+                    <p >It shat on my bed</p>
+                  </div>
+    
+                </div>
+    
+                <div class = "review-indi">
+                  <div class = "review-indi-info mb-3">
+                    <h5 class = "d-inline  me-3">Bruce Wayne</h5>
+                    <small>09/09/09</small>
+                  </div>
+                  <div class = "review-stars mb-3">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                  </div>
+                  <div class = "review-indi-description">
+                    <h4  class = "fw-bold">Father's Day</h4>
+                    <p >My father would have love this. Oh well.</p>
+                  </div>
+    
+                </div>
+              <!-- </div> -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="other-products-section mt-5 pt-5">
+      <div class = "container">
+        <h3>Other Products in this Category</h3>
+        <div class="glider-contain">
+          <div class="glider-other-products">
+            <div>
+              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
+                <div class = "card-main-section">
+                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
+                  <div class = "card-main-section-icon">
+                      <button class ="btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                      </button>
+                      <button class = "btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                      </button>
+                  </div>
+                </div>
+                <div class = "card-content-section">
+                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                </div>
+                <div class = "card-rating-section text-center">
+                  <div class = "stars">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <small class = " align-bottom">1 out of 5</small>
+                  </div>
+                </div>
+                <div class = "card-price-section text-center">
+                  <span>MYR 1000.00</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
+                <div class = "card-main-section">
+                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
+                  <div class = "card-main-section-icon">
+                      <button class ="btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                      </button>
+                      <button class = "btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                      </button>
+                  </div>
+                </div>
+                <div class = "card-content-section">
+                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                </div>
+                <div class = "card-rating-section text-center">
+                  <div class = "stars">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <small class = " align-bottom">2 out of 5</small>
+                  </div>
+                </div>
+                <div class = "card-price-section text-center">
+                  <span>MYR 1000.00</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
+                <div class = "card-main-section">
+                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
+                  <div class = "card-main-section-icon">
+                      <button class ="btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                      </button>
+                      <button class = "btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                      </button>
+                  </div>
+                </div>
+                <div class = "card-content-section">
+                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                </div>
+                <div class = "card-rating-section text-center">
+                  <div class = "stars">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <small class = " align-bottom">3 out of 5</small>
+                  </div>
+                </div>
+                <div class = "card-price-section text-center">
+                  <span>MYR 1000.00</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
+                <div class = "card-main-section">
+                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
+                  <div class = "card-main-section-icon">
+                      <button class ="btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                      </button>
+                      <button class = "btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                      </button>
+                  </div>
+                </div>
+                <div class = "card-content-section">
+                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                </div>
+                <div class = "card-rating-section text-center">
+                  <div class = "stars">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <small class = " align-bottom">4 out of 5</small>
+                  </div>
+                </div>
+                <div class = "card-price-section text-center">
+                  <span>MYR 1000.00</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
+                <div class = "card-main-section">
+                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
+                  <div class = "card-main-section-icon">
+                      <button class ="btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                      </button>
+                      <button class = "btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                      </button>
+                  </div>
+                </div>
+                <div class = "card-content-section">
+                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                </div>
+                <div class = "card-rating-section text-center">
+                  <div class = "stars">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <small class = " align-bottom">5 out of 5</small>
+                  </div>
+                </div>
+                <div class = "card-price-section text-center">
+                  <span>MYR 1000.00</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
+                <div class = "card-main-section">
+                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
+                  <div class = "card-main-section-icon">
+                      <button class ="btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                      </button>
+                      <button class = "btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                        </svg>
+                      </button>
+                  </div>
+                </div>
+                <div class = "card-content-section">
+                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                </div>
+                <div class = "card-rating-section text-center">
+                  <div class = "stars">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <img src="./svg/star-fill-white.svg" alt="">
+                    <small class = " align-bottom">6 out of 5</small>
+                  </div>
+                </div>
+                <div class = "card-price-section text-center">
+                  <span>MYR 1000.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button aria-label="Previous" class="glider-prev" id = "other-products-prev">«</button>
+          <button aria-label="Next" class="glider-next" id = "other-products-next">»</button>
+          <div role="tablist" class="dots"></div>
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>
