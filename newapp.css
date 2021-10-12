@@ -169,11 +169,11 @@ input[type=number] {
 
 .card-wrapper{
   width: 280px;
-  height: 503px;
+  max-height: 503px;
   background-color: #fff;
   margin: 0 auto;
   border-radius: 15px;
-  position: relative;
+  /* position: relative; */
   top: 30px;
   overflow: hidden;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -452,12 +452,20 @@ input[type=number] {
  */
 
 
-
- .product-section .grid{
-   display: grid;
+/* 
+.product-card-wrapper{
+    display: grid;
    grid-template-columns: repeat( auto-fit, minmax(290px, 1fr)) ;
    grid-template-rows: auto;
    gap: 3rem 0.2rem;
+   display: flex;
+   flex-wrap: wrap;
+ } */
+
+
+ .product-indi{
+   flex-basis: 33%;
+   margin-bottom: 3rem;
  }
 
  .filter-section{
@@ -625,6 +633,10 @@ input[type=number] {
     width: 200px;
     height: auto;
   } */
+
+  .product-indi{
+    flex-basis: 50%;
+  }
 }
 
 /* Below Medium || Small and Below */
@@ -671,9 +683,9 @@ input[type=number] {
     right: 0px;
   }
 
-   .product-section .grid{
+   /* .product-section .grid{
     grid-template-columns: repeat( auto-fit, minmax(200px, 1fr)) ;;
-  }
+  } */
 
  .card-wrapper.general{
     width: 200px;

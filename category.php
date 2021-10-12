@@ -1,5 +1,6 @@
 <?php require_once "header.php"; ?>
 
+
   <div class="offcanvas offcanvas-start justify-content-center" tabindex="-1" id="sidenavCanvas" aria-labelledby="sidenavCanvasLabel">
     <div class="offcanvas-header justify-content-end">
       <button type="button" class="btn-close text-reset " data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -116,6 +117,9 @@
   </div>
 
   <div class = "main-wrapper general">
+
+<?php require_once "navbar.php"; ?>
+
     <section class = "breadcrumb-section">
       <div class = "container  mt-5">
         <nav class = "mb-5 " style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
@@ -230,9 +234,9 @@
             </ul>
           </div>
         </nav>
-        <div class = "container grid">
+        <div class = "container d-flex flex-wrap">
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -267,7 +271,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -302,7 +306,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -337,7 +341,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -372,7 +376,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -407,7 +411,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -442,7 +446,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -477,7 +481,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -512,7 +516,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -547,7 +551,7 @@
             </div>
           </div>
           <div class = "product-indi">
-            <div class = "card-wrapper general" data-aos = "fade-up" data-aos-delay = "100">
+            <div class = "card-wrapper general">
               <div class = "card-main-section">
                 <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
@@ -584,9 +588,10 @@
         </div>
       </div>
     </section>
+
+
   </div>
 
-  <?php require_once "footer.php"; ?>
 
   <a href="#" class="to-top">
     <img src="./svg/chevron-up.svg" alt="">

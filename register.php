@@ -1,69 +1,54 @@
 <?php
-
-  if(filter_var("80765", FILTER_VALIDATE_INT) === false){
-    echo "yes";
-  }else{
-    echo"np";  }
-
+  // session_start();
   $errorArray = [];
 
-if(isset($_POST["signup"])){
-  require_once "function/db.php";
+  if(isset($_POST["signup"])){
+    require_once "./function/db.php";
+
+    $filters = [
+      "firstName"=> FILTER_SANITIZE_STRING,
+      "lastName" => FILTER_SANITIZE_STRING,
+      "mobileNumber" => FILTER_SANITIZE_STRING,
+      "icNumber" => FILTER_SANITIZE_STRING,
+      "email"=> FILTER_SANITIZE_EMAIL,
+      "password" => FILTER_SANITIZE_STRING,
+      "addressLine" => FILTER_SANITIZE_STRING,
+      "postcode" => FILTER_SANITIZE_STRING,
+      "city" => FILTER_SANITIZE_STRING,
+      "state" => FILTER_SANITIZE_STRING
+    ];
+
+    $sanitizeInput = filter_input_array(INPUT_POST, $filters);
+
+    if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
+      array_push($errorArray, $sanitizeInput["email"]);
+    }
+
+    $mobileRegEx = "/^[1-9]{9,10}$/";
+    $mobileValidate = preg_match($mobileRegEx, $sanitizeInput["mobileNumber"]);
+
+    $postcodeRegEx = "/^[0-9]{5}$/";
+    $postcodeValidate = preg_match($postcodeRegEx, $sanitizeInput["postcode"]);
 
 
-  echo gettype($_POST["postcode"]);
+    foreach ($sanitizeInput as $key => $value){
+      if (!$value){
+        array_push($errorArray, $key);
+      }
+    }
 
-  $filters = [
-    "firstName"=> FILTER_SANITIZE_STRING,
-    "lastName" => FILTER_SANITIZE_STRING,
-    "mobileNumber" => FILTER_SANITIZE_STRING,
-    "icNumber" => FILTER_SANITIZE_STRING,
-    "email"=> FILTER_SANITIZE_EMAIL,
-    "password" => FILTER_SANITIZE_STRING,
-    "addressLine" => FILTER_SANITIZE_STRING,
-    "postcode" => FILTER_SANITIZE_STRING,
-    "city" => FILTER_SANITIZE_STRING,
-    "state" => FILTER_SANITIZE_STRING
-  ];
+    if (!$errorArray){
+      extract($sanitizeInput);
+      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+      $stmt = $connection->prepare("INSERT INTO user (firstName, lastName, email, userPassword, mobileNumber, identificationNumber, addressLine, city, stateName, postcode, imagePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT);");
+      $stmt->bind_param("ssssiisssi", $firstName, $lastName, $email, $hashedPassword, $mobileNumber, $icNumber, $addressLine, $city, $state, $postcode);
 
-  $sanitizeInput = filter_input_array(INPUT_POST, $filters);
-
-  if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
-    $errorArray[] = $sanitizeInput["email"];
-  }
-
-  $mobileRegEx = "/^[1-9]{9,10}$/";
-  $mobileValidate = preg_match($mobileRegEx, $sanitizeInput["mobileNumber"]);
-
-  $postcodeRegEx = "/^[0-9]{5}$/";
-  $postcodeValidate = preg_match($postcodeRegEx, $sanitizeInput["postcode"]);
-
-
-  foreach ($sanitizeInput as $key => $value){
-    if (!$value){
-      $errorArray[] = $key;
+      $stmt->execute();
+      $stmt->close();
+      // header("Location: ../index.php");
+      // exit();
     }
   }
-
-  // var_dump($errorArray);
-
-  if (!$errorArray){
-    extract($sanitizeInput);
-    // echo $firstName;
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $connection->prepare("INSERT INTO user (firstName, lastName, email, userPassword, mobileNumber, identificationNumber, addressLine, city, stateName, postcode, imagePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT);");
-    $stmt->bind_param("ssssiisssi", $firstName, $lastName, $email, $hashedPassword, $mobileNumber, $icNumber, $addressLine, $city, $state, $postcode);
-
-    // if(!mysqli_stmt_prepare($statement, $sql)){
-    //   echo "failed";
-    //   header("Location: register.php");
-    //   exit();
-    // }
-
-    $stmt->execute();
-    $stmt->close();
-  }
-}
 ?>
 
 
@@ -84,7 +69,7 @@ if(isset($_POST["signup"])){
   
   <div class = "container my-5 ">
     <h1 class = "mb-5 text-center">REGISTER AN ACCOUNT</h1> 
-    <form class="row g-3 " id = "register-form" action="" method = "POST">
+    <form class="row g-3 " id = "register-form" action="./controller/register_user.php" method = "POST">
     <div class="col-md-6">
       <label for="inputFirstName" class="form-label">First Name</label>
       <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName">
@@ -120,7 +105,7 @@ if(isset($_POST["signup"])){
     </div>
     <div class="col-md-12">
       <label for="inputEmail" class="form-label">Email</label>
-      <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" required>
+      <input type="text" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" required>
       <?php if(in_array("email", $errorArray)):  ?>
       <p class = "mt-1 text-danger mb-0">Please enter a valid email</p>
       <?php endif; ?>
