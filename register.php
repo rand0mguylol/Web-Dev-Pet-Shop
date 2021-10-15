@@ -1,52 +1,51 @@
 <?php
-  // session_start();
+  session_start();
   $errorArray = [];
 
+  // $test = 'F1@fffffffff';
+  // $r = preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/', $test);
+  // echo $r;
+
+  // $mobileRegEx = "/^[1-9][0-9]{8,9}$/";
+  // $mobileValidate = preg_match($mobileRegEx, "1234567890");
+  // echo $mobileValidate;
   if(isset($_POST["signup"])){
     require_once "./function/db.php";
+    require_once "./function/helpers.php";
+
+    $firstName = validateText($_POST["firstName"]);
+    $lastName = validateText($_POST["lastName"]);
 
     $filters = [
-      "firstName"=> FILTER_SANITIZE_STRING,
-      "lastName" => FILTER_SANITIZE_STRING,
-      "mobileNumber" => FILTER_SANITIZE_STRING,
-      "icNumber" => FILTER_SANITIZE_STRING,
+      "mobileNumber" => array("filter" => FILTER_VALIDATE_REGEXP, "options"=>array("regexp"=>"/^[1-9][0-9]{8,9}$/")),
       "email"=> FILTER_SANITIZE_EMAIL,
-      "password" => FILTER_SANITIZE_STRING,
-      "addressLine" => FILTER_SANITIZE_STRING,
-      "postcode" => FILTER_SANITIZE_STRING,
-      "city" => FILTER_SANITIZE_STRING,
-      "state" => FILTER_SANITIZE_STRING
+      "password" => array("filter" => FILTER_VALIDATE_REGEXP, "options"=>array("regexp"=>"/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/"))
     ];
 
     $sanitizeInput = filter_input_array(INPUT_POST, $filters);
 
     if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
-      array_push($errorArray, $sanitizeInput["email"]);
+      array_push($errorArray, "email");
+    }else{
+      $email = $sanitizeInput["email"];
     }
 
-    $mobileRegEx = "/^[1-9]{9,10}$/";
-    $mobileValidate = preg_match($mobileRegEx, $sanitizeInput["mobileNumber"]);
-
-    $postcodeRegEx = "/^[0-9]{5}$/";
-    $postcodeValidate = preg_match($postcodeRegEx, $sanitizeInput["postcode"]);
-
-
-    foreach ($sanitizeInput as $key => $value){
-      if (!$value){
-        array_push($errorArray, $key);
-      }
+    if(!$sanitizeInput["mobileNumber"]){
+      array_push($errorArray, "mobileNumber");
+    }else{
+      $mobileNumber = $sanitizeInput["mobileNumber"];
     }
 
     if (!$errorArray){
-      extract($sanitizeInput);
+      $password = $sanitizeInput["password"];
       $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-      $stmt = $connection->prepare("INSERT INTO user (firstName, lastName, email, userPassword, mobileNumber, identificationNumber, addressLine, city, stateName, postcode, imagePath) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT);");
-      $stmt->bind_param("ssssiisssi", $firstName, $lastName, $email, $hashedPassword, $mobileNumber, $icNumber, $addressLine, $city, $state, $postcode);
+      $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber) VALUES (?, ?, ?, ?, ?);");
+      $stmt->bind_param("ssssi", $firstName, $lastName, $email, $hashedPassword, $mobileNumber);
 
       $stmt->execute();
       $stmt->close();
-      // header("Location: ../index.php");
-      // exit();
+      header("Location: index.php");
+      exit();
     }
   }
 ?>
@@ -69,17 +68,17 @@
   
   <div class = "container my-5 ">
     <h1 class = "mb-5 text-center">REGISTER AN ACCOUNT</h1> 
-    <form class="row g-3 " id = "register-form" action="./controller/register_user.php" method = "POST">
-    <div class="col-md-6">
+    <form class="row g-3 " id = "register-form" action="register.php" method = "POST">
+    <div class="col-md-12">
       <label for="inputFirstName" class="form-label">First Name</label>
-      <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName">
+      <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName" value = "<?php echo isset($_POST['firstName']) && !in_array("firstName", $errorArray) ? htmlspecialchars($firstName): '' ; ?>">
       <?php if(in_array("firstName", $errorArray)):  ?>
       <p class = "mt-1 text-danger mb-0">Please enter a valid first name</p>
       <?php endif; ?>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-12">
       <label for="inputLastName" class="form-label">Last Name</label>
-      <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName">
+      <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo isset($_POST['lastName']) && !in_array("lastName", $errorArray) ? htmlspecialchars($lastName): '' ; ?>">
       <?php if(in_array("lastName", $errorArray)):  ?>
       <p class = "mt-1 text-danger mb-0">Please enter a valid last name</p>
       <?php endif; ?>
@@ -89,23 +88,16 @@
       <label for="inputTelephone" class="form-label">Mobile Number</label>
       <div class="input-group">
         <div class="input-group-text">+60</div>
-        <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber">
+        <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo isset($_POST['mobileNumber']) && !in_array("mobileNumber", $errorArray) ? htmlspecialchars($mobileNumber): '' ; ?>">
         <?php if(in_array("mobileNumber", $errorArray)):  ?>
-        <p class = "mt-1 text-danger mb-0">Please enter a valid mobile number</p>
+        <p class = "mt-1 text-danger mb-0 ps-3 d-block">Please enter a valid mobile number</p>
         <?php endif; ?>
       </div>
     </div>
-    <div class="col-md-12">
-      <label for="inputIC" class="form-label">Identification Number</label>
-      <input type="text" class="form-control" id="inputIC" placeholder="Identification Number" name = "icNumber" required>
-      <small class = "mt-1">Only digits, no "-".</small>
-      <?php if(in_array("icNumber", $errorArray)):  ?>
-      <p class = "mt-1 text-danger mb-0">Please enter a valid identification number</p>
-      <?php endif; ?>
-    </div>
+   
     <div class="col-md-12">
       <label for="inputEmail" class="form-label">Email</label>
-      <input type="text" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" required>
+      <input type="text" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" value = "<?php echo isset($_POST['email']) && !in_array("email", $errorArray) ? htmlspecialchars($email): '' ; ?>" required>
       <?php if(in_array("email", $errorArray)):  ?>
       <p class = "mt-1 text-danger mb-0">Please enter a valid email</p>
       <?php endif; ?>
@@ -113,7 +105,7 @@
     <div class="col-md-12">
       <label for="inputPassword" class="form-label">Password</label>
       <input type="password" class="form-control" id="inputPassword" placeholder = "Password" name = "password" required>
-      <small class = "mt-1"    <?php if(in_array("password", $errorArray)):  ?> style = "text-color:red" <?php endif; ?>>Length must be between 8 to 16 characters, including one digit, one special, one uppercase and one lowecase character.</small>
+      <small class = "mt-1"    <?php if(in_array("password", $errorArray)):  ?> style = "color:red" <?php endif; ?>>Length must be between 8 to 16 characters, including one digit, one uppercase, one lowecase character and may contain the following !@#$%& </small>
     </div>
     
     <div class="col-md-12">
@@ -122,56 +114,6 @@
         <label class="form-check-label" for="flexSwitchCheckDefault">Show Password</label>
       </div>
     </div>
-    <div class="col-md-12">
-      <label for="inputAddress" class="form-label">Address</label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="Address" name = "addressLine" required>
-      <?php if(in_array("addressLine", $errorArray)):  ?>
-        <p class = "mt-1 text-danger mb-0">Please enter a valid address</p>
-      <?php endif; ?>
-    </div>
-    <div class="col-md-2">
-      <label for="inputPostCode" class="form-label">Postcode</label>
-      <input type="number" class="form-control" id="inputPostCode" placeholder="10000" name = "postcode"  min = "0" required>
-      <?php if(in_array("postcode", $errorArray)):  ?>
-        <p class = "mt-1 text-danger mb-0">Please enter a valid postcode</p>
-      <?php endif; ?>
-    </div>
-    <div class="col-md-10">
-      <label for="inputCity" class="form-label">City</label>
-      <input type="text" class="form-control" id="inputCity" placeholder="Selangor" name = "city" required>
-      <?php if(in_array("city", $errorArray)):  ?>
-        <p class = "mt-1 text-danger mb-0">Please enter a valid city</p>
-      <?php endif; ?>
-    </div>
-    <div class="col-md-12">
-      <label for="inputState" class="form-label">State</label>
-      <select id="inputState" class="form-select" name = "state" required>
-        <option value = "Johor">Johor</option>
-        <option value = "Kedah">Kedah</option>
-        <option value = "Kelantan">Kelantan</option>
-        <option value = "Malacca">Malacca</option>
-        <option value = "Negeri Sembilan">Negeri Sembilan</option>
-        <option value = "Pahang">Pahang</option>
-        <option value = "Penang">Penang</option>
-        <option value = "Perak">Perak</option>
-        <option value = "Perlis">Perlis</option>
-        <option value = "Sabah">Sabah</option>
-        <option value = "Sarawak">Sarawak</option>
-        <option value = "Selangor" selected>Selangor</option>
-        <option value = "Terengganu">Terengganu</option>
-        <option value =  "Kuala Lumpur">Kuala Lumpur</option>
-        <option value = "Putrajaya">Putrajaya</option>
-        <option value = "Labuan">Labuan</option>
-      </select>
-    </div>
-    <!-- <div class="col-12">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="gridCheck">
-        <label class="form-check-label" for="gridCheck">
-          Check me out
-        </label>
-      </div>
-    </div> -->
     <div class="col-12">
       <button type="submit" class="btn btn-primary" name = "signup">Sign Up</button>
     </div>
@@ -187,25 +129,5 @@
         password.type = "password"
       }
     }
-  </script>
-
-  <script>
-
-    const inputPostcode = document.querySelector("#inputPostCode");
-
-    inputPostcode.addEventListener("keypress", function(e){
-      if (e.target.value.length > 4){
-        e.preventDefault()
-      }
-    })
-
-    // const inputTelphone = document.querySelector("#inputTelephone");
-
-    // inputTelphone.addEventListener("keypress", function(e){
-    //   if(parseInt(e.target.value) === false){
-    //     e.preventDefault();
-    //   }
-    // })
-    
   </script>
  <?php require_once "script_links.php"; ?>

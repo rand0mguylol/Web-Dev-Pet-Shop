@@ -1,3 +1,60 @@
+<?php
+session_start();
+require_once "./function/db.php";
+require_once "./function/helpers.php";
+
+  // var_dump($_GET);
+
+if(isset($_GET["category"])){
+  $category = filter_var($_GET["category"], FILTER_SANITIZE_STRING);
+
+  $petArray  = ["dog", "cat", "hamster"];
+  $productArray = ["dogFood", "catFood", "hamsterFood", "dogCare", "catCare", "dogAccess", "catAccess"];
+
+
+  if(in_array($category, $petArray)){
+    $informaton = getPets($connection, $category);
+  }
+  else if(in_array($category, $productArray)){
+    $informaton = getProduct($connection, $category);
+  }
+  else{
+    header("Location: index.php");
+    exit();
+  }
+  
+
+  $categoryDescription = $informaton["categoryDescription"];
+  $categoryArray = $informaton["categoryArray"];
+  $categoryName = $informaton["categoryName"];
+}
+else{
+  header("Location: index.php");
+  exit();
+}
+
+// $petArray = [];
+// $petDescription = "";
+// $petCategory = "";
+
+// $stmt = $connection->prepare("SELECT * FROM pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE pets.petCatId = 1 AND petImageType = 'Card';");
+// // $stmt->bind_param("s", $email);
+
+
+// $stmt->execute();
+// $result = $stmt->get_result();
+
+// while($row = $result->fetch_assoc()){
+//   array_push($petArray, $row);
+//   $petDescription = $row["description"];
+//   $petCategory = $row["name"];
+// }
+
+
+// $stmt->close();
+
+?>
+
 <?php require_once "header.php"; ?>
 
 
@@ -134,8 +191,8 @@
     
     <section class = "general-product-header-section">
       <div class = "container text-center">
-        <h1>PRODUCT</h1>
-        <p class = "w-50">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi necessitatibus placeat veritatis? Aliquid impedit fugit aut? Error esse rem optio!</p>
+        <h1><?php echo $categoryName; ?></h1>
+        <p class = "w-50"><?php echo $categoryDescription; ?></p>
       </div>
     </section>
 
@@ -235,10 +292,12 @@
           </div>
         </nav>
         <div class = "container d-flex flex-wrap">
+          
+        <?php foreach($categoryArray as $cat): ?>
           <div class = "product-indi">
             <div class = "card-wrapper general">
               <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
+                <img src="<?php echo "$cat[imagePath].jpg"; ?>" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
                     <button class ="btn card-icon-wrapper">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -253,7 +312,7 @@
                 </div>
               </div>
               <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                <h5 class="text-center mt-2 px-2 text-truncate"><?php echo $cat["name"]; ?></h5>
               </div>
               <div class = "card-rating-section text-center">
                 <div class = "stars">
@@ -266,325 +325,12 @@
                 </div>
               </div>
               <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
+                <span><?php echo "RM $cat[price]"; ?></span>
               </div>
             </div>
           </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
-          <div class = "product-indi">
-            <div class = "card-wrapper general">
-              <div class = "card-main-section">
-                <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                <div class = "card-main-section-icon">
-                    <button class ="btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                      </svg>
-                    </button>
-                    <button class = "btn card-icon-wrapper">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                      </svg>
-                    </button>
-                </div>
-              </div>
-              <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-              </div>
-              <div class = "card-rating-section text-center">
-                <div class = "stars">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <img src="./svg/star-fill-white.svg" alt="">
-                  <small class = " align-bottom">1 out of 5</small>
-                </div>
-              </div>
-              <div class = "card-price-section text-center">
-                <span>MYR 1000.00</span>
-              </div>
-            </div>
-          </div>
+        <?php endforeach; ?>
+
         </div>
       </div>
     </section>

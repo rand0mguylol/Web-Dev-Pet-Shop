@@ -1,0 +1,402 @@
+INSERT INTO `petimage`(`petImageID`, `pettId`, `petImageName`, `petImagePath`, `petImageType`) 
+  VALUES 
+  (NULL,'1','Husky_1_Card_319_409','./Images/Dog/Husky/Card/Husky_1_Card_319_409','Card'),
+  (NULL,'1','Husky_1_Gallery_550_550','./Images/Dog/Husky/Gallery/Husky_1_Gallery_550_550','Gallery"),
+  (NULL,'1','Husky_2_Gallery_550_550','./Images/Dog/Husky/Gallery/Husky_2_Gallery_550_550','Gallery'),
+  (NULL,'1','Husky_1_Thumbnail_110_110','./Images/Dog/Husky/Thumbnail/Husky_1_Thumbnail_110_110','Thumbnail'),
+  (NULL,'1','Husky_2_Thumbnail_110_110','./Images/Dog/Husky/Thumbnail/Husky_2_Thumbnail_110_110','Thumbnail'),
+  (NULL,'2','Poodle_1_Card_319_409','./Images/Dog/Poodle/Card/Poodle_1_Card_319_409','Card'),
+  (NULL,'2','Poodle_1_Gallery_550_550','./Images/Dog/Poodle/Gallery/Poodle_1_Gallery_550_550','Gallery'),
+  (NULL,'2','Poodle_2_Gallery_550_550','./Images/Dog/Poodle/Gallery/Poodle_2_Gallery_550_550','Gallery'),
+  (NULL,'2','Poodle_1_Thumbnail_100_100','./Images/Dog/Poodle/Thumbnail/Poodle_1_Thumbnail_100_100','Thumbnail'),
+  (NULL,'2','Poodle_2_Thumbnail_100_100','./Images/Dog/Poodle/Thumbnail/Poodle_2_Thumbnail_100_100','Thumbnail'),
+  (NULL,'3','Retriever_1_Card_319_409','./Images/Dog/Retriever/Card/Retriever_1_Card_319_409','Card'),
+  (NULL,'3','Retriever_1_Gallery_550_550','./Images/Dog/Retriever/Gallery/Retriever_1_Gallery_550_550','Gallery'),
+  (NULL,'3','Retriever_2_Gallery_550_550','./Images/Dog/Retriever/Gallery/Retriever_2_Gallery_550_550','Gallery'),
+  (NULL,'3','Retriever_1_Thumbnail_100_100','./Images/Dog/Retriever/Thumbnail/Retriever_1_Thumbnail_100_100','Thumbnail'),
+  (NULL,'3','Retriever_2_Thumbnail_100_100','./Images/Dog/Retriever/Thumbnail/Retriever_1_Thumbnail_100_100','Thumbnail'),
+  (NULL,'4','Rottweiler_Card_319_409','./Images/Dog/Rottweiler/Card/Rottweiler_Card_319_409','Card'),
+  (NULL,'4','Rottweiler_Gallery_550_550','./Images/Dog/Rottweiler/Gallery/Rottweiler_Gallery_550_550','Gallery'),
+  (NULL,'4','Rottweiler_Thumbnail_100_100','./Images/Dog/Rottweiler/Thumbnail/Rottweiler_Thumbnail_100_100','Thumbnail'),
+  (NULL,'5','Shih_Tzu_1_Card_319_409','./Images/Dog/Shih_Tzu/Card/Shih_Tzu_1_Card_319_409','Card'),
+  (NULL,'5','Shih_Tzu_1_Gallery_550_550','./Images/Dog/Shih_Tzu/Gallery/Shih_Tzu_1_Gallery_550_550','Gallery'),
+  (NULL,'5','Shih_Tzu_1_Thumbnail_100_100','./Images/Dog/Shih_Tzu/Thumbnail/Shih_Tzu_1_Thumbnail_100_100','Thumbnail'),
+  (NULL,'6','Bengal_1_Card_319_409','./Images/Cat/Bengal/Card/Bengal_1_Card_319_409','Card'),
+  (NULL,'6','Bengal_1_Gallery_550_550','./Images/Cat/Bengal/Gallery/Bengal_1_Gallery_550_550','Gallery'),
+  (NULL,'6','Bengal_2_Gallery_550_550','./Images/Cat/Bengal/Gallery/Bengal_2_Gallery_550_550','Gallery'),
+  (NULL,'6','Bengal_1_Thumbnail_100_100','./Images/Cat/Bengal/Thumbnail/Bengal_1_Thumbnail_100_100','Thumbnail'),
+  (NULL,'6','Bengal_2_Thumbnail_100_100','./Images/Cat/Bengal/Thumbnail/Bengal_2_Thumbnail_100_100','Thumbnail'),
+  (NULL,'7','Maine_Coon_1_Card_319_409','./Images/Cat/Maine_Coon/Card/Maine_Coon_1_Card_319_409','Card'),
+  (NULL,'7','Maine_Coon_1_Gallery_550_550','./Images/Cat/Maine_Coon/Gallery/Maine_Coon_1_Gallery_550_550','Gallery'),
+  (NULL,'7','Maine_Coon_1_Thumbnail_100_100','./Images/Cat/Maine_Coon/Thumbnail/Maine_Coon_1_Thumbnail_100_100','Thumbnail'),
+  (NULL,'8','Persian_Card_319_409','./Images/Cat/Persian/Card/Persian_Card_319_409','Card'),
+  (NULL,'8','Persian_Gallery_550_550','./Images/Cat/Persian/Gallery/Persian_Gallery_550_550','Gallery'),
+  (NULL,'8','Persian_2_Gallery_550_550','./Images/Cat/Persian/Gallery/Persian_2_Gallery_550_550','Gallery'),
+  (NULL,'8','Persian_3_Gallery_550_550','./Images/Cat/Persian/Gallery/Persian_3_Gallery_550_550','Gallery'),
+  (NULL,'8','Persian_Thumbnail_100_100','./Images/Cat/Persian/Thumbnail/Persian_Thumbnail_100_100','Thumbnail'),
+  (NULL,'8','Persian_2_Thumbnail_100_100','./Images/Cat/Persian/Thumbnail/Persian_2_Thumbnail_100_100','Thumbnail'),
+  (NULL,'8','Persian_3_Thumbnail_100_100','./Images/Cat/Persian/Thumbnail/Persian_3_Thumbnail_100_100','Thumbnail'),
+  (NULL,'9','Ragdoll_1_Card_319_409','./Images/Cat/Ragdoll/Card/Ragdoll_1_Card_319_409','Card'),
+  (NULL,'9','Ragdoll_1_Gallery_550_550','./Images/Cat/Ragdoll/Gallery/Ragdoll_1_Gallery_550_550','Gallery'),
+  (NULL,'9','Ragdoll_1_Thumbnail_100_100','./Images/Cat/Ragdoll/Thumbnail/Ragdoll_1_Thumbnail_100_100','Thumbnail'),
+  (NULL,'10','Scottish_Fold_1_Card_319_409','./Images/Cat/Scottish_Fold/Card/Scottish_Fold_1_Card_319_409','Card'),
+  (NULL,'10','Scottish_Fold_1_Gallery_550_550','./Images/Cat/Scottish_Fold/Gallery/Scottish_Fold_1_Gallery_550_550','Gallery'),
+  (NULL,'10','Scottish_Fold_2_Gallery_550_550','./Images/Cat/Scottish_Fold/Gallery/Scottish_Fold_2_Gallery_550_550','Gallery'),
+  (NULL,'10','Scottish_Fold_1_Thumbnail_100_100','./Images/Cat/Scottish_Fold/Thumbnail/Scottish_Fold_1_Thumbnail_100_100','Thumbnail'),
+  (NULL,'10','Scottish_Fold_2_Thumbnail_100_100','./Images/Cat/Scottish_Fold/Thumbnail/Scottish_Fold_2_Thumbnail_100_100','Thumbnail'),
+   (NULL,'11','Chinese_Hamster_1_Card_319_409','./Images/Hamster/Chinese/Card/Chinese_Hamster_1_Card_319_409','Card'),
+    (NULL,'11','Chinese_Hamster_1_Gallery_550_550','./Images/Hamster/Chinese/Gallery/Chinese_Hamster_1_Gallery_550_550','Gallery),
+    (NULL,'11','Chinese_Hamster_2_Gallery_550_550','./Images/Hamster/Chinese/Gallery/Chinese_Hamster_2_Gallery_550_550','Gallery'),
+    (NULL,'11','Chinese_Hamster_1_Thumbnail_100_100','./Images/Hamster/Chinese/Thumbnail/Chinese_Hamster_1_Thumbnail_100_100','Thumbnail'),
+    (NULL,'11','Chinese_Hamster_2_Thumbnail_100_100','./Images/Hamster/Chinese/Thumbnail/Chinese_Hamster_2_Thumbnail_100_100','Thumbnail'),
+    (NULL,'12','Common_1_Card_319_409','./Images/Hamster/Common/Card/Common_1_Card_319_409','Card'),
+    (NULL,'12','Common_1_Gallery_550_550','./Images/Hamster/Common/Gallery/Common_1_Gallery_550_550','Gallery'),
+    (NULL,'12','Common_1_Thumbnail_100_100','./Images/Hamster/Common/Thumbnail/Common_1_Thumbnail_100_100','Thumbnail'),
+    (NULL,'13','Roborovsky_1_Card_319_409','./Images/Hamster/Roborovsky/Card/Roborovsky_1_Card_319_409','Card'),
+    (NULL,'13','Roborovsky_1_Gallery_550_550','./Images/Hamster/Roborovsky/Gallery/Roborovsky_1_Gallery_550_550','Gallery'),
+    (NULL,'13','Roborovsky_1_Thumbnail_100_100','./Images/Hamster/Roborovsky/Thumbnail/Roborovsky_1_Thumbnail_100_100','Thumbnail'),
+    (NULL,'14','Short_Dwarf_1_Card_319_409','./Images/Hamster/Short_Dwarf/Card/Short_Dwarf_1_Card_319_409','Card'),
+    (NULL,'14','Short_Dwarf_1_Gallery_550_550','./Images/Hamster/Short_Dwarf/Gallery/Short_Dwarf_1_Gallery_550_550','Gallery'),
+    (NULL,'14','Short_Dwarf_1_Thumbnail_100_100','./Images/Hamster/Short_Dwarf/Thumbnail/Short_Dwarf_1_Thumbnail_100_100','Thumbnail'),
+    (NULL,'15','Syrian_1_Card_319_409','./Images/Hamster/Syrian/Card/Syrian_1_Card_319_409','Card'),
+    (NULL,'15','Syrian_1_Gallery_550_550','./Images/Hamster/Syrian/Gallery/Syrian_1_Gallery_550_550','Gallery'),
+    (NULL,'15','Syrian_1_Thumbnail_100_100','./Images/Hamster/Syrian/Thumbnail/Syrian_1_Thumbnail_100_100','Thumbnail');
+
+
+C:\Users\user\OneDrive - Asia Pacific University\WDT_Images_2\Hamster\Syrian\Card
+
+C:\Users\user\OneDrive - Asia Pacific University\WDT_Images_2\Hamster\Short_Dwarf\Card
+
+C:\Users\user\OneDrive - Asia Pacific University\WDT_Images_2\Hamster\Roborovsky\Card
+Card
+Gallery
+Thumbnail
+
+C:\Users\user\OneDrive - Asia Pacific University\WDT_Images_2\Cat\Scottish_Fold\Card
+
+
+
+------------------------------------------------------------------------------------------
+
+//Dog_Food
+
+(NULL,'1','ALPO_Dry_Adult_Dog_Food_Pack_1_Card_319_409','./Images/Dog_Food/ALPO_Dry_Adult_Dog_Food_Pack/Card/ALPO_Dry_Adult_Dog_Food_Pack_1_Card_319_409','Card'),
+(NULL,'1','ALPO_Dry_Adult_Dog_Food_Pack_1_Gallery_550_550','./Images/Dog_Food/ALPO_Dry_Adult_Dog_Food_Pack/Gallery/ALPO_Dry_Adult_Dog_Food_Pack_1_Gallery_550_550','Gallery'),
+(NULL,'1','ALPO_Dry_Adult_Dog_Food_Pack_2_Gallery_550_550','./Images/Dog_Food/ALPO_Dry_Adult_Dog_Food_Pack/Gallery/ALPO_Dry_Adult_Dog_Food_Pack_2_Gallery_550_550','Gallery'),
+(NULL,'1','ALPO_Dry_Adult_Dog_Food_Pack_3_Gallery_550_550','./Images/Dog_Food/ALPO_Dry_Adult_Dog_Food_Pack/Gallery/ALPO_Dry_Adult_Dog_Food_Pack_3_Gallery_550_550','Gallery'),
+(NULL,'1','ALPO_Dry_Adult_Dog_Food_Pack_1_Thumbnail_100_100','./Images/Dog_Food/ALPO_Dry_Adult_Dog_Food_Pack/Thumbnail/ALPO_Dry_Adult_Dog_Food_Pack_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'1','ALPO_Dry_Adult_Dog_Food_Pack_2_Thumbnail_100_100','./Images/Dog_Food/ALPO_Dry_Adult_Dog_Food_Pack/Thumbnail/ALPO_Dry_Adult_Dog_Food_Pack_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'1','ALPO_Dry_Adult_Dog_Food_Pack_3_Thumbnail_100_100','./Images/Dog_Food/ALPO_Dry_Adult_Dog_Food_Pack/Thumbnail/ALPO_Dry_Adult_Dog_Food_Pack_3_Thumbnail_100_100','Thumbnail'),
+(NULL,'2','CESAR_Dog_Food_Beef_x6_Wet_Food_1_Card_319_409','./Images/Dog_Food/CESAR_Dog_Food_Beef_x6_Wet_Food/Card/CESAR_Dog_Food_Beef_x6_Wet_Food_1_Card_319_409','Card'),
+(NULL,'2','CESAR_Dog_Food_Beef_x6_Wet_Food_1_Gallery_550_550','./Images/Dog_Food/CESAR_Dog_Food_Beef_x6_Wet_Food/Gallery/CESAR_Dog_Food_Beef_x6_Wet_Food_1_Gallery_550_550','Gallery'),
+(NULL,'2','CESAR_Dog_Food_Beef_x6_Wet_Food_2_Gallery_550_550','./Images/Dog_Food/CESAR_Dog_Food_Beef_x6_Wet_Food/Gallery/CESAR_Dog_Food_Beef_x6_Wet_Food_2_Gallery_550_550','Gallery'),
+(NULL,'2','CESAR_Dog_Food_Beef_x6_Wet_Food_3_Gallery_550_550','./Images/Dog_Food/CESAR_Dog_Food_Beef_x6_Wet_Food/Gallery/CESAR_Dog_Food_Beef_x6_Wet_Food_3_Gallery_550_550','Gallery'),
+(NULL,'2','CESAR_Dog_Food_Beef_x6_Wet_Food_1_Thumbnail_100_100','./Images/Dog_Food/CESAR_Dog_Food_Beef_x6_Wet_Food/Thumbnail/CESAR_Dog_Food_Beef_x6_Wet_Food_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'2','CESAR_Dog_Food_Beef_x6_Wet_Food_2_Thumbnail_100_100','./Images/Dog_Food/CESAR_Dog_Food_Beef_x6_Wet_Food/Thumbnail/CESAR_Dog_Food_Beef_x6_Wet_Food_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'2','CESAR_Dog_Food_Beef_x6_Wet_Food_3_Thumbnail_100_100','./Images/Dog_Food/CESAR_Dog_Food_Beef_x6_Wet_Food/Thumbnail/CESAR_Dog_Food_Beef_x6_Wet_Food_3_Thumbnail_100_100','Thumbnail'),
+(NULL,'3','CESAR_Naturally_Crafted_Aust_Beef_1_Card_319_409','./Images/Dog_Food/CESAR Naturally Crafted Aust Beef X6 Dog Wet Food/Card/CESAR_Naturally_Crafted_Aust_Beef_1_Card_319_409','Card'),
+(NULL,'3','CESAR_Naturally_Crafted_Aust_Beef_1_Gallery_550_550','./Images/Dog_Food/CESAR Naturally Crafted Aust Beef X6 Dog Wet Food/Gallery/CESAR_Naturally_Crafted_Aust_Beef_1_Gallery_550_550','Gallery'),
+(NULL,'3','CESAR_Naturally_Crafted_Aust_Beef_2_Gallery_550_550','./Images/Dog_Food/CESAR Naturally Crafted Aust Beef X6 Dog Wet Food/Gallery/CESAR_Naturally_Crafted_Aust_Beef_2_Gallery_550_550','Gallery'),
+(NULL,'3','CESAR_Naturally_Crafted_Aust_Beef_3_Gallery_550_550','./Images/Dog_Food/CESAR Naturally Crafted Aust Beef X6 Dog Wet Food/Gallery/CESAR_Naturally_Crafted_Aust_Beef_3_Gallery_550_550','Gallery'),
+(NULL,'3','CESAR_Naturally_Crafted_Aust_Beef_1_Thumbnail_100_100','./Images/Dog_Food/CESAR Naturally Crafted Aust Beef X6 Dog Wet Food/Thumbnail/CESAR_Naturally_Crafted_Aust_Beef_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'3','CESAR_Naturally_Crafted_Aust_Beef_2_Thumbnail_100_100','./Images/Dog_Food/CESAR Naturally Crafted Aust Beef X6 Dog Wet Food/Thumbnail/CESAR_Naturally_Crafted_Aust_Beef_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'3','CESAR_Naturally_Crafted_Aust_Beef_3_Thumbnail_100_100','./Images/Dog_Food/CESAR Naturally Crafted Aust Beef X6 Dog Wet Food/Thumbnail/CESAR_Naturally_Crafted_Aust_Beef_3_Thumbnail_100_100','Thumbnail'),
+(NULL,'4','GREENIES_Treatpak_Pette_1_Card_319_409','./Images/Dog_Food/GREENIES Treatpak Petite Dog Denta Care/Card/GREENIES_Treatpak_Pette_1_Card_319_409','Card'),
+(NULL,'4','GREENIES_Treatpak_Pette_1_Gallery_550_550','./Images/Dog_Food/GREENIES Treatpak Petite Dog Denta Care/Gallery/GREENIES_Treatpak_Pette_1_Gallery_550_550','Gallery'),
+(NULL,'4','GREENIES_Treatpak_Pette_2_Gallery_550_550','./Images/Dog_Food/GREENIES Treatpak Petite Dog Denta Care/Gallery/GREENIES_Treatpak_Pette_2_Gallery_550_550','Gallery'),
+(NULL,'4','GREENIES_Treatpak_Pette_3_Gallery_550_550','./Images/Dog_Food/GREENIES Treatpak Petite Dog Denta Care/Gallery/GREENIES_Treatpak_Pette_3_Gallery_550_550','Gallery'),
+(NULL,'4','GREENIES_Treatpak_Pette_3_Thumbnail_100_100','./Images/Dog_Food/GREENIES Treatpak Petite Dog Denta Care/Thumbnail/GREENIES_Treatpak_Pette_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'4','GREENIES_Treatpak_Pette_3_Thumbnail_100_100','./Images/Dog_Food/GREENIES Treatpak Petite Dog Denta Care/Thumbnail/GREENIES_Treatpak_Pette_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'4','GREENIES_Treatpak_Pette_3_Thumbnail_100_100','./Images/Dog_Food/GREENIES Treatpak Petite Dog Denta Care/Thumbnail/GREENIES_Treatpak_Pette_3_Thumbnail_100_100','Thumbnail'),
+(NULL,'5','IAMS_Proactive_Health_1_Card_319_409','./Images/Dog_Food/IAMS Proactive Health/Card/IAMS_Proactive_Health_1_Card_319_409','Card'),
+(NULL,'5','IAMS_Proactive_Health_1_Gallery_550_550','./Images/Dog_Food/IAMS Proactive Health/Gallery/IAMS_Proactive_Health_1_Gallery_550_550','Gallery'),
+(NULL,'5','IAMS_Proactive_Health_1_Thumbnail_100_100','./Images/Dog_Food/IAMS Proactive Health/Thumbnail/IAMS_Proactive_Health_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'6','PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_1_Card_319_409','./Images/Dog_Food/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken/Card/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_1_Card_319_409','Card'),
+(NULL,'6','PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_1_Gallery_550_550','./Images/Dog_Food/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken/Gallery/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_1_Gallery_550_550','Gallery'),
+(NULL,'6','PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_2_Gallery_550_550','./Images/Dog_Food/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken/Gallery/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_2_Gallery_550_550','Gallery'), 
+(NULL,'6','PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_1_Thumbnail_100_100','./Images/Dog_Food/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken/Thumbnail/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'6','PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_2_Thumbnail_100_100','./Images/Dog_Food/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken/Thumbnail/PEDIGREE_Can_Dog_Wet_Food_Adult_Chicken_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'7','PEDIGREE_Medium_Dog_Treats_1_Card_319_409','./Images/Dog_Food/PEDIGREE_Medium_Dog_Treats/Card/PEDIGREE_Medium_Dog_Treats_1_Card_319_409','Card'),
+(NULL,'7','PEDIGREE_Medium_Dog_Treats_1_Gallery_550_550','./Images/Dog_Food/PEDIGREE_Medium_Dog_Treats/Gallery/PEDIGREE_Medium_Dog_Treats_1_Gallery_550_550','Gallery'),
+(NULL,'7','PEDIGREE_Medium_Dog_Treats_2_Gallery_550_550','./Images/Dog_Food/PEDIGREE_Medium_Dog_Treats/Gallery/PEDIGREE_Medium_Dog_Treats_2_Gallery_550_550','Gallery'),
+(NULL,'7','PEDIGREE_Medium_Dog_Treats_1_Thumbnail_100_100','./Images/Dog_Food/PEDIGREE_Medium_Dog_Treats/Thumbnail/PEDIGREE_Medium_Dog_Treats_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'7','PEDIGREE_Medium_Dog_Treats_2_Thumbnail_100_100','./Images/Dog_Food/PEDIGREE_Medium_Dog_Treats/Thumbnail/PEDIGREE_Medium_Dog_Treats_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'8','PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_1_Card_319_409','./Images/Dog_Food/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable/Card/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_1_Card_319_409','Card'),
+(NULL,'8','PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_1_Gallery_550_550','./Images/Dog_Food/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable/Gallery/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_1_Gallery_550_550','Gallery'),
+(NULL,'8','PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_2_Gallery_550_550','./Images/Dog_Food/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable/Gallery/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_2_Gallery_550_550','Gallery'), 
+(NULL,'8','PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_1_Thumbnail_100_100','./Images/Dog_Food/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable/Thumbnail/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'8','PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_2_Thumbnail_100_100','./Images/Dog_Food/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable/Thumbnail/PEDIGREE_Dog_Dry_Food_Chicken_Vegetable_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'9','PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_1_Card_319_409','./Images/Dog_Food/PEDIGREE Dog Dry Food Puppy Chicken, Egg & Milk/Card/PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_1_Card_319_409','Card'),
+(NULL,'9','PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_1_Gallery_550_550','./Images/Dog_Food/PEDIGREE Dog Dry Food Puppy Chicken, Egg & Milk/Gallery/PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_1_Gallery_550_550','Gallery'),
+(NULL,'9','PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_2_Gallery_550_550','./Images/Dog_Food/PEDIGREE Dog Dry Food Puppy Chicken, Egg & Milk/Gallery/PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_2_Gallery_550_550','Gallery'),
+(NULL,'9','PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_1_Thumbnail_100_100','./Images/Dog_Food/PEDIGREE Dog Dry Food Puppy Chicken, Egg & Milk/Thumbnail/PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'9','PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_2_Thumbnail_100_100','./Images/Dog_Food/PEDIGREE Dog Dry Food Puppy Chicken, Egg & Milk/Thumbnail/PEDIGREE_Dog_Dry_Food_Chicken_Egg_Milk_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_1_Card_319_409','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Card/SUPERCOAT_Chicken_Dry_Dog_Food_1_Card_319_409','Card'),
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_1_Gallery_550_550','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Gallery/SUPERCOAT_Chicken_Dry_Dog_Food_1_Gallery_550_550','Gallery'),
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_2_Gallery_550_550','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Gallery/SUPERCOAT_Chicken_Dry_Dog_Food_2_Gallery_550_550','Gallery'),
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_3_Gallery_550_550','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Gallery/SUPERCOAT_Chicken_Dry_Dog_Food_3_Gallery_550_550','Gallery'),
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_4_Gallery_550_550','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Gallery/SUPERCOAT_Chicken_Dry_Dog_Food_4_Gallery_550_550','Gallery'),
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_1_Thumbnail_100_100','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Thumbnail/SUPERCOAT_Chicken_Dry_Dog_Food_1_Thumbnail_100_100','Thumbnail'),  
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_2_Thumbnail_100_100','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Thumbnail/SUPERCOAT_Chicken_Dry_Dog_Food_2_Thumbnail_100_100','Thumbnail'),  
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_3_Thumbnail_100_100','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Thumbnail/SUPERCOAT_Chicken_Dry_Dog_Food_3_Thumbnail_100_100','Thumbnail'),  
+(NULL,'10','SUPERCOAT_Chicken_Dry_Dog_Food_4_Thumbnail_100_100','./Images/Dog_Food/SUPERCOAT ADULT SMALL BREED Chicken Dry Dog Food/Thumbnail/SUPERCOAT_Chicken_Dry_Dog_Food_4_Thumbnail_100_100','Thumbnail');
+
+
+//Dog_Accessories
+
+(NULL,'11','5M_Dog_Leash_1_Card_319_409','./Images/Dog_Accessories/5M Retractable Dog Leash/Card/5M_Dog_Leash_1_Card_319_409','Card'),                                                    
+(NULL,'11','5M_Dog_Leash_1_Gallery_550_550','./Images/Dog_Accessories/5M Retractable Dog Leash/Gallery/5M_Dog_Leash_1_Gallery_550_550','Gallery'),                                        
+(NULL,'11','5M_Dog_Leash_2_Gallery_550_550','./Images/Dog_Accessories/5M Retractable Dog Leash/Gallery/5M_Dog_Leash_2_Gallery_550_550','Gallery'),                                       
+(NULL,'11','5M_Dog_Leash_1_Thumbnail_100_100','./Images/Dog_Accessories/5M Retractable Dog Leash/Thumbnail/5M_Dog_Leash_1_Thumbnail_100_100','Thumbnail'),                                
+(NULL,'11','5M_Dog_Leash_2_Thumbnail_100_100','./Images/Dog_Accessories/5M Retractable Dog Leash/Thumbnail/5M_Dog_Leash_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'12','Heavy_Duty_Collar_1_Card_319_409','./Images/Dog_Accessories/Heavy Duty Stainless Steel Collar/Card/Heavy_Duty_Collar_1_Card_319_409','Card'),
+(NULL,'12','Heavy_Duty_Collar_1_Gallery_550_550','./Images/Dog_Accessories/Heavy Duty Stainless Steel Collar/Gallery/Heavy_Duty_Collar_1_Gallery_550_550','Gallery'),        
+(NULL,'12','Heavy_Duty_Collar_2_Gallery_550_550','./Images/Dog_Accessories/Heavy Duty Stainless Steel Collar/Gallery/Heavy_Duty_Collar_2_Gallery_550_550','Gallery'),        
+(NULL,'12','Heavy_Duty_Collar_1_Thumbnail_100_100','./Images/Dog_Accessories/Heavy Duty Stainless Steel Collar/Thumbnail/Heavy_Duty_Collar_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'12','Heavy_Duty_Collar_2_Thumbnail_100_100','./Images/Dog_Accessories/Heavy Duty Stainless Steel Collar/Thumbnail/Heavy_Duty_Collar_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'13','Pet_Chew_Toys_Bone_1_Card_319_409','./Images/Dog_Accessories/Indestructible Pet Chew Toys Bone/Card/Pet_Chew_Toys_Bone_1_Card_319_409','Card'),
+(NULL,'13','Pet_Chew_Toys_Bone_1_Gallery_550_550','./Images/Dog_Accessories/Indestructible Pet Chew Toys Bone/Gallery/Pet_Chew_Toys_Bone_1_Gallery_550_550','Gallery'),
+(NULL,'13','Pet_Chew_Toys_Bone_2_Gallery_550_550','./Images/Dog_Accessories/Indestructible Pet Chew Toys Bone/Gallery/Pet_Chew_Toys_Bone_2_Gallery_550_550','Gallery'),
+(NULL,'13','Pet_Chew_Toys_Bone_1_Thumbnail_100_100','./Images/Dog_Accessories/Indestructible Pet Chew Toys Bone/Thumbnail/Pet_Chew_Toys_Bone_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'13','Pet_Chew_Toys_Bone_2_Thumbnail_100_100','./Images/Dog_Accessories/Indestructible Pet Chew Toys Bone/Thumbnail/Pet_Chew_Toys_Bone_2_Thumbnail_100_100','Thumbnail')
+
+
+
+(NULL,'14','Cotton_Rope_Dog_Toy_1_Card_319_409','./Images/Dog_Accessories/Interactive Traction Cotton Rope Dog Toy/Card/Cotton_Rope_Dog_Toy_1_Card_319_409','Card'),
+(NULL,'14','Cotton_Rope_Dog_Toy_1_Gallery_550_550','./Images/Dog_Accessories/Interactive Traction Cotton Rope Dog Toy/Gallery/Cotton_Rope_Dog_Toy_1_Gallery_550_550','Gallery'),
+(NULL,'14','Cotton_Rope_Dog_Toy_2_Gallery_550_550','./Images/Dog_Accessories/Interactive Traction Cotton Rope Dog Toy/Gallery/Cotton_Rope_Dog_Toy_2_Gallery_550_550','Gallery'),
+(NULL,'14','Cotton_Rope_Dog_Toy_1_Thumbnail_100_100','./Images/Dog_Accessories/Interactive Traction Cotton Rope Dog Toy/Thumbnail/Cotton_Rope_Dog_Toy_1_Thumbnail_100_100','Thumbnail'), 
+(NULL,'14','Cotton_Rope_Dog_Toy_2_Thumbnail_100_100','./Images/Dog_Accessories/Interactive Traction Cotton Rope Dog Toy/Thumbnail/Cotton_Rope_Dog_Toy_2_Thumbnail_100_100','Thumbnail'), 
+(NULL,'15','Basketball_Shirt_1_Card_319_409','./Images/Dog_Accessories/MIAODODO Thin Summer Basketball Shirt for Dogs/Card/Basketball_Shirt_1_Card_319_409','Card'),
+(NULL,'15','Basketball_Shirt_1_Gallery_550_550','./Images/Dog_Accessories/MIAODODO Thin Summer Basketball Shirt for Dogs/Gallery/Basketball_Shirt_1_Gallery_550_550','Gallery'),
+(NULL,'15','Basketball_Shirt_2_Gallery_550_550','./Images/Dog_Accessories/MIAODODO Thin Summer Basketball Shirt for Dogs/Gallery/Basketball_Shirt_2_Gallery_550_550','Gallery'),
+(NULL,'15','Basketball_Shirt_1_Thumbnail_100_100','./Images/Dog_Accessories/MIAODODO Thin Summer Basketball Shirt for Dogs/Thumbnail/Basketball_Shirt_1_Thumbnail_100_100','Thumbnail'), 
+(NULL,'15','Basketball_Shirt_2_Thumbnail_100_100','./Images/Dog_Accessories/MIAODODO Thin Summer Basketball Shirt for Dogs/Thumbnail/Basketball_Shirt_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'16','Unit_Vest_1_Card_319_409','./Images/Dog_Accessories/Pet Dog Black Polices K-9 Unit Vest T-Shirt/Card/Unit_Vest_1_Card_319_409','Card'),
+(NULL,'16','Unit_Vest_1_Gallery_550_550','./Images/Dog_Accessories/Pet Dog Black Polices K-9 Unit Vest T-Shirt/Gallery/Unit_Vest_1_Gallery_550_550','Gallery'),
+(NULL,'16','Unit_Vest_2_Gallery_550_550','./Images/Dog_Accessories/Pet Dog Black Polices K-9 Unit Vest T-Shirt/Gallery/Unit_Vest_2_Gallery_550_550','Gallery'),
+(NULL,'16','Unit_Vest_1_Thumbnail_100_100','./Images/Dog_Accessories/Pet Dog Black Polices K-9 Unit Vest T-Shirt/Thumbnail/Unit_Vest_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'16','Unit_Vest_2_Thumbnail_100_100','./Images/Dog_Accessories/Pet Dog Black Polices K-9 Unit Vest T-Shirt/Thumbnail/Unit_Vest_2_Thumbnail_100_100','Thumbnail'),
+(NULL,'17','Leash_Nylon_1_Card_319_409','./Images/Dog_Accessories/Reflective Rope Pet Dog Leash/Card/Leash_Nylon_1_Card_319_409','Card'),
+(NULL,'17','Leash_Nylon_1_Gallery_550_550','./Images/Dog_Accessories/Reflective Rope Pet Dog Leash/Gallery/Leash_Nylon_1_Gallery_550_550','Gallery'),
+(NULL,'17','Leash_Nylon_2_Gallery_550_550','./Images/Dog_Accessories/Reflective Rope Pet Dog Leash/Gallery/Leash_Nylon_2_Gallery_550_550','Gallery'),
+(NULL,'17','Leash_Nylon_1_Thumbnail_100_100','./Images/Dog_Accessories/Reflective Rope Pet Dog Leash/Thumbnail/Leash_Nylon_1_Thumbnail_100_100','Thumbnail'),
+(NULL,'17','Leash_Nylon_2_Thumbnail_100_100','./Images/Dog_Accessories/Reflective Rope Pet Dog Leash/Thumbnail/Leash_Nylon_2_Thumbnail_100_100','Thumbnail');
+
+
+
+
+//Dog_Care
+
+
+(NULL, 18,'Folding_Bag_1_Card_319_409','./Images/Dog_Care/Folding Portable Mesh Breathable Dog Bag/Card/Folding_Bag_1_Card_319_409','Card'),
+(NULL, 18,'Folding_Bag_1_Gallery_550_550','./Images/Dog_Care/Folding Portable Mesh Breathable Dog Bag/Gallery/Folding_Bag_1_Gallery_550_550','Gallery'),        
+(NULL, 18,'Folding_Bag_2_Gallery_550_550','./Images/Dog_Care/Folding Portable Mesh Breathable Dog Bag/Gallery/Folding_Bag_2_Gallery_550_550','Gallery'),        
+(NULL, 18,'Folding_Bag_1_Thumbnail_100_100','./Images/Dog_Care/Folding Portable Mesh Breathable Dog Bag/Thumbnail/Folding_Bag_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 18,'Folding_Bag_2_Thumbnail_100_100','./Images/Dog_Care/Folding Portable Mesh Breathable Dog Bag/Thumbnail/Folding_Bag_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 19,'Toilet_1_Card_319_409','./Images/Dog_Care/idropmy Pet Toilet Mat Puppy Potty Pad Training Seat Tray/Card/Toilet_1_Card_319_409','Card'),
+(NULL, 19,'Toilet_1_Gallery_550_550','./Images/Dog_Care/idropmy Pet Toilet Mat Puppy Potty Pad Training Seat Tray/Gallery/Toilet_1_Gallery_550_550','Gallery'),
+(NULL, 19,'Toilet_2_Gallery_550_550','./Images/Dog_Care/idropmy Pet Toilet Mat Puppy Potty Pad Training Seat Tray/Gallery/Toilet_2_Gallery_550_550','Gallery'),
+(NULL, 19,'Toilet_1_Thumbnail_100_100','./Images/Dog_Care/idropmy Pet Toilet Mat Puppy Potty Pad Training Seat Tray/Thumbnail/Toilet_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 19,'Toilet_2_Thumbnail_100_100','./Images/Dog_Care/idropmy Pet Toilet Mat Puppy Potty Pad Training Seat Tray/Thumbnail/Toilet_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 20,'Shampoo_1_Card_319_409','./Images/Dog_Care/Nanovet Pet Medicated Shampoo/Card/Shampoo_1_Card_319_409','Card'),
+(NULL, 20,'Shampoo_1_Gallery_550_550','./Images/Dog_Care/Nanovet Pet Medicated Shampoo/Gallery/Shampoo_1_Gallery_550_550','Gallery'),
+(NULL, 20,'Shampoo_2_Gallery_550_550','./Images/Dog_Care/Nanovet Pet Medicated Shampoo/Gallery/Shampoo_2_Gallery_550_550','Gallery'),
+(NULL, 20,'Shampoo_3_Gallery_550_550','./Images/Dog_Care/Nanovet Pet Medicated Shampoo/Gallery/Shampoo_3_Gallery_550_550','Gallery'),
+(NULL, 20,'Shampoo_1_Thumbnail_100_100','./Images/Dog_Care/Nanovet Pet Medicated Shampoo/Thumbnail/Shampoo_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 20,'Shampoo_2_Thumbnail_100_100','./Images/Dog_Care/Nanovet Pet Medicated Shampoo/Thumbnail/Shampoo_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 20,'Shampoo_3_Thumbnail_100_100','./Images/Dog_Care/Nanovet Pet Medicated Shampoo/Thumbnail/Shampoo_3_Thumbnail_100_100','Thumbnail');
+
+(NULL, 21,'Only_Fresh_Shampoo_1_Card_319_409','./Images/Dog_Care/Oxyfresh Premium Pet Dental Care Solution Pet Water Additive (16oz)/Card/Only_Fresh_Shampoo_1_Card_319_409','Card'),
+(NULL, 21,'Only_Fresh_Shampoo_1_Gallery_550_550','./Images/Dog_Care/Oxyfresh Premium Pet Dental Care Solution Pet Water Additive (16oz)/Gallery/Only_Fresh_Shampoo_1_Gallery_550_550','Gallery'),
+(NULL, 21,'Only_Fresh_Shampoo_2_Gallery_550_550','./Images/Dog_Care/Oxyfresh Premium Pet Dental Care Solution Pet Water Additive (16oz)/Gallery/Only_Fresh_Shampoo_2_Gallery_550_550','Gallery'),        
+(NULL, 21,'Only_Fresh_Shampoo_1_Thumbnail_100_100','./Images/Dog_Care/Oxyfresh Premium Pet Dental Care Solution Pet Water Additive (16oz)/Thumbnail/Only_Fresh_Shampoo_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 21,'Only_Fresh_Shampoo_2_Thumbnail_100_100','./Images/Dog_Care/Oxyfresh Premium Pet Dental Care Solution Pet Water Additive (16oz)/Thumbnail/Only_Fresh_Shampoo_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 22,'Pads_1_Card_319_409','./Images/Dog_Care/Training Pads, Pack of 100/Card/Pads_1_Card_319_409','Card'),
+(NULL, 22,'Pads_1_Gallery_550_550','./Images/Dog_Care/Training Pads, Pack of 100/Gallery/Pads_1_Gallery_550_550','Gallery'),
+(NULL, 22,'Pads_2_Gallery_550_550','./Images/Dog_Care/Training Pads, Pack of 100/Gallery/Pads_2_Gallery_550_550','Gallery'),
+(NULL, 22,'Pads_3_Gallery_550_550','./Images/Dog_Care/Training Pads, Pack of 100/Gallery/Pads_3_Gallery_550_550','Gallery'),
+(NULL, 22,'Pads_1_Thumbnail_100_100','./Images/Dog_Care/Training Pads, Pack of 100/Thumbnail/Pads_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 22,'Pads_2_Thumbnail_100_100','./Images/Dog_Care/Training Pads, Pack of 100/Thumbnail/Pads_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 22,'Pads_3_Thumbnail_100_100','./Images/Dog_Care/Training Pads, Pack of 100/Thumbnail/Pads_3_Thumbnail_100_100','Thumbnail'),
+(NULL, 23,'Toothpaste_1_Card_319_409','./Images/Dog_Care/Vet’s Best Enzymatic Dog Toothpaste/Card/Toothpaste_1_Card_319_409','Card'),
+(NULL, 23,'Toothpaste_1_Gallery_550_550','./Images/Dog_Care/Vet’s Best Enzymatic Dog Toothpaste/Gallery/Toothpaste_1_Gallery_550_550','Gallery'),
+(NULL, 23,'Toothpaste_2_Gallery_550_550','./Images/Dog_Care/Vet’s Best Enzymatic Dog Toothpaste/Gallery/Toothpaste_2_Gallery_550_550','Gallery'),
+(NULL, 23,'Toothpaste_3_Gallery_550_550','./Images/Dog_Care/Vet’s Best Enzymatic Dog Toothpaste/Gallery/Toothpaste_3_Gallery_550_550','Gallery'),
+(NULL, 23,'Toothpaste_1_Thumbnail_100_100','./Images/Dog_Care/Vet’s Best Enzymatic Dog Toothpaste/Thumbnail/Toothpaste_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 23,'Toothpaste_2_Thumbnail_100_100','./Images/Dog_Care/Vet’s Best Enzymatic Dog Toothpaste/Thumbnail/Toothpaste_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 23,'Toothpaste_3_Thumbnail_100_100','./Images/Dog_Care/Vet’s Best Enzymatic Dog Toothpaste/Thumbnail/Toothpaste_3_Thumbnail_100_100','Thumbnail'),
+(NULL, 24,'Container_1_Card_319_409','./Images/Dog_Care/Vumdua Dog Food Storage Container with Serving Scoop/Card/Container_1_Card_319_409','Card'),
+(NULL, 24,'Container_1_Gallery_550_550','./Images/Dog_Care/Vumdua Dog Food Storage Container with Serving Scoop/Gallery/Container_1_Gallery_550_550','Gallery'),
+(NULL, 24,'Container_2_Gallery_550_550','./Images/Dog_Care/Vumdua Dog Food Storage Container with Serving Scoop/Gallery/Container_2_Gallery_550_550','Gallery'),
+(NULL, 24,'Container_1_Thumbnail_100_100','./Images/Dog_Care/Vumdua Dog Food Storage Container with Serving Scoop/Thumbnail/Container_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 24,'Container_2_Thumbnail_100_100','./Images/Dog_Care/Vumdua Dog Food Storage Container with Serving Scoop/Thumbnail/Container_2_Thumbnail_100_100','Thumbnail');
+
+
+
+//Cat_Food
+
+(NULL, 25,'IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_1_Card_319_409','./Images/Cat_Food/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg/Card/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_1_Card_319_409','Card'),
+(NULL, 25,'IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_1_Gallery_550_550','./Images/Cat_Food/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg/Gallery/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_1_Gallery_550_550','Gallery'),
+(NULL, 25,'IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_2_Gallery_550_550','./Images/Cat_Food/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg/Gallery/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_2_Gallery_550_550','Gallery'),
+(NULL, 25,'IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_3_Gallery_550_550','./Images/Cat_Food/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg/Gallery/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_3_Gallery_550_550','Gallery'),
+(NULL, 25,'IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_1_Thumbnail_100_100','./Images/Cat_Food/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg/Thumbnail/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 25,'IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_2_Thumbnail_100_100','./Images/Cat_Food/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg/Thumbnail/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 25,'IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_3_Thumbnail_100_100','./Images/Cat_Food/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg/Thumbnail/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_3_Thumbnail_100_100','Thumbnail'),
+(NULL, 26,'IAMS_Cat_Dry_Food_Adult_Ocean_Fish_1_Card_319_409','./Images/Cat_Food/IAMS Cat Dry Food Adult Ocean Fish 3kg Cat Food/Card/IAMS_Cat_Dry_Food_Adult_Ocean_Fish_1_Card_319_409','Card'),
+(NULL, 26,'IAMS_Cat_Dry_Food_Adult_Ocean_Fish_1_Gallery_550_550','./Images/Cat_Food/IAMS Cat Dry Food Adult Ocean Fish 3kg Cat Food/Gallery/IAMS_Cat_Dry_Food_Adult_Ocean_Fish_1_Gallery_550_550','Gallery'),
+(NULL, 26,'IAMS_Cat_Dry_Food_Adult_Ocean_Fish_2_Gallery_550_550','./Images/Cat_Food/IAMS Cat Dry Food Adult Ocean Fish 3kg Cat Food/Gallery/IAMS_Cat_Dry_Food_Adult_Ocean_Fish_2_Gallery_550_550','Gallery'),
+(NULL, 26,'IAMS_Cat_Dry_Food_Adult_Ocean_Fish_3_Gallery_550_550','./Images/Cat_Food/IAMS Cat Dry Food Adult Ocean Fish 3kg Cat Food/Gallery/IAMS_Cat_Dry_Food_Adult_Ocean_Fish_3_Gallery_550_550','Gallery'),
+(NULL, 26,'IAMS_Cat_Dry_Food_Adult_Ocean_Fish_1_Thumbnail_100_100','./Images/Cat_Food/IAMS Cat Dry Food Adult Ocean Fish 3kg Cat Food/Thumbnail/IAMS_Cat_Dry_Food_Adult_Ocean_Fish_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 26,'IAMS_Cat_Dry_Food_Adult_Ocean_Fish_2_Thumbnail_100_100','./Images/Cat_Food/IAMS Cat Dry Food Adult Ocean Fish 3kg Cat Food/Thumbnail/IAMS_Cat_Dry_Food_Adult_Ocean_Fish_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 26,'IAMS_Cat_Dry_Food_Adult_Ocean_Fish_3_Thumbnail_100_100','./Images/Cat_Food/IAMS Cat Dry Food Adult Ocean Fish 3kg Cat Food/Thumbnail/IAMS_Cat_Dry_Food_Adult_Ocean_Fish_3_Thumbnail_100_100','Thumbnail'),
+
+
+
+(NULL, 27,'Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_1_Card_319_409','./Images/Cat_Food/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm/Card/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_1_Card_319_409','Card'),
+(NULL, 27,'Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_1_Gallery_550_550','./Images/Cat_Food/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm/Gallery/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_1_Gallery_550_550','Gallery'),
+(NULL, 27,'Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_2_Gallery_550_550','./Images/Cat_Food/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm/Gallery/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_2_Gallery_550_550','Gallery'),
+(NULL, 27,'Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_1_Thumbnail_100_100','./Images/Cat_Food/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm/Thumbnail/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 27,'Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_2_Thumbnail_100_100','./Images/Cat_Food/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm/Thumbnail/Sheba_Can_Cat_Wet_Food_Adult_Succulent_Chicken_Breast_with_Prawn_85gm_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 28,'SHEBA_Melty_Cat_Treat_Tuna_Seafood_1_Card_319_409','./Images/Cat_Food/SHEBA Melty Cat Treat Tuna & Tuna Seafood (48g)/Card/SHEBA_Melty_Cat_Treat_Tuna_Seafood_1_Card_319_409','Card'),
+(NULL, 28,'SHEBA_Melty_Cat_Treat_Tuna_Seafood_1_Gallery_550_550','./Images/Cat_Food/SHEBA Melty Cat Treat Tuna & Tuna Seafood (48g)/Gallery/SHEBA_Melty_Cat_Treat_Tuna_Seafood_1_Gallery_550_550','Gallery'),
+(NULL, 28,'SHEBA_Melty_Cat_Treat_Tuna_Seafood_2_Gallery_550_550','./Images/Cat_Food/SHEBA Melty Cat Treat Tuna & Tuna Seafood (48g)/Gallery/SHEBA_Melty_Cat_Treat_Tuna_Seafood_2_Gallery_550_550','Gallery'),
+(NULL, 28,'SHEBA_Melty_Cat_Treat_Tuna_Seafood_3_Gallery_550_550','./Images/Cat_Food/SHEBA Melty Cat Treat Tuna & Tuna Seafood (48g)/Gallery/SHEBA_Melty_Cat_Treat_Tuna_Seafood_3_Gallery_550_550','Gallery'),
+(NULL, 28,'SHEBA_Melty_Cat_Treat_Tuna_Seafood_1_Thumbnail_100_100','./Images/Cat_Food/SHEBA Melty Cat Treat Tuna & Tuna Seafood (48g)/Thumbnail/SHEBA_Melty_Cat_Treat_Tuna_Seafood_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 28,'SHEBA_Melty_Cat_Treat_Tuna_Seafood_2_Thumbnail_100_100','./Images/Cat_Food/SHEBA Melty Cat Treat Tuna & Tuna Seafood (48g)/Thumbnail/SHEBA_Melty_Cat_Treat_Tuna_Seafood_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 28,'SHEBA_Melty_Cat_Treat_Tuna_Seafood_3_Thumbnail_100_100','./Images/Cat_Food/SHEBA Melty Cat Treat Tuna & Tuna Seafood (48g)/Thumbnail/SHEBA_Melty_Cat_Treat_Tuna_Seafood_3_Thumbnail_100_100','Thumbnail'),
+
+
+
+
+(NULL, 29,'Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_1_Card_319_409','./Images/Cat_Food/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm/Card/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_1_Card_319_409','Card'),
+(NULL, 29,'Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_1_Gallery_550_550','./Images/Cat_Food/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm/Gallery/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_1_Gallery_550_550','Gallery'),
+(NULL, 29,'Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_2_Gallery_550_550','./Images/Cat_Food/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm/Gallery/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_2_Gallery_550_550','Gallery'),
+(NULL, 29,'Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_1_Thumbnail_100_100','./Images/Cat_Food/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm/Thumbnail/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 29,'Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_2_Thumbnail_100_100','./Images/Cat_Food/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm/Thumbnail/Temptation_Cat_Treat_Adult_Tasty_Chicken_85gm_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 30,'WHISKAS_Dry_Cat_Food_Ocean_FIsh_1_Card_319_409','./Images/Cat_Food/WHISKAS Dry Cat Food Junior Ocean Fish 1.1kg Cat Dry Food/Card/WHISKAS_Dry_Cat_Food_Ocean_FIsh_1_Card_319_409','Card'),
+(NULL, 30,'WHISKAS_Dry_Cat_Food_Ocean_FIsh_1_Gallery_550_550','./Images/Cat_Food/WHISKAS Dry Cat Food Junior Ocean Fish 1.1kg Cat Dry Food/Gallery/WHISKAS_Dry_Cat_Food_Ocean_FIsh_1_Gallery_550_550','Gallery'),
+(NULL, 30,'WHISKAS_Dry_Cat_Food_Ocean_FIsh_2_Gallery_550_550','./Images/Cat_Food/WHISKAS Dry Cat Food Junior Ocean Fish 1.1kg Cat Dry Food/Gallery/WHISKAS_Dry_Cat_Food_Ocean_FIsh_2_Gallery_550_550','Gallery'),
+(NULL, 30,'WHISKAS_Dry_Cat_Food_Ocean_FIsh_3_Gallery_550_550','./Images/Cat_Food/WHISKAS Dry Cat Food Junior Ocean Fish 1.1kg Cat Dry Food/Gallery/WHISKAS_Dry_Cat_Food_Ocean_FIsh_3_Gallery_550_550','Gallery'),
+(NULL, 30,'WHISKAS_Dry_Cat_Food_Ocean_FIsh_1_Thumbnail_100_100','./Images/Cat_Food/WHISKAS Dry Cat Food Junior Ocean Fish 1.1kg Cat Dry Food/Thumbnail/WHISKAS_Dry_Cat_Food_Ocean_FIsh_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 30,'WHISKAS_Dry_Cat_Food_Ocean_FIsh_2_Thumbnail_100_100','./Images/Cat_Food/WHISKAS Dry Cat Food Junior Ocean Fish 1.1kg Cat Dry Food/Thumbnail/WHISKAS_Dry_Cat_Food_Ocean_FIsh_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 30,'WHISKAS_Dry_Cat_Food_Ocean_FIsh_3_Thumbnail_100_100','./Images/Cat_Food/WHISKAS Dry Cat Food Junior Ocean Fish 1.1kg Cat Dry Food/Thumbnail/WHISKAS_Dry_Cat_Food_Ocean_FIsh_3_Thumbnail_100_100','Thumbnail'),
+
+
+(NULL, 31,'Whiskas_Mackerel_1_Card_319_409','./Images/Cat_Food/Whiskas_Mackerel/Card/Whiskas_Mackerel_1_Card_319_409','Card'),
+(NULL, 31,'Whiskas_Mackerel_1_Gallery_550_550','./Images/Cat_Food/Whiskas_Mackerel/Gallery/Whiskas_Mackerel_1_Gallery_550_550','Gallery'),
+(NULL, 31,'Whiskas_Mackerel_2_Gallery_550_550','./Images/Cat_Food/Whiskas_Mackerel/Gallery/Whiskas_Mackerel_2_Gallery_550_550','Gallery'),
+(NULL, 31,'Whiskas_Mackerel_3_Gallery_550_550','./Images/Cat_Food/Whiskas_Mackerel/Gallery/Whiskas_Mackerel_3_Gallery_550_550','Gallery'),
+(NULL, 31,'Whiskas_Mackerel_1_Thumbnail_100_100','./Images/Cat_Food/Whiskas_Mackerel/Thumbnail/Whiskas_Mackerel_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 31,'Whiskas_Mackerel_2_Thumbnail_100_100','./Images/Cat_Food/Whiskas_Mackerel/Thumbnail/Whiskas_Mackerel_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 31,'Whiskas_Mackerel_3_Thumbnail_100_100','./Images/Cat_Food/Whiskas_Mackerel/Thumbnail/Whiskas_Mackerel_3_Thumbnail_100_100','Thumbnail'),
+(NULL, 32,'Whiskas_Group_1_Card_319_409','./Images/Cat_Food/Whiskas_4_Pack/Card/Whiskas_Group_1_Card_319_409','Card'),
+(NULL, 32,'Whiskas_Group_1_Gallery_550_550','./Images/Cat_Food/Whiskas_4_Pack/Gallery/Whiskas_Group_1_Gallery_550_550','Gallery'),
+(NULL, 32,'Whiskas_Group_2_Gallery_550_550','./Images/Cat_Food/Whiskas_4_Pack/Gallery/Whiskas_Group_2_Gallery_550_550','Gallery'),
+(NULL, 32,'Whiskas_Group_3_Gallery_550_550','./Images/Cat_Food/Whiskas_4_Pack/Gallery/Whiskas_Group_3_Gallery_550_550','Gallery'),
+(NULL, 32,'Whiskas_Group_4_Gallery_550_550','./Images/Cat_Food/Whiskas_4_Pack/Gallery/Whiskas_Group_4_Gallery_550_550','Gallery'),
+(NULL, 32,'Whiskas_Group_1_Thumbnail_100_100','./Images/Cat_Food/Whiskas_4_Pack/Thumbnail/Whiskas_Group_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 32,'Whiskas_Group_2_Thumbnail_100_100','./Images/Cat_Food/Whiskas_4_Pack/Thumbnail/Whiskas_Group_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 32,'Whiskas_Group_3_Thumbnail_100_100','./Images/Cat_Food/Whiskas_4_Pack/Thumbnail/Whiskas_Group_3_Thumbnail_100_100','Thumbnail'),
+(NULL, 32,'Whiskas_Group_4_Thumbnail_100_100','./Images/Cat_Food/Whiskas_4_Pack/Thumbnail/Whiskas_Group_4_Thumbnail_100_100','Thumbnail'),
+
+
+
+//Cat_Accessories
+
+(NULL, 33,'Cat_Litter_1_Card_319_409','./Images/Cat_Accessories/Cat_Litter/Card/Cat_Litter_1_Card_319_409','Card'),
+(NULL, 33,'Cat_Litter_1_Gallery_550_550','./Images/Cat_Accessories/Cat_Litter/Gallery/Cat_Litter_1_Gallery_550_550','Gallery'),        
+(NULL, 33,'Cat_Litter_2_Gallery_550_550','./Images/Cat_Accessories/Cat_Litter/Gallery/Cat_Litter_2_Gallery_550_550','Gallery'),        
+(NULL, 33,'Cat_Litter_1_Thumbnail_100_100','./Images/Cat_Accessories/Cat_Litter/Thumbnail/Cat_Litter_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 33,'Cat_Litter_2_Thumbnail_100_100','./Images/Cat_Accessories/Cat_Litter/Thumbnail/Cat_Litter_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 34,'Cat_Scratchers_1_Card_319_409','./Images/Cat_Accessories/Cat_Scratchers/Card/Cat_Scratchers_1_Card_319_409','Card'),
+(NULL, 34,'Cat_Scratchers_1_Gallery_550_550','./Images/Cat_Accessories/Cat_Scratchers/Gallery/Cat_Scratchers_1_Gallery_550_550','Gallery'),
+(NULL, 34,'Cat_Scratchers_2_Gallery_550_550','./Images/Cat_Accessories/Cat_Scratchers/Gallery/Cat_Scratchers_2_Gallery_550_550','Gallery'),
+(NULL, 34,'Cat_Scratchers_1_Thumbnail_100_100','./Images/Cat_Accessories/Cat_Scratchers/Thumbnail/Cat_Scratchers_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 34,'Cat_Scratchers_2_Thumbnail_100_100','./Images/Cat_Accessories/Cat_Scratchers/Thumbnail/Cat_Scratchers_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 35,'Cat_Tower_1_Card_319_409','./Images/Cat_Accessories/Cat_Tower/Card/Cat_Tower_1_Card_319_409','Card'),
+(NULL, 35,'Cat_Tower_1_Gallery_550_550','./Images/Cat_Accessories/Cat_Tower/Gallery/Cat_Tower_1_Gallery_550_550','Gallery'),
+(NULL, 35,'Cat_Tower_2_Gallery_550_550','./Images/Cat_Accessories/Cat_Tower/Gallery/Cat_Tower_2_Gallery_550_550','Gallery'),
+(NULL, 35,'Cat_Tower_1_Thumbnail_100_100','./Images/Cat_Accessories/Cat_Tower/Thumbnail/Cat_Tower_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 35,'Cat_Tower_2_Thumbnail_100_100','./Images/Cat_Accessories/Cat_Tower/Thumbnail/Cat_Tower_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 36,'Feather_Toy_1_Card_319_409','./Images/Cat_Accessories/Feather_Toy/Card/Feather_Toy_1_Card_319_409','Card'),
+(NULL, 36,'Feather_Toy_1_Gallery_550_550','./Images/Cat_Accessories/Feather_Toy/Gallery/Feather_Toy_1_Gallery_550_550','Gallery'),
+(NULL, 36,'Feather_Toy_2_Gallery_550_550','./Images/Cat_Accessories/Feather_Toy/Gallery/Feather_Toy_2_Gallery_550_550','Gallery'),
+(NULL, 36,'Feather_Toy_1_Thumbnail_100_100','./Images/Cat_Accessories/Feather_Toy/Thumbnail/Feather_Toy_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 36,'Feather_Toy_2_Thumbnail_100_100','./Images/Cat_Accessories/Feather_Toy/Thumbnail/Feather_Toy_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 37,'Habitat_Crate_1_Card_319_409','./Images/Cat_Accessories/Habitat_Crate/Card/Habitat_Crate_1_Card_319_409','Card'),
+(NULL, 37,'Habitat_Crate_1_Gallery_550_550','./Images/Cat_Accessories/Habitat_Crate/Gallery/Habitat_Crate_1_Gallery_550_550','Gallery'),
+(NULL, 37,'Habitat_Crate_2_Gallery_550_550','./Images/Cat_Accessories/Habitat_Crate/Gallery/Habitat_Crate_2_Gallery_550_550','Gallery'),
+(NULL, 37,'Habitat_Crate_1_Thumbnail_100_100','./Images/Cat_Accessories/Habitat_Crate/Thumbnail/Habitat_Crate_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 37,'Habitat_Crate_2_Thumbnail_100_100','./Images/Cat_Accessories/Habitat_Crate/Thumbnail/Habitat_Crate_2_Thumbnail_100_100','Thumbnail');
+
+
+
+//Cat_Care
+
+(NULL, 38,'Advantage_Flea_Prevenion_Treatment_1_Card_319_409','./Images/Cat_Care/Advantage II Flea Prevention and Treatment/Card/Advantage_Flea_Prevenion_Treatment_1_Card_319_409','Card'),
+(NULL, 38,'Advantage_Flea_Prevenion_Treatment_1_Gallery_550_550','./Images/Cat_Care/Advantage II Flea Prevention and Treatment/Gallery/Advantage_Flea_Prevenion_Treatment_1_Gallery_550_550','Gallery'),
+(NULL, 38,'Advantage_Flea_Prevenion_Treatment_2_Gallery_550_550','./Images/Cat_Care/Advantage II Flea Prevention and Treatment/Gallery/Advantage_Flea_Prevenion_Treatment_2_Gallery_550_550','Gallery'),
+(NULL, 38,'Advantage_Flea_Prevenion_Treatment_1_Thumbnail_100_100','./Images/Cat_Care/Advantage II Flea Prevention and Treatment/Thumbnail/Advantage_Flea_Prevenion_Treatment_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 38,'Advantage_Flea_Prevenion_Treatment_2_Thumbnail_100_100','./Images/Cat_Care/Advantage II Flea Prevention and Treatment/Thumbnail/Advantage_Flea_Prevenion_Treatment_2_Thumbnail_100_100','Thumbnail'),
+
+
+(NULL, 39,'Golden_Paw_Herbal_Cat_Supplement_1_Card_319_409','./Images/Cat_Care/GoldenPaw Herbal Pet Supplement for Cat/Card/Golden_Paw_Herbal_Cat_Supplement_1_Card_319_409','Card'),
+(NULL, 39,'Golden_Paw_Herbal_Cat_Supplement_1_Gallery_550_550','./Images/Cat_Care/GoldenPaw Herbal Pet Supplement for Cat/Gallery/Golden_Paw_Herbal_Cat_Supplement_1_Gallery_550_550','Gallery'),
+(NULL, 39,'Golden_Paw_Herbal_Cat_Supplement_2_Gallery_550_550','./Images/Cat_Care/GoldenPaw Herbal Pet Supplement for Cat/Gallery/Golden_Paw_Herbal_Cat_Supplement_2_Gallery_550_550','Gallery'),
+(NULL, 39,'Golden_Paw_Herbal_Cat_Supplement_1_Thumbnail_100_100','./Images/Cat_Care/GoldenPaw Herbal Pet Supplement for Cat/Thumbnail/Golden_Paw_Herbal_Cat_Supplement_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 39,'Golden_Paw_Herbal_Cat_Supplement_2_Thumbnail_100_100','./Images/Cat_Care/GoldenPaw Herbal Pet Supplement for Cat/Thumbnail/Golden_Paw_Herbal_Cat_Supplement_2_Thumbnail_100_100','Thumbnail'),
+
+(NULL, 40,'Lysine_Chews_1_Card_319_409','./Images/Cat_Care/L-Lysine Chews/Card/Lysine_Chews_1_Card_319_409','Card'),
+(NULL, 40,'Lysine_Chews_1_Gallery_550_550','./Images/Cat_Care/L-Lysine Chews/Gallery/Lysine_Chews_1_Gallery_550_550','Gallery'),
+(NULL, 40,'Lysine_Chews_2_Gallery_550_550','./Images/Cat_Care/L-Lysine Chews/Gallery/Lysine_Chews_2_Gallery_550_550','Gallery'),
+(NULL, 40,'Lysine_Chews_1_Thumbnail_100_100','./Images/Cat_Care/L-Lysine Chews/Thumbnail/Lysine_Chews_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 40,'Lysine_Chews_2_Thumbnail_100_100','./Images/Cat_Care/L-Lysine Chews/Thumbnail/Lysine_Chews_2_Thumbnail_100_100','Thumbnail'),
+
+(NULL, 41,'Omega_Fish_Oil_1_Card_319_409','./Images/Cat_Care/Omega 3 Fish Oil/Card/Omega_Fish_Oil_1_Card_319_409','Card'),
+(NULL, 41,'Omega_Fish_Oil_1_Gallery_550_550','./Images/Cat_Care/Omega 3 Fish Oil/Gallery/Omega_Fish_Oil_1_Gallery_550_550','Gallery'),
+(NULL, 41,'Omega_Fish_Oil_2_Gallery_550_550','./Images/Cat_Care/Omega 3 Fish Oil/Gallery/Omega_Fish_Oil_2_Gallery_550_550','Gallery'),
+(NULL, 41,'Omega_Fish_Oil_1_Thumbnail_100_100','./Images/Cat_Care/Omega 3 Fish Oil/Thumbnail/Omega_Fish_Oil_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 41,'Omega_Fish_Oil_2_Thumbnail_100_100','./Images/Cat_Care/Omega 3 Fish Oil/Thumbnail/Omega_Fish_Oil_2_Thumbnail_100_100','Thumbnail'),
+
+(NULL, 42,'Kidney_Support_Gold_1_Card_319_409','./Images/Cat_Care/Pet Wellbeing - Kidney Support Gold for Cats/Card/Kidney_Support_Gold_1_Card_319_409','Card'),
+(NULL, 42,'Kidney_Support_Gold_1_Gallery_550_550','./Images/Cat_Care/Pet Wellbeing - Kidney Support Gold for Cats/Gallery/Kidney_Support_Gold_1_Gallery_550_550','Gallery'),
+(NULL, 42,'Kidney_Support_Gold_2_Gallery_550_550','./Images/Cat_Care/Pet Wellbeing - Kidney Support Gold for Cats/Gallery/Kidney_Support_Gold_2_Gallery_550_550','Gallery'),
+(NULL, 42,'Kidney_Support_Gold_1_Thumbnail_100_100','./Images/Cat_Care/Pet Wellbeing - Kidney Support Gold for Cats/Thumbnail/Kidney_Support_Gold_1_Thumbnail_100_100','Thumbnail'),   
+(NULL, 42,'Kidney_Support_Gold_2_Thumbnail_100_100','./Images/Cat_Care/Pet Wellbeing - Kidney Support Gold for Cats/Thumbnail/Kidney_Support_Gold_2_Thumbnail_100_100','Thumbnail'),
+
+
+
+
+//Hamster_Food
+
+
+(NULL, 43,'FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_1_Card_319_409','./Images/Hamster_Food/F.M. Brown's Tropical Carnival Gourmet Hamster and Gerbil Food/Card/FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_1_Card_319_409','Card'),
+(NULL, 43,'FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_1_Gallery_550_550','./Images/Hamster_Food/F.M. Brown's Tropical Carnival Gourmet Hamster and Gerbil Food/Gallery/FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_1_Gallery_550_550','Gallery'),
+(NULL, 43,'FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_2_Gallery_550_550','./Images/Hamster_Food/F.M. Brown's Tropical Carnival Gourmet Hamster and Gerbil Food/Gallery/FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_2_Gallery_550_550','Gallery'),
+(NULL, 43,'FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_1_Thumbnail_100_100','./Images/Hamster_Food/F.M. Brown's Tropical Carnival Gourmet Hamster and Gerbil Food/Thumbnail/FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 43,'FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_2_Thumbnail_100_100','./Images/Hamster_Food/F.M. Brown's Tropical Carnival Gourmet Hamster and Gerbil Food/Thumbnail/FM_Brown_Tropical_Carnival_Gourment_Hamster_Food_2_Thumbnail_100_100','Thumbnail'),
+
+
+(NULL, 44,'Kaytee_Food_Wild_Hamster_1_Card_319_409','./Images/Hamster_Food/Kaytee Food from The Wild Hamster/Card/Kaytee_Food_Wild_Hamster_1_Card_319_409','Card'),
+(NULL, 44,'Kaytee_Food_Wild_Hamster_1_Gallery_550_550','./Images/Hamster_Food/Kaytee Food from The Wild Hamster/Gallery/Kaytee_Food_Wild_Hamster_1_Gallery_550_550','Gallery'),
+(NULL, 44,'Kaytee_Food_Wild_Hamster_2_Gallery_550_550','./Images/Hamster_Food/Kaytee Food from The Wild Hamster/Gallery/Kaytee_Food_Wild_Hamster_2_Gallery_550_550','Gallery'),
+(NULL, 44,'Kaytee_Food_Wild_Hamster_1_Thumbnail_100_100','./Images/Hamster_Food/Kaytee Food from The Wild Hamster/Thumbnail/Kaytee_Food_Wild_Hamster_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 44,'Kaytee_Food_Wild_Hamster_2_Thumbnail_100_100','./Images/Hamster_Food/Kaytee Food from The Wild Hamster/Thumbnail/Kaytee_Food_Wild_Hamster_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 45,'Kaytee_Forti_Diet_Pro_1_Card_319_409','./Images/Hamster_Food/Kaytee Forti Diet Pro Health Hamster Food/Card/Kaytee_Forti_Diet_Pro_1_Card_319_409','Card'),
+(NULL, 45,'Kaytee_Forti_Diet_Pro_1_Gallery_550_550','./Images/Hamster_Food/Kaytee Forti Diet Pro Health Hamster Food/Gallery/Kaytee_Forti_Diet_Pro_1_Gallery_550_550','Gallery'),
+(NULL, 45,'Kaytee_Forti_Diet_Pro_2_Gallery_550_550','./Images/Hamster_Food/Kaytee Forti Diet Pro Health Hamster Food/Gallery/Kaytee_Forti_Diet_Pro_2_Gallery_550_550','Gallery'),
+(NULL, 45,'Kaytee_Forti_Diet_Pro_1_Thumbnail_100_100','./Images/Hamster_Food/Kaytee Forti Diet Pro Health Hamster Food/Thumbnail/Kaytee_Forti_Diet_Pro_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 45,'Kaytee_Forti_Diet_Pro_2_Thumbnail_100_100','./Images/Hamster_Food/Kaytee Forti Diet Pro Health Hamster Food/Thumbnail/Kaytee_Forti_Diet_Pro_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 46,'Oxbow_Essentials_Hamster_Food_1_Card_319_409','./Images/Hamster_Food/Oxbow Essentials Hamster Food and Gerbil Food/Card/Oxbow_Essentials_Hamster_Food_1_Card_319_409','Card'),
+(NULL, 46,'Oxbow_Essentials_Hamster_Food_1_Gallery_550_550','./Images/Hamster_Food/Oxbow Essentials Hamster Food and Gerbil Food/Gallery/Oxbow_Essentials_Hamster_Food_1_Gallery_550_550','Gallery'),
+(NULL, 46,'Oxbow_Essentials_Hamster_Food_2_Gallery_550_550','./Images/Hamster_Food/Oxbow Essentials Hamster Food and Gerbil Food/Gallery/Oxbow_Essentials_Hamster_Food_2_Gallery_550_550','Gallery'),
+(NULL, 46,'Oxbow_Essentials_Hamster_Food_1_Thumbnail_100_100','./Images/Hamster_Food/Oxbow Essentials Hamster Food and Gerbil Food/Thumbnail/Oxbow_Essentials_Hamster_Food_1_Thumbnail_100_100','Thumbnail'),   
+(NULL, 46,'Oxbow_Essentials_Hamster_Food_2_Thumbnail_100_100','./Images/Hamster_Food/Oxbow Essentials Hamster Food and Gerbil Food/Thumbnail/Oxbow_Essentials_Hamster_Food_2_Thumbnail_100_100','Thumbnail'),
+(NULL, 47,'Vitakraft_Hamster_Treat_Stick_1_Card_319_409','./Images/Hamster_Food/Vitakraft Hamster Treat Stick/Card/Vitakraft_Hamster_Treat_Stick_1_Card_319_409','Card'),
+(NULL, 47,'Vitakraft_Hamster_Treat_Stick_1_Gallery_550_550','./Images/Hamster_Food/Vitakraft Hamster Treat Stick/Gallery/Vitakraft_Hamster_Treat_Stick_1_Gallery_550_550','Gallery'),
+(NULL, 47,'Vitakraft_Hamster_Treat_Stick_2_Gallery_550_550','./Images/Hamster_Food/Vitakraft Hamster Treat Stick/Gallery/Vitakraft_Hamster_Treat_Stick_2_Gallery_550_550','Gallery'),
+(NULL, 47,'Vitakraft_Hamster_Treat_Stick_1_Thumbnail_100_100','./Images/Hamster_Food/Vitakraft Hamster Treat Stick/Thumbnail/Vitakraft_Hamster_Treat_Stick_1_Thumbnail_100_100','Thumbnail'),
+(NULL, 47,'Vitakraft_Hamster_Treat_Stick_2_Thumbnail_100_100','./Images/Hamster_Food/Vitakraft Hamster Treat Stick/Thumbnail/Vitakraft_Hamster_Treat_Stick_2_Thumbnail_100_100','Thumbnail'),
+
+
