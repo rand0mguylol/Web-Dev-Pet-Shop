@@ -8,7 +8,7 @@ function getPets($connection, $category){
     "hamster" => 3
   ];
 
-  $stmt = $connection->prepare("SELECT * FROM pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE pets.petCatId = ? AND imageType = 'Card';");
+  $stmt = $connection->prepare("SELECT pets.name, pets.price, petcategory.category, petcategory.description, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE pets.petCatId = ? AND imageType = 'Card';");
   $stmt->bind_param("i", $categoryIdArray[$category]);
   
   
@@ -48,7 +48,7 @@ function getProduct($connection, $category){
     "hamsterFood" => 7,
   ];
 
-  $stmt = $connection->prepare("SELECT * FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE products.productCatId = ? AND imageType = 'Card';");
+  $stmt = $connection->prepare("SELECT products.name, products.price,  productcategory.category, productcategory.description, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE products.productCatId = ? AND imageType = 'Card';");
   $stmt->bind_param("i", $categoryIdArray[$category]);
   
   
