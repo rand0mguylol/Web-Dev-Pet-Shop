@@ -11,42 +11,8 @@
   // echo $mobileValidate;
   if(isset($_POST["signup"])){
     require_once "./function/db.php";
-    require_once "./function/helpers.php";
-
-    $firstName = validateText($_POST["firstName"]);
-    $lastName = validateText($_POST["lastName"]);
-
-    $filters = [
-      "mobileNumber" => array("filter" => FILTER_VALIDATE_REGEXP, "options"=>array("regexp"=>"/^[1-9][0-9]{8,9}$/")),
-      "email"=> FILTER_SANITIZE_EMAIL,
-      "password" => array("filter" => FILTER_VALIDATE_REGEXP, "options"=>array("regexp"=>"/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/"))
-    ];
-
-    $sanitizeInput = filter_input_array(INPUT_POST, $filters);
-
-    if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
-      array_push($errorArray, "email");
-    }else{
-      $email = $sanitizeInput["email"];
-    }
-
-    if(!$sanitizeInput["mobileNumber"]){
-      array_push($errorArray, "mobileNumber");
-    }else{
-      $mobileNumber = $sanitizeInput["mobileNumber"];
-    }
-
-    if (!$errorArray){
-      $password = $sanitizeInput["password"];
-      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-      $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber) VALUES (?, ?, ?, ?, ?);");
-      $stmt->bind_param("ssssi", $firstName, $lastName, $email, $hashedPassword, $mobileNumber);
-
-      $stmt->execute();
-      $stmt->close();
-      header("Location: index.php");
-      exit();
-    }
+    require_once "./function/helpers.php"; 
+    createUser($_POST, $connection, $errorArray);
   }
 ?>
 
