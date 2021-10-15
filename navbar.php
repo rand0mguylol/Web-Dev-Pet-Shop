@@ -9,9 +9,9 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-bs-auto-close="true" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Pets</a>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Dogs</a></li>
-          <li><a class="dropdown-item" href="#">Cats</a></li>
-          <li><a class="dropdown-item" href="#">Hamster</a></li>
+          <li><a class="dropdown-item" href="./category.php?category=dog">Dogs</a></li>
+          <li><a class="dropdown-item" href="./category.php?category=cat">Cats</a></li>
+          <li><a class="dropdown-item" href="./category.php?category=hamster">Hamster</a></li>
         </ul>
       </li>
       <li class="nav-item dropdown has-megamenu">
@@ -22,9 +22,9 @@
               <div class="col-megamenu">
                 <h5 class="title"><u>Pet Food</u></h4>
                 <ul class="list-unstyled">
-                  <li><a class = "dropdown-item" href="#">Cat Food</a></li>
-                  <li><a class = "dropdown-item" href="#">Dog Food</a></li>
-                  <li><a class = "dropdown-item" href="#">Hamster Food</a></li>
+                  <li><a class = "dropdown-item" href="./category.php?category=catFood">Cat Food</a></li>
+                  <li><a class = "dropdown-item" href="./category.php?category=dogFood">Dog Food</a></li>
+                  <li><a class = "dropdown-item" href="./category.php?category=hamsterFood">Hamster Food</a></li>
                 </ul>
               </div>  <!-- //megamenu-main -->
             </div><!-- end col-1 -->
@@ -32,9 +32,8 @@
               <div class="col-megamenu">
                 <h5 class="title"><u>Pet Accessories</u></h5>
                 <ul class="list-unstyled">
-                  <li><a class = "dropdown-item" href="#">Cat Accessories</a></li>
-                  <li><a class = "dropdown-item" href="#">Dog Accessories</a></li>
-                  <li><a class = "dropdown-item" href="#">Hamster Accessories</a></li>
+                  <li><a class = "dropdown-item" href="./category.php?category=catAccess">Cat Accessories</a></li>
+                  <li><a class = "dropdown-item" href="./category.php?category=dogAccess">Dog Accessories</a></li>
                 </ul>
               </div>  <!-- //megamenu-col-1 -->
             </div><!-- end col-2 -->
@@ -42,9 +41,8 @@
               <div class="col-megamenu">
                 <h5 class="title"><u>Care Products</u></h5>
                 <ul class="list-unstyled">
-                  <li ><a class = "dropdown-item" href="#">Cat Care Products</a></li>
-                  <li ><a class = "dropdown-item" href="#">Dog Care Products</a></li>
-                  <li ><a class = "dropdown-item" href="#">Hamster Care Products</a></li>
+                  <li ><a class = "dropdown-item" href="./category.php?category=catCare">Cat Care Products</a></li>
+                  <li ><a class = "dropdown-item" href="./category.php?category=dogCare">Dog Care Products</a></li>
                 </ul>
               </div>  <!-- //megamenu-col-2 -->
             </div><!-- end col-3 -->  
