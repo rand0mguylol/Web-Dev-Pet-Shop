@@ -136,7 +136,7 @@
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
           <?php if (isset($itemInfo["itemMainInfo"]['description'])): ?>
-          <p><?php echo nl2br($itemInfo["itemMainInfo"]['description']); ?></p>
+          <p><?php echo nl2br(str_replace('\n', "<br>",$itemInfo["itemMainInfo"]['description'])); ?></p>
 
           <?php endif; ?>
         </div>
