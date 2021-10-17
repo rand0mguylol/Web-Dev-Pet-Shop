@@ -508,6 +508,44 @@ input[type="number"] {
   padding: 5px;
 }
 
+
+#sidenavCanvas .nav-link {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.filter-form fieldset > * {
+  margin-bottom: 1rem;
+}
+
+.fab{
+  margin: 2px;
+}
+
+.fa-facebook{
+  color:#3b5998;
+}
+
+.fa-instagram{
+  color:#ac2bac;
+}
+
+.fa-twitter{
+  color:#55acee;
+}
+
+.paymentpic{
+  max-height:100px;
+  max-width:100px;
+}
+
+.product a{
+  text-decoration: none;
+}
+
+.quantity-input{
+  padding: 5px;
+}
+
 /* .filter-container{
    position: sticky;
    top: 0px;
@@ -733,4 +771,3 @@ input[type="number"] {
   .medium-inner-wrapper {
     max-width: 1140px;
   }
-}

@@ -42,10 +42,10 @@
         <div class="col-12 col-md-4 align-self-end follow-us">
           <div class = "d-flex flex-row justify-content-center">
             <h6 class= "mt-1">Follow Us</h6>
-            <ul class="social d-flex flex-row justify-content-around list-group-horizontal" style = "width: 125px">
-                <li class = "list-item"><a href="#"><img src="./svg/facebook.svg" alt="Facebook Logo"></a></li>
-                <li class = "list-item"><a href="#"><img src="./svg/instagram.svg" alt="Instagram Logo"></a></li>
-                <li class = "list-item"><a href="#"><img src="./svg/twitter.svg" alt="Twitter Logo"></a></li>
+            <ul class="social d-flex flex-row justify-content-md-around list-group-horizontal" style = "width: 125px">
+              <li class = "list-item"><a href=""><i class="fab fa-facebook fa-lg"></i></a></li>
+              <li class = "list-item"><a href=""><i class="fab fa-instagram fa-lg"></i></a></li>
+              <li class = "list-item"><a href=""><i class="fab fa-twitter fa-lg"></i></a></li>
             </ul>
           </div>
         </div>

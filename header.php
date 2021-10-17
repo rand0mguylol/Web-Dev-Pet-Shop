@@ -1,8 +1,7 @@
 <?php
-
-  session_start();
-  $errorArray = [];
-  $validLogin = false;
+  $emptyArray = [];
+  $isLogin = false;
+  // $validLogin = false;
 
   if(isset($_POST["signin"])){
     require_once "function/db.php";
@@ -15,17 +14,18 @@
     $sanitizeInput = filter_input_array(INPUT_POST, $filters);
 
     if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
-      $errorArray[] = $sanitizeInput["email"];
+      array_push($emptyArray, "email");
     }
 
-    if(!$sanitizeInput["password"]){
-      $errorArray[] = $sanitizeInput["password"];
+    if($_POST["password"] === ""){
+      array_push($emptyArray, "password");
     }
-    
-    if (!$errorArray){
-      extract($sanitizeInput);
 
-      $stmt = $connection->prepare("SELECT * FROM user WHERE email = ?;");
+    if (!$emptyArray){
+      $email = $sanitizeInput["email"];
+      $password = $sanitizeInput["password"];
+
+      $stmt = $connection->prepare("SELECT email, userPassword, firstName, lastName FROM user WHERE email = ?;");
       $stmt->bind_param("s", $email);
 
 
@@ -37,6 +37,7 @@
 
       if($row){
         $verifyPassword = password_verify($password, $row["userPassword"]);  
+        $isLogin = ($verifyPassword === false) ? false : true;
         $validLogin = ($verifyPassword === false) ? false : true;
 
         if ($validLogin){
@@ -52,6 +53,8 @@
     session_destroy();
     $validLogin = false;
   }
+
+  // var_dump($_SESSION);
 ?>
 
 
@@ -66,6 +69,7 @@
   <link rel="stylesheet" href="./newapp.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
   <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
   <title>Home Page</title>
@@ -73,23 +77,32 @@
 <body>
 
   <!-- Offcanvas -->
-  <?php if (!$validLogin): ?>
+  <?php if (!$isLogin): ?>
   <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
     <div class="offcanvas-header flex-column">
       <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">SIGN IN</h2>
     </div>
     <div class="offcanvas-body mb-5">
+    <?php if (isset($_POST["signin"])): ?>
+      <div class="p-3 mb-2 bg-danger text-white text-center rounded-pill">INCORRECT LOGIN DETAILS</div>
+    <?php endif; ?>
       <div>
         <form action="" class="row g-3 row-cols-1" method = "POST">
           <div class = "col">
             <label for="inputEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name = "email">
+            <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" required>
+            <?php if(isset($_POST["email"]) && in_array("email", $emptyArray)): ?>
+              <small>Please enter a valid email.</small>
+            <?php endif; ?>
           </div>
 
           <div class = "col">
             <label for="inputPassword" class="form-label">Password</label>
-            <input type="password" class="form-control" id="inputPassword" placeholder = "Password" name = "password">
+            <input type="password" class="form-control" id="inputPassword" placeholder = "Password" name = "password" required>
+            <?php if(isset($_POST["password"]) && in_array("password", $emptyArray)): ?>
+              <small>Please do not leave the field blank.</small>
+            <?php endif; ?>
           </div>
 
           <div class = "col-12 text-center"><button type="submit" class="btn btn-primary offcanvas-sign-in" name = "signin">Sign in</button></div>
