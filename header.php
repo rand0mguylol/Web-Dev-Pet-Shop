@@ -1,60 +1,13 @@
 <?php
   $emptyArray = [];
-  $isLogin = false;
-  // $validLogin = false;
 
-  if(isset($_POST["signin"])){
-    require_once "function/db.php";
-    
-    $filters = [
-      "email"=> FILTER_SANITIZE_EMAIL,
-      "password" => FILTER_SANITIZE_STRING,
-    ];
-
-    $sanitizeInput = filter_input_array(INPUT_POST, $filters);
-
-    if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
-      array_push($emptyArray, "email");
-    }
-
-    if($_POST["password"] === ""){
-      array_push($emptyArray, "password");
-    }
-
-    if (!$emptyArray){
-      $email = $sanitizeInput["email"];
-      $password = $sanitizeInput["password"];
-
-      $stmt = $connection->prepare("SELECT email, userPassword, firstName, lastName FROM user WHERE email = ?;");
-      $stmt->bind_param("s", $email);
-
-
-      $stmt->execute();
-      $result = $stmt->get_result();
-
-      $row = $result->fetch_assoc();
-      $stmt->close();
-
-      if($row){
-        $verifyPassword = password_verify($password, $row["userPassword"]);  
-        $isLogin = ($verifyPassword === false) ? false : true;
-        $validLogin = ($verifyPassword === false) ? false : true;
-
-        if ($validLogin){
-          $_SESSION["firstName"] = $row["firstName"];
-          $_SESSION["lastName"] = $row["lastName"];
-        }
-      }
-    }
-  }
-
-  if(isset($_POST["logout"])){
-    session_unset();
-    session_destroy();
-    $validLogin = false;
-  }
-
-  // var_dump($_SESSION);
+  $folder = $_SERVER["REQUEST_URI"];
+  $path = dirname($folder);
+  $currentPage = $path !== "\\" ? basename($folder): "";
+ 
+  $validLogin = isset($_SESSION["isValidLogin"]) && $_SESSION["isValidLogin"] === "error" ? false: null;
+  $emptyArray = isset($_SESSION["isValidLogin"]) && is_array($_SESSION["isValidLogin"])? $_SESSION["isValidLogin"]: [];
+  unset($_SESSION["isValidLogin"]);
 ?>
 
 
@@ -77,22 +30,22 @@
 <body>
 
   <!-- Offcanvas -->
-  <?php if (!$isLogin): ?>
+  <?php if (!isset($_SESSION["userID"])): ?>
   <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
     <div class="offcanvas-header flex-column">
       <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">SIGN IN</h2>
     </div>
     <div class="offcanvas-body mb-5">
-    <?php if (isset($_POST["signin"])): ?>
+    <?php if (isset($validLogin) && $validLogin === false): ?>
       <div class="p-3 mb-2 bg-danger text-white text-center rounded-pill">INCORRECT LOGIN DETAILS</div>
     <?php endif; ?>
       <div>
-        <form action="" class="row g-3 row-cols-1" method = "POST">
+        <form action=" <?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method = "POST">
           <div class = "col">
             <label for="inputEmail" class="form-label">Email</label>
             <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" required>
-            <?php if(isset($_POST["email"]) && in_array("email", $emptyArray)): ?>
+            <?php if(in_array("email", $emptyArray)): ?>
               <small>Please enter a valid email.</small>
             <?php endif; ?>
           </div>
@@ -100,7 +53,7 @@
           <div class = "col">
             <label for="inputPassword" class="form-label">Password</label>
             <input type="password" class="form-control" id="inputPassword" placeholder = "Password" name = "password" required>
-            <?php if(isset($_POST["password"]) && in_array("password", $emptyArray)): ?>
+            <?php if(in_array("password", $emptyArray)): ?>
               <small>Please do not leave the field blank.</small>
             <?php endif; ?>
           </div>
@@ -125,8 +78,8 @@
     </div>
     <div class="offcanvas-body mb-5">
       <div>
-        <form action="" class="row g-3 row-cols-1" method = "POST">
-          <div class = "col-12 text-center"><button type="submit" class="btn btn-primary offcanvas-sign-in" name = "logout">Log Out</button></div>
+        <form action="<?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method = "POST">
+          <div class = "col-12 text-center"><button type="submit" class="btn btn-primary offcanvas-sign-in rounded-pill px-5" name = "logout">Log Out</button></div>
         </form>
 
       </div>
