@@ -6,23 +6,17 @@ require_once "./function/helpers.php";
   // var_dump($_GET);
 
 if(isset($_GET["category"])){
-  $category = filter_var($_GET["category"], FILTER_SANITIZE_STRING);
 
-  $petArray  = ["dog", "cat", "hamster"];
-  $productArray = ["dogFood", "catFood", "hamsterFood", "dogCare", "catCare", "dogAccess", "catAccess"];
+  $category = validateText($_GET["category"]);
+  $categoryClean = filter_var($category, FILTER_SANITIZE_STRING);
+  
 
+  $informaton = getCategoryInfo($connection, $categoryClean);
 
-  if(in_array($category, $petArray)){
-    $informaton = getPets($connection, $category);
-  }
-  else if(in_array($category, $productArray)){
-    $informaton = getProduct($connection, $category);
-  }
-  else{
+  if(!$informaton){
     header("Location: index.php");
     exit();
   }
-  
 
   $categoryDescription = $informaton["categoryDescription"];
   $categoryArray = $informaton["categoryArray"];
@@ -32,27 +26,6 @@ else{
   header("Location: index.php");
   exit();
 }
-
-// $petArray = [];
-// $petDescription = "";
-// $petCategory = "";
-
-// $stmt = $connection->prepare("SELECT * FROM pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE pets.petCatId = 1 AND petImageType = 'Card';");
-// // $stmt->bind_param("s", $email);
-
-
-// $stmt->execute();
-// $result = $stmt->get_result();
-
-// while($row = $result->fetch_assoc()){
-//   array_push($petArray, $row);
-//   $petDescription = $row["description"];
-//   $petCategory = $row["name"];
-// }
-
-
-// $stmt->close();
-
 ?>
 
 <?php require_once "header.php"; ?>
@@ -181,9 +154,8 @@ else{
       <div class = "container  mt-5">
         <nav class = "mb-5 " style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-center">
-            <li class="breadcrumb-item"><a href="./index.html">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Dogs</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Pomeranian</li>
+            <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><?php echo $categoryName; ?></li>
           </ol>
         </nav>
       </div>
@@ -284,10 +256,7 @@ else{
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Hamster Food</a>
-              </li>
-              
-         
-           
+              </li>                               
             </ul>
           </div>
         </nav>
@@ -312,7 +281,9 @@ else{
                 </div>
               </div>
               <div class = "card-content-section">
-                <h5 class="text-center mt-2 px-2 text-truncate"><?php echo $cat["name"]; ?></h5>
+                <a href="<?php echo "item.php?category=$categoryName&id=$cat[id]"; ?>" class = "text-decoration-none text-dark">
+                  <h5 class="text-center mt-2 px-2 text-truncate"><?php echo $cat["name"]; ?></h5>
+                </a>
               </div>
               <div class = "card-rating-section text-center">
                 <div class = "stars">
@@ -330,18 +301,14 @@ else{
             </div>
           </div>
         <?php endforeach; ?>
-
         </div>
       </div>
     </section>
-
-
   </div>
-
-
   <a href="#" class="to-top">
     <img src="./svg/chevron-up.svg" alt="">
   </a>
+
   <script>
     const toTop = document.querySelector(".to-top");
     const subNavToggle = document.querySelectorAll(".dropdown-toggle");
