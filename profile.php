@@ -15,6 +15,7 @@
   }
 
   if(isset($_SESSION["profileUpdate"])){
+    var_dump($_SESSION);
     echo "update success";
     unset($_SESSION["profileUpdate"]);
   }
@@ -65,7 +66,7 @@
                 <input type="text" class="form-control" id="inputAddressLine" placeholder="Address Line" name = "addressLine" value = "<?php echo $_SESSION["user"]["addressLine"];?>">              
               </div>
               <div class="col-md-4">
-                <input type="text" class="form-control" id="inputPostcode" placeholder="Postcode" name = "postcode" value = "<?php echo isset($_SESSION["user"]["postcode"]) &&  !($_SESSION["user"]["postcode"]) === 0 ? $_SESSION["user"]["postcode"]:"";?>">              
+                <input type="text" class="form-control" id="inputPostcode" placeholder="Postcode" name = "postcode" value = "<?php echo isset($_SESSION["user"]["postcode"]) &&  ($_SESSION["user"]["postcode"]) !== 0 ? $_SESSION["user"]["postcode"]:"";?>">              
                 <?php if(isset($profileErrorArray) && in_array("postcode", $profileErrorArray)):  ?>
                 <p class = "mt-1 text-danger mb-0 d-block">Please enter a valid postcode</p>
                 <?php endif; ?>

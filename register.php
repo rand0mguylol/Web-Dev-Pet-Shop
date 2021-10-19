@@ -5,9 +5,9 @@
 
   var_dump($_SESSION);
 
-  if(isset($_SESSION["error"])){
-      $errorArray =  $_SESSION["error"];
-      unset($_SESSION["error"]);
+  if(isset($_SESSION["accountCreationError"])){
+      $errorArray =  $_SESSION["accountCreationError"];
+      unset($_SESSION["accountCreationError"]);
   }
   
 

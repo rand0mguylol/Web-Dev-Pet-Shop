@@ -50,6 +50,13 @@ function validatePostcode($postcode){
   return $postcodeValidate;
 }
 
+function validateEmail($email){
+  $emailSanitize = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+  $email = filter_var($emailSanitize, FILTER_VALIDATE_EMAIL);
+  return $email;
+}
+
 
 function returnType($category){
   $petArray  = ["Dog", "Cat", "Hamster"];
@@ -117,53 +124,16 @@ function getCategoryInfo($connection, $category, $id = "", $limit = false){
 }
 
 
-
-function createUser($postArray, $connection){
-  $errorArray = [];
-  $firstName = sanitizeText($postArray["firstName"]);
-  $lastName = sanitizeText($postArray["lastName"]);
-
-  $filters = [
-    "mobileNumber" => array("filter" => FILTER_VALIDATE_REGEXP, "options"=>array("regexp"=>"/^[1-9][0-9]{8,9}$/")),
-    "email"=> FILTER_SANITIZE_EMAIL,
-    "password" => array("filter" => FILTER_VALIDATE_REGEXP, "options"=>array("regexp"=>"/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/"))
-  ];
-  
-  $sanitizeInput = filter_input_array(INPUT_POST, $filters);
-
-  if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
-    array_push($errorArray, "email");
-  }else{
-    $email = $sanitizeInput["email"];
-  }
-
-  if(!$sanitizeInput["mobileNumber"]){
-    array_push($errorArray, "mobileNumber");
-  }else{
-    $mobileNumber = $sanitizeInput["mobileNumber"];
-  }
-
-  if(!$sanitizeInput["password"]){
-    array_push($errorArray, "password");
-  }else{
-    $password= $sanitizeInput["password"];
-  }
-
-  if (!$errorArray){
-    // $password = $sanitizeInput["password"];
+function createUser($newUser, $connection){
     $userRole = "CUSTOMER";
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $hashedPassword = password_hash($newUser["password"], PASSWORD_DEFAULT);
     $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber, userRole) VALUES (?, ?, ?, ?, ?, ?);");
-    $stmt->bind_param("ssssis", $firstName, $lastName, $email, $hashedPassword, $mobileNumber, $userRole);
+    $stmt->bind_param("ssssis", $newUser["firstName"], $newUser["lastName"], $newUser["email"], $hashedPassword, $newUser["mobileNumber"], $userRole);
 
     $stmt->execute();
     $stmt->close();
-    return false;
   }
-  else{
-    return $errorArray;
-  }
-}
+
 
 function getImage($id, $category, $imageType, $connection){
     // Get item gallery
@@ -237,57 +207,18 @@ function getItemInfo($id,  $category, $connection){
 }
 
 
-function updateProfile($postArray, $connection, $id){
-  $profileErrorArray = [];
-
-  $firstName = sanitizeText($postArray["firstName"]);
-  $lastName = sanitizeText($postArray["lastName"]);
-  $addressLine = sanitizeText($postArray["addressLine"]);
-  $city = sanitizeText($postArray["city"]);
-
-  $mobileNumber = validateMobileNumber($postArray["mobileNumber"]);
-
-  if($mobileNumber === false){
-    array_push( $profileErrorArray , "mobileNumber");
-  }
-
-  $postcode = validatePostcode($postArray['postcode']);
-
-  if($postcode === false){
-    array_push( $profileErrorArray , "postcode");
-  }
-
-  $state = validateState($postArray['state']);
-
-  if($state === false){
-    array_push( $profileErrorArray , "state");
-  }
-
-  if(!$profileErrorArray){
-    $newInfo = array(
-      "firstName" => $firstName,
-      "lastName" => $lastName,
-      "mobileNumber" => $mobileNumber,
-      "addressLine" => $addressLine,
-      "city" => $city,
-      "state" =>$state,
-      "postcode" => $postcode
-    );
-  
+function updateProfile($newInfo, $connection, $id){
     $stmt = $connection->prepare("UPDATE user SET firstName = ?, lastName = ?, mobileNumber = ?, addressLine = ?, city = ?, userState = ?, postcode = ? WHERE userId = ?");
-    $stmt -> bind_param("ssissssi", $firstName, $lastName, $mobileNumber, $addressLine, $city, $state, $postcode, $id);
+    $stmt -> bind_param("ssissssi", $newInfo["firstName"], $newInfo["lastName"], $newInfo["mobileNumber"], $newInfo["addressLine"], $newInfo["city"], $newInfo["state"], $newInfo["postcode"], $id);
 
     $stmt->execute();
     $stmt->close();
     
      foreach ($newInfo as $key => $value){
-    $_SESSION["user"][$key] = $value;
-  }
-    return false;
-  }
-  else{
-    return $profileErrorArray;
-  }
+      $_SESSION["user"][$key] = $value;
+    }
+  
+
 }
 
 function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
