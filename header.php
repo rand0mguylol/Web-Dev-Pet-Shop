@@ -30,7 +30,7 @@
 <body>
 
   <!-- Offcanvas -->
-  <?php if (!isset($_SESSION["userID"])): ?>
+  <?php if (!isset($_SESSION["user"]["userID"])): ?>
   <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
     <div class="offcanvas-header flex-column">
       <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -74,12 +74,13 @@
    <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
     <div class="offcanvas-header flex-column">
       <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel"><?php echo $_SESSION['firstName'] . " ". $_SESSION['lastName']; ?> </h2>
+      <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel"><?php echo $_SESSION['user']['firstName'] . " ". $_SESSION['user']['lastName']; ?> </h2>
     </div>
     <div class="offcanvas-body mb-5">
       <div>
+      <div class = "col-12 text-center"><a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">View Account</a></div>
         <form action="<?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method = "POST">
-          <div class = "col-12 text-center"><button type="submit" class="btn btn-primary offcanvas-sign-in rounded-pill px-5" name = "logout">Log Out</button></div>
+          <div class = "col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name = "logout">Log Out</button></div>
         </form>
 
       </div>

@@ -1,4 +1,13 @@
-<?php session_start(); ?>
+<?php session_start(); 
+
+// var_dump($_SESSION);
+$statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
+
+  if(!isset($_SESSION["user"]["userID"])){
+    header("Location: index.php");
+    exit();
+  }
+?>
 
 <?php require_once "header.php"; ?>
 
@@ -19,38 +28,47 @@
         <div class="tab-content mt-3" id="nav-tabContent">
           <!-- Profile Tab  -->
           <div class="tab-pane fade show active mx-auto" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-            <form action="" class = "row g-3 justify-content-center" id = "profile-form">
+            <form action="./controller/update_profile.php?id=<?php echo $_SESSION["user"]["userID"]; ?>" class = "row g-3 justify-content-center" id = "profile-form" method="POST">
               <div class="col-md-12">
                 <label for="inputFirstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName"  value = "<?php echo isset($_SESSION["firstName"]) ? $_SESSION["firstName"] : '';?> ">        
+                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName"  value = "<?php echo isset($_SESSION["user"]["firstName"]) ? $_SESSION["user"]["firstName"] : '';?> ">        
               </div>
               <div class="col-md-12">
               <label for="inputLastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName">              
+                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo isset($_SESSION["user"]["lastName"]) ? $_SESSION["user"]["lastName"] : '';?> ">              
               </div>
               <div class="col-md-12">
               <label for="inputTelephone" class="form-label">Mobile Number</label>
                 <div class="input-group">
                   <div class="input-group-text">+60</div>
-                  <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "">
+                  <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo isset($_SESSION["user"]["mobileNumber"]) ? $_SESSION["user"]["mobileNumber"] : '';?> ">
                 </div>
               </div>
               <div class="col-md-12">
                 <label for="inputAddressLine" class="form-label">Address Line</label>
-                <input type="text" class="form-control" id="inputAddressLine" placeholder="Address Line" name = "addressLine">              
+                <input type="text" class="form-control" id="inputAddressLine" placeholder="Address Line" name = "addressLine" value = "<?php echo isset($_SESSION["user"]["addressLine"]) ? $_SESSION["user"]["addressLine"] : '';?> ">              
               </div>
               <div class="col-md-4">
               <label for="inputPostcode" class="form-label">Postcode</label>
-                <input type="text" class="form-control" id="inputPostcode" placeholder="Postcode" name = "postcode">              
+                <input type="text" class="form-control" id="inputPostcode" placeholder="Postcode" name = "postcode" value = "<?php echo isset($_SESSION["user"]["postcode"]) &&  !($_SESSION["user"]["postcode"]) === 0 ? $_SESSION["user"]["postcode"] : '';?> ">              
               </div>
               <div class="col-md-8">
               <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity" placeholder="City" name = "city">              
+                <input type="text" class="form-control" id="inputCity" placeholder="City" name = "city" value = "<?php echo isset($_SESSION["user"]["city"]) ? $_SESSION["user"]["city"] : '';?> ">              
               </div>
               <div class="col-md-12">
-              <label for="inputState" class="form-label">State</label>
-                <input type="text" class="form-control" id="inputState" placeholder="State" name = "state">              
+                <label for="inputState" class="form-label">State</label>
+                <select id="inputState" class="form-select" name = "state">    
+                  <?php if(!$_SESSION["user"]["userState"]): ?>
+                  <option selected value = "">Select State</option>
+                  <?php endif; ?>
+                  <?php foreach($statesArray as $s): ?>
+                  <option value = "<?php echo $s;?>" <?php if ($_SESSION["user"]["state"] === $s) echo "selected"; ?>><?php echo $s;?></option>
+                  <?php endforeach; ?>    
+                </select>
               </div>
+
+              <div class = "col-12 text-center"><button type="submit" class="btn offcanvas-save-profile rounded-pill mt-5 px-5" name = "saveProfile">Save</button></div>
             </form>
           </div>
         <!-- End of Porfile Tab -->

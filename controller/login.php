@@ -27,7 +27,7 @@ if(isset($_POST["signin"]) && isset($_GET["page"])){
     $email = $sanitizeInput["email"];
     $password = $sanitizeInput["password"];
 
-    $stmt = $connection->prepare("SELECT userId, email, userPassword, firstName, lastName FROM user WHERE email = ?;");
+    $stmt = $connection->prepare("SELECT * FROM user WHERE email = ?;");
 
     if(!$stmt){
       $_SESSION["isValidLogin"] = "error";
@@ -46,9 +46,20 @@ if(isset($_POST["signin"]) && isset($_GET["page"])){
     $validLogin = ($verifyPassword === false) ? false : true;
 
     if ($validLogin){
-      $_SESSION["firstName"] = $row["firstName"];
-      $_SESSION["lastName"] = $row["lastName"];
-      $_SESSION["userID"] = $row["userId"];
+      $_SESSION["user"] = array(
+        "userID" => $row["userId"],
+        "firstName" => $row["firstName"],
+        "lastName" => $row["lastName"],
+        "email" => $row["email"],
+        "addressLine" => $row["addressLine"],
+        "mobileNumber" =>$row["mobileNumber"],
+        "city" => $row["city"],
+        "state" => $row["userState"],
+        "userPicture" => $row["imagePath"],
+        "postcode" => $row["postcode"],
+        "userRole" => $row["userRole"]
+      );
+  
       $_SESSION["isValidLogin"] = "success";
     }
     else{
