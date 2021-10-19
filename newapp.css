@@ -219,12 +219,12 @@ input[type=number] {
   margin: 0 auto;
 }
 
-#register-form, #profile-form{
+#register-form, #profile-form, #password-form{
   max-width: 900px;
   margin: 0 auto;
 }
 
-#profile-form{
+#profile-form, #password-form{
   max-width: 500px;
 }
 

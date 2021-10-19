@@ -12,6 +12,7 @@ if(isset($_POST["signup"])) {
       header("Location:  ../register.php" );
       exit();
     }else{
+      $_SESSION["accountCreation"] = "success";
       header("Location:  ../index.php" );
       exit();
     }

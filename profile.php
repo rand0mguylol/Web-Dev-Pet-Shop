@@ -1,12 +1,29 @@
 <?php session_start(); 
 
 // var_dump($_SESSION);
-$statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
+  $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
 
+  // Return to index if not login
   if(!isset($_SESSION["user"]["userID"])){
     header("Location: index.php");
     exit();
   }
+  
+  if(isset($_SESSION["passwordChangeMsg"])){
+    $passwordMsg = $_SESSION["passwordChangeMsg"];
+    unset($_SESSION["passwordChangeMsg"]);
+  }
+
+  if(isset($_SESSION["profileUpdate"])){
+    echo "update success";
+    unset($_SESSION["profileUpdate"]);
+  }
+
+  if(isset($_SESSION["profileUpdateError"])){
+    $profileErrorArray = $_SESSION["profileUpdateError"];
+    unset($_SESSION["profileUpdateError"]);
+  }
+
 ?>
 
 <?php require_once "header.php"; ?>
@@ -14,7 +31,7 @@ $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan",
 <div class="main-wrapper profile">
 <?php require_once "navbar.php"; ?>
 
-  <div class="container border border-dark profile-container mt-5  d-flex align-items-stretch">
+  <div class="container border border-dark profile-container my-5  d-flex align-items-stretch">
     <div class = "row align-items-stretch">
       <div class="col-3 px-0 d-flex align-items-center nav-tab-container">
           <div class="nav nav-tabs profile-tab flex-column" id="nav-tab" role="tablist">
@@ -30,51 +47,54 @@ $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan",
           <div class="tab-pane fade show active mx-auto" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
             <form action="./controller/update_profile.php?id=<?php echo $_SESSION["user"]["userID"]; ?>" class = "row g-3 justify-content-center" id = "profile-form" method="POST">
               <div class="col-md-12">
-                <label for="inputFirstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName"  value = "<?php echo isset($_SESSION["user"]["firstName"]) ? $_SESSION["user"]["firstName"] : '';?> ">        
+                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName"  value = "<?php echo $_SESSION["user"]["firstName"];?>">        
               </div>
               <div class="col-md-12">
-              <label for="inputLastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo isset($_SESSION["user"]["lastName"]) ? $_SESSION["user"]["lastName"] : '';?> ">              
+                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo $_SESSION["user"]["lastName"];?>">              
               </div>
               <div class="col-md-12">
-              <label for="inputTelephone" class="form-label">Mobile Number</label>
                 <div class="input-group">
                   <div class="input-group-text">+60</div>
-                  <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo isset($_SESSION["user"]["mobileNumber"]) ? $_SESSION["user"]["mobileNumber"] : '';?> ">
+                  <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo $_SESSION["user"]["mobileNumber"];?>">             
                 </div>
+                <?php if(isset($profileErrorArray) && in_array("mobileNumber", $profileErrorArray)):  ?>
+                  <p class = "mt-1 text-danger mb-0 d-block">Please enter a valid mobile number</p>
+                  <?php endif; ?>
               </div>
               <div class="col-md-12">
-                <label for="inputAddressLine" class="form-label">Address Line</label>
-                <input type="text" class="form-control" id="inputAddressLine" placeholder="Address Line" name = "addressLine" value = "<?php echo isset($_SESSION["user"]["addressLine"]) ? $_SESSION["user"]["addressLine"] : '';?> ">              
+                <input type="text" class="form-control" id="inputAddressLine" placeholder="Address Line" name = "addressLine" value = "<?php echo $_SESSION["user"]["addressLine"];?>">              
               </div>
               <div class="col-md-4">
-              <label for="inputPostcode" class="form-label">Postcode</label>
-                <input type="text" class="form-control" id="inputPostcode" placeholder="Postcode" name = "postcode" value = "<?php echo isset($_SESSION["user"]["postcode"]) &&  !($_SESSION["user"]["postcode"]) === 0 ? $_SESSION["user"]["postcode"] : '';?> ">              
+                <input type="text" class="form-control" id="inputPostcode" placeholder="Postcode" name = "postcode" value = "<?php echo isset($_SESSION["user"]["postcode"]) &&  !($_SESSION["user"]["postcode"]) === 0 ? $_SESSION["user"]["postcode"]:"";?>">              
+                <?php if(isset($profileErrorArray) && in_array("postcode", $profileErrorArray)):  ?>
+                <p class = "mt-1 text-danger mb-0 d-block">Please enter a valid postcode</p>
+                <?php endif; ?>
               </div>
               <div class="col-md-8">
-              <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity" placeholder="City" name = "city" value = "<?php echo isset($_SESSION["user"]["city"]) ? $_SESSION["user"]["city"] : '';?> ">              
+                <input type="text" class="form-control" id="inputCity" placeholder="City" name = "city" value = "<?php echo  $_SESSION["user"]["city"];?>">              
               </div>
               <div class="col-md-12">
-                <label for="inputState" class="form-label">State</label>
                 <select id="inputState" class="form-select" name = "state">    
                   <?php if(!$_SESSION["user"]["userState"]): ?>
                   <option selected value = "">Select State</option>
                   <?php endif; ?>
                   <?php foreach($statesArray as $s): ?>
-                  <option value = "<?php echo $s;?>" <?php if ($_SESSION["user"]["state"] === $s) echo "selected"; ?>><?php echo $s;?></option>
+                  <option value = "<?php echo $s;?>" <?php if ($_SESSION["user"]["state"] === $s) echo "selected";?>><?php echo $s;?></option>
                   <?php endforeach; ?>    
                 </select>
+                <?php if(isset($profileErrorArray) && in_array("state", $profileErrorArray)):  ?>
+                <p class = "mt-1 text-danger mb-0">Please select a valid state</p>
+                <?php endif; ?>
               </div>
 
               <div class = "col-12 text-center"><button type="submit" class="btn offcanvas-save-profile rounded-pill mt-5 px-5" name = "saveProfile">Save</button></div>
             </form>
           </div>
-        <!-- End of Porfile Tab -->
+        <!-- End of Profile Tab -->
 
         <!-- Picture Tab -->
           <div class="tab-pane fade" id="nav-pic" role="tabpanel" aria-labelledby="nav-pic-tab">   
+         
 
           </div>
 
@@ -82,7 +102,21 @@ $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan",
 
           <!-- Privacy Tab -->
           <div class="tab-pane fade" id="nav-privacy" role="tabpanel" aria-labelledby="nav-privacy-tab">   
-            
+            <form action="./controller/change_Password.php?id=<?php echo $_SESSION["user"]["userID"]; ?>" class = "row g-3 justify-content-center" id = "password-form" method="POST">
+            <p class = "lead"><?php if(isset($passwordMsg)) echo $passwordMsg; ?></p>
+              <div class="col-md-12">
+                <input type="password" class="form-control" placeholder="Old Password" name = "oldPassword">        
+              </div>
+              <div class="col-md-12">
+                <input type="password" class="form-control" placeholder="New Password" name = "newPassword">              
+              </div>   
+              <div class="col-md-12">
+                <input type="password" class="form-control" placeholder="Confirm Password" name = "confirmPassword">              
+              </div>  
+              <div class = "col-12 text-center">
+                <button type="submit" class="btn offcanvas-save-profile rounded-pill mt-5 px-5" name = "changePass">Change Password</button>
+              </div>
+            </form>
           </div>
 
           <!--  End of privacy tab-->
