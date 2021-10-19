@@ -99,7 +99,8 @@ function validateText($text){
   return $text;
 }
 
-function createUser($postArray, $connection,  $errorArray ){
+function createUser($postArray, $connection){
+  $errorArray = [];
   $firstName = validateText($postArray["firstName"]);
   $lastName = validateText($postArray["lastName"]);
 
@@ -123,23 +124,32 @@ function createUser($postArray, $connection,  $errorArray ){
     $mobileNumber = $sanitizeInput["mobileNumber"];
   }
 
+  if(!$sanitizeInput["password"]){
+    array_push($errorArray, "password");
+  }else{
+    $password= $sanitizeInput["password"];
+  }
+
   if (!$errorArray){
-    $password = $sanitizeInput["password"];
+    // $password = $sanitizeInput["password"];
+    $userRole = "CUSTOMER";
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber) VALUES (?, ?, ?, ?, ?);");
-    $stmt->bind_param("ssssi", $firstName, $lastName, $email, $hashedPassword, $mobileNumber);
+    $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber, userRole) VALUES (?, ?, ?, ?, ?, ?);");
+    $stmt->bind_param("ssssis", $firstName, $lastName, $email, $hashedPassword, $mobileNumber, $userRole);
 
     $stmt->execute();
     $id = mysqli_insert_id($connection);
     $stmt->close();
 
-    $stmt = $connection->prepare("INSERT INTO role(userId, userRole) VALUES (?, 'CUSTOMER');");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->close();
+    // $stmt = $connection->prepare("INSERT INTO role(userId, userRole) VALUES (?, 'CUSTOMER');");
+    // $stmt->bind_param("i", $id);
+    // $stmt->execute();
+    // $stmt->close();
 
-    header("Location: index.php");
-    exit();
+    return false;
+  }
+  else{
+    return $errorArray;
   }
 }
 
