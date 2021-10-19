@@ -1,5 +1,7 @@
 <?php 
 
+session_start();
+
   require_once "./function/db.php";
   require_once "./function/helpers.php";
   if(isset($_GET["category"], $_GET["id"])){
@@ -38,7 +40,7 @@
     <section class = "container item-section mt-5">
       <nav class = "mb-5" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
         <ol class="breadcrumb justify-content-start">
-          <li class="breadcrumb-item"><a href="./index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
           <li class="breadcrumb-item"><a href="./category.php?category=<?php echo ($itemInfo["itemSubInfo"]["category"]);?>"><?php echo $itemInfo["itemSubInfo"]["category"]; ?></a></li>
           <li class="breadcrumb-item active" aria-current="page"><?php echo $itemInfo["itemMainInfo"]["name"]; ?></li>
         </ol>
@@ -136,7 +138,7 @@
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
           <?php if (isset($itemInfo["itemMainInfo"]['description'])): ?>
-          <p><?php echo nl2br($itemInfo["itemMainInfo"]['description']); ?></p>
+          <p><?php echo nl2br(str_replace('\n', "<br>",$itemInfo["itemMainInfo"]['description'])); ?></p>
 
           <?php endif; ?>
         </div>
