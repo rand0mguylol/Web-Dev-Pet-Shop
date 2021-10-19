@@ -223,9 +223,13 @@ input[type="number"] {
   margin: 0 auto;
 }
 
-#register-form {
+#register-form, #profile-form{
   max-width: 900px;
   margin: 0 auto;
+}
+
+#profile-form{
+  max-width: 500px;
 }
 
 .specific-tabs button {
@@ -304,6 +308,7 @@ input[type="number"] {
   padding-left: 7rem;
 }
 
+
 .item-quantity-section input, .product-container .input-number {
   width: 50px;
   height: 50px;
@@ -327,7 +332,7 @@ input[type="number"] {
 }
 
 .specific-item-property {
-  min-width: 150px;
+  min-width: 200px;
 }
 
 .review-inner-section {
@@ -588,12 +593,41 @@ input[type="number"] {
   }
 } */
 
+
 .product-container .input-number{
   flex: none;
 }
 
-@media (max-width: 1399px) {
-  .view-button {
+.profile-container{
+  min-height: 800px;
+}
+
+.profile-container .nav-tabs{
+  border-bottom: none;
+  flex-basis: 100%;
+}
+.profile-tab button{
+  display: block;
+} 
+ .profile-container >.row{
+  flex-basis: 100%;
+} 
+ .profile-container  .nav-link{
+  color: #000!important;
+  font-weight: bold;
+}
+
+.profile-container .nav-link.active{
+  background-color: rgb(146 141 141 / 22%)!important
+}
+
+.nav-tab-container{
+  border-right: 1px solid #000;
+}
+
+
+@media (max-width: 1399px){
+  .view-button{
     display: inline;
   }
 }

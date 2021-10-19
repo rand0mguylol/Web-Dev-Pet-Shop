@@ -1,19 +1,38 @@
 <?php
   session_start();
+
   $errorArray = [];
 
-  // $test = 'F1@fffffffff';
-  // $r = preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/', $test);
-  // echo $r;
+  var_dump($_SESSION);
 
-  // $mobileRegEx = "/^[1-9][0-9]{8,9}$/";
-  // $mobileValidate = preg_match($mobileRegEx, "1234567890");
-  // echo $mobileValidate;
-  if(isset($_POST["signup"])){
-    require_once "./function/db.php";
-    require_once "./function/helpers.php"; 
-    createUser($_POST, $connection, $errorArray);
+  if(isset($_SESSION["error"])){
+      $errorArray =  $_SESSION["error"];
+      unset($_SESSION["error"]);
   }
+  
+
+
+
+  // if(isset($_GET["status"])){
+  //   $status = filter_input(INPUT_GET, "status", FILTER_SANITIZE_STRING);
+
+  //   if($status === "error"){
+  //     $errorArray = isset($_SESSION["error"]) ? $_SESSION["error"] : [];
+  //     unset($_SESSION["error"]);
+  //   }
+  //   elseif($status === "success"){
+  //     header("Location:  index.php" );
+  //     exit();
+  //   }
+  // }
+  
+  // if(isset($_POST["signup"])){
+  //   require_once "./function/db.php";
+  //   require_once "./function/helpers.php"; 
+  //   createUser($_POST, $connection, $errorArray);
+  // }
+  // $currentPage = $_SERVER["REQUEST_URI"];
+  // $currentPage = basename($currentPage);
 ?>
 
 
@@ -34,7 +53,7 @@
   
   <div class = "container my-5 ">
     <h1 class = "mb-5 text-center">REGISTER AN ACCOUNT</h1> 
-    <form class="row g-3 " id = "register-form" action="register.php" method = "POST">
+    <form class="row g-3 " id = "register-form" action="./controller/register_user.php" method = "POST">
     <div class="col-md-12">
       <label for="inputFirstName" class="form-label">First Name</label>
       <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName" value = "<?php echo isset($_POST['firstName']) && !in_array("firstName", $errorArray) ? htmlspecialchars($firstName): '' ; ?>">
