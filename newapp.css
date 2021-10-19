@@ -82,7 +82,7 @@ input[type=number] {
   flex-grow: 0;
 }
 
-.offcanvas-sign-in{
+.offcanvas-sign-in, .offcanvas-view-account,  .offcanvas-save-profile{
   background-color: rgb(225, 183, 94);
   border-color: rgb(225, 183, 94);
 }
