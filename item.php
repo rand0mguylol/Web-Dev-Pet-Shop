@@ -47,7 +47,7 @@ session_start();
       </nav>
 
       <div class = "row">
-       
+      
         <div class = "col-12 col-md-9 col-lg-6 col-xl-5 order-lg-1">
           <div class="glider-contain">
             <div class="glider-gallery-view">

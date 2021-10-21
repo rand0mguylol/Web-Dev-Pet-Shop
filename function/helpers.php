@@ -256,7 +256,12 @@ function getItemInfo($id,  $category, $connection){
 //   return $itemInfo;
 // }
 
-
+function getUserCartID($id, $connection){
+  $userID = $id;
+  $getcartstmt = $connection -> prepare("SELECT * FROM cart WHERE userid = ?");
+  $getcartstmt -> bind_param("i", $userID);
+  
+}
 
 
 ?>
