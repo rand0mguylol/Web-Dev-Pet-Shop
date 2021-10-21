@@ -1,33 +1,52 @@
 <?php session_start(); 
 
   if(isset($_POST["saveProfile"], $_GET["id"], $_SESSION["user"]["userID"])){
+    require_once "../function/db.php";
+    require_once "../function/helpers.php"; 
+    
+    $profileErrorArray = [];
 
-    require_once "../function/db.php"; 
-
-    $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
-
-
-    $userId = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
-    $userId = filter_var($userId, FILTER_VALIDATE_INT);
-
-    $firstName = validateText($_POST["firstName"]);
-    $lastName = validateText($_POST["lastName"]);
-    $addressLine = validateText($_POST["addressLine"]);
-    $city = validateText($_POST["city"]);
-
-    if($_POST["postcode"] !== ""){
-      $postcode = filter_input(INPUT_POST, "postcode", FILTER_VALIDATE_REGEXP, array("regexp"=>"/^[0-9]{5}$/"));
-    }else{
-      $postcode = 0;
+    $firstName = sanitizeText($_POST["firstName"]);
+    $lastName = sanitizeText($_POST["lastName"]);
+    $addressLine = sanitizeText($_POST["addressLine"]);
+    $city = sanitizeText($_POST["city"]);
+  
+    $mobileNumber = validateMobileNumber($_POST["mobileNumber"]);
+  
+    if($mobileNumber === false){
+      array_push( $profileErrorArray , "mobileNumber");
+    }
+  
+    $postcode = validatePostcode($_POST['postcode']);
+  
+    if($postcode === false){
+      array_push( $profileErrorArray , "postcode");
+    }
+  
+    $state = validateState($_POST['state']);
+  
+    if($state === false){
+      array_push( $profileErrorArray , "state");
     }
 
-    if(!$_POST["state"] !== ""){
-      
+    if(!$profileErrorArray){
+      $newInfo = array(
+        "firstName" => $firstName,
+        "lastName" => $lastName,
+        "mobileNumber" => $mobileNumber,
+        "addressLine" => $addressLine,
+        "city" => $city,
+        "state" =>$state,
+        "postcode" => $postcode
+      );
+      updateProfile($newInfo, $connection, $_GET["id"]);
+      $_SESSION["profileUpdate"] = "success";
+    }
+    else{
+      $_SESSION["profileUpdateError"] = $profileErrorArray;
     }
 
-    $stmt = $connection->prepare("UPDATE user SET firstName = ?, lastName = ?, mobileNumber = ?, addressLine = ?, city = ?, userState = ?, postcode = ? WHERE userId = ?");
-
-
-
+    header("Location: ../profile.php");
+    exit();
   }
 ?>

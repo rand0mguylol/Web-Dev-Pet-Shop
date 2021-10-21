@@ -5,9 +5,9 @@
 
   var_dump($_SESSION);
 
-  if(isset($_SESSION["error"])){
-      $errorArray =  $_SESSION["error"];
-      unset($_SESSION["error"]);
+  if(isset($_SESSION["accountCreationError"])){
+      $errorArray =  $_SESSION["accountCreationError"];
+      unset($_SESSION["accountCreationError"]);
   }
   
 
@@ -56,24 +56,18 @@
     <form class="row g-3 " id = "register-form" action="./controller/register_user.php" method = "POST">
     <div class="col-md-12">
       <label for="inputFirstName" class="form-label">First Name</label>
-      <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName" value = "<?php echo isset($_POST['firstName']) && !in_array("firstName", $errorArray) ? htmlspecialchars($firstName): '' ; ?>">
-      <?php if(in_array("firstName", $errorArray)):  ?>
-      <p class = "mt-1 text-danger mb-0">Please enter a valid first name</p>
-      <?php endif; ?>
+      <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName" value = "<?php echo isset($_POST['firstName']) && !in_array("firstName", $errorArray)?htmlspecialchars($firstName):'';?>">
     </div>
     <div class="col-md-12">
       <label for="inputLastName" class="form-label">Last Name</label>
-      <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo isset($_POST['lastName']) && !in_array("lastName", $errorArray) ? htmlspecialchars($lastName): '' ; ?>">
-      <?php if(in_array("lastName", $errorArray)):  ?>
-      <p class = "mt-1 text-danger mb-0">Please enter a valid last name</p>
-      <?php endif; ?>
+      <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo isset($_POST['lastName']) && !in_array("lastName", $errorArray)?htmlspecialchars($lastName):'';?>">
     </div>
     
     <div class="col-md-12">
-      <label for="inputTelephone" class="form-label">Mobile Number</label>
+      <label for="inputTelephone" class="form-label">Mobile Number*</label>
       <div class="input-group">
         <div class="input-group-text">+60</div>
-        <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo isset($_POST['mobileNumber']) && !in_array("mobileNumber", $errorArray) ? htmlspecialchars($mobileNumber): '' ; ?>">
+        <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo isset($_POST['mobileNumber']) && !in_array("mobileNumber", $errorArray)?htmlspecialchars($mobileNumber):'';?>" required>
         <?php if(in_array("mobileNumber", $errorArray)):  ?>
         <p class = "mt-1 text-danger mb-0 ps-3 d-block">Please enter a valid mobile number</p>
         <?php endif; ?>
@@ -81,14 +75,14 @@
     </div>
    
     <div class="col-md-12">
-      <label for="inputEmail" class="form-label">Email</label>
-      <input type="text" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" value = "<?php echo isset($_POST['email']) && !in_array("email", $errorArray) ? htmlspecialchars($email): '' ; ?>" required>
+      <label for="inputEmail" class="form-label">Email*</label>
+      <input type="text" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" value = "<?php echo isset($_POST['email']) && !in_array("email", $errorArray)?htmlspecialchars($email):'' ?>" required>
       <?php if(in_array("email", $errorArray)):  ?>
       <p class = "mt-1 text-danger mb-0">Please enter a valid email</p>
       <?php endif; ?>
     </div>
     <div class="col-md-12">
-      <label for="inputPassword" class="form-label">Password</label>
+      <label for="inputPassword" class="form-label">Password*</label>
       <input type="password" class="form-control" id="inputPassword" placeholder = "Password" name = "password" required>
       <small class = "mt-1"    <?php if(in_array("password", $errorArray)):  ?> style = "color:red" <?php endif; ?>>Length must be between 8 to 16 characters, including one digit, one uppercase, one lowecase character and may contain the following !@#$%& </small>
     </div>

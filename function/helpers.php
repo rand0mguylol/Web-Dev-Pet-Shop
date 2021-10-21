@@ -1,5 +1,63 @@
 <?php
 
+function sanitizeText($text){
+  $text = trim($text);
+  $text = strip_tags($text);
+  $text = filter_var($text, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+
+  return $text;
+}
+
+function validatePassword($password){
+  $passwordRegEx = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/';
+
+  $passwordValidate = filter_var($password, FILTER_VALIDATE_REGEXP, array("options" => array("regexp"=>$passwordRegEx)));
+
+  return $passwordValidate;
+}
+
+function validateMobileNumber($mobileNumber){
+  $mobileRegEx = "/^[1]{1}[0-9]{8,9}$/";
+  $mobileValidate = filter_var($mobileNumber, FILTER_VALIDATE_REGEXP, array("options" => array("regexp"=>$mobileRegEx)));
+
+  return $mobileValidate;
+}
+
+function validateState($state){
+  $state = trim($state);
+  $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
+  
+  if(!$_POST["state"] !== "" && in_array($_POST["state"], $statesArray)){
+    return $state;
+  }elseif($_POST["state"] === ""){
+    $state = "";
+  }else{
+    return false;
+  }
+
+  return $state;
+}
+
+function validatePostcode($postcode){
+  $postRegEx = "/^[0-9]{5}$/";
+ 
+  if($postcode === ""){
+    return "";
+  }else{
+    $postcodeValidate = filter_var($postcode, FILTER_VALIDATE_REGEXP, array("options" => array("regexp"=>$postRegEx)));
+  }
+
+  return $postcodeValidate;
+}
+
+function validateEmail($email){
+  $emailSanitize = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+  $email = filter_var($emailSanitize, FILTER_VALIDATE_EMAIL);
+  return $email;
+}
+
+
 function returnType($category){
   $petArray  = ["Dog", "Cat", "Hamster"];
   $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
@@ -66,92 +124,16 @@ function getCategoryInfo($connection, $category, $id = "", $limit = false){
 }
 
 
-function validatePassword($password){
-  $passwordRegEx = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/';
-  $passwordValidate = preg_match($passwordRegEx, $password);
-
-  // if (!$passwordValidate && !in_array($sanitizeInput["password"], $errorArray)){
-  //   array_push($errorArray, "password");
-  // }
-
-  if (!$passwordValidate){
-    return false;
-  }else{
-    return $password;
-  }
-}
-
-function validateMobileNumber($mobileNumber){
-  $mobileRegEx = "/^[1-9][0-9]{8,9}$/";
-  $mobileValidate = preg_match($mobileRegEx, $mobileNumber);
-
-  if (!$mobileValidate){
-    return false;
-  }else{
-    return $mobileNumber;
-  }
-}
-
-function validateText($text){
-  $text = trim($text);
-  $text = strip_tags($text);
-
-  return $text;
-}
-
-function createUser($postArray, $connection){
-  $errorArray = [];
-  $firstName = validateText($postArray["firstName"]);
-  $lastName = validateText($postArray["lastName"]);
-
-  $filters = [
-    "mobileNumber" => array("filter" => FILTER_VALIDATE_REGEXP, "options"=>array("regexp"=>"/^[1-9][0-9]{8,9}$/")),
-    "email"=> FILTER_SANITIZE_EMAIL,
-    "password" => array("filter" => FILTER_VALIDATE_REGEXP, "options"=>array("regexp"=>"/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/"))
-  ];
-
-  $sanitizeInput = filter_input_array(INPUT_POST, $filters);
-
-  if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
-    array_push($errorArray, "email");
-  }else{
-    $email = $sanitizeInput["email"];
-  }
-
-  if(!$sanitizeInput["mobileNumber"]){
-    array_push($errorArray, "mobileNumber");
-  }else{
-    $mobileNumber = $sanitizeInput["mobileNumber"];
-  }
-
-  if(!$sanitizeInput["password"]){
-    array_push($errorArray, "password");
-  }else{
-    $password= $sanitizeInput["password"];
-  }
-
-  if (!$errorArray){
-    // $password = $sanitizeInput["password"];
+function createUser($newUser, $connection){
     $userRole = "CUSTOMER";
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $hashedPassword = password_hash($newUser["password"], PASSWORD_DEFAULT);
     $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber, userRole) VALUES (?, ?, ?, ?, ?, ?);");
-    $stmt->bind_param("ssssis", $firstName, $lastName, $email, $hashedPassword, $mobileNumber, $userRole);
+    $stmt->bind_param("ssssis", $newUser["firstName"], $newUser["lastName"], $newUser["email"], $hashedPassword, $newUser["mobileNumber"], $userRole);
 
     $stmt->execute();
-    $id = mysqli_insert_id($connection);
     $stmt->close();
-
-    // $stmt = $connection->prepare("INSERT INTO role(userId, userRole) VALUES (?, 'CUSTOMER');");
-    // $stmt->bind_param("i", $id);
-    // $stmt->execute();
-    // $stmt->close();
-
-    return false;
   }
-  else{
-    return $errorArray;
-  }
-}
+
 
 function getImage($id, $category, $imageType, $connection){
     // Get item gallery
@@ -225,43 +207,51 @@ function getItemInfo($id,  $category, $connection){
 }
 
 
-// function getProductInfo($id, $connection){
-//   $itemInfo = [
-//     "itemMainInfo" => array(),
-//     "itemSubInfo" => array()
-//   ];
-//   $stmt = $connection->prepare("SELECT product.name, product.price, product.description, product.brand,  product.weight, product.warrantyPeriod, product.productDimensions productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1");
-//   $stmt->bind_param("i", $id);
-//   $stmt->execute();
-//   $result = $stmt->get_result();
-//   $row = $result->fetch_assoc();
-//   $itemInfo = [
-//     "itemMainInfo" => array(),
-//     "itemSubInfo" => array()
-//   ];
+function updateProfile($newInfo, $connection, $id){
+    $stmt = $connection->prepare("UPDATE user SET firstName = ?, lastName = ?, mobileNumber = ?, addressLine = ?, city = ?, userState = ?, postcode = ? WHERE userId = ?");
+    $stmt -> bind_param("ssissssi", $newInfo["firstName"], $newInfo["lastName"], $newInfo["mobileNumber"], $newInfo["addressLine"], $newInfo["city"], $newInfo["state"], $newInfo["postcode"], $id);
 
-//   if(!$row){
-//     return false;
-//   }
-
-//   foreach($row as $key => $value){
-//     if($key !== "name" && $key !== "price"){
-//       $itemInfo["itemSubInfo"][$key] = $value;
-//     }else{
-//       $itemInfo["itemMainInfo"][$key] = $value;
-//     }
-//   }
-//   $stmt->close();
-
-//   return $itemInfo;
-// }
-
-function getUserCartID($id, $connection){
-  $userID = $id;
-  $getcartstmt = $connection -> prepare("SELECT * FROM cart WHERE userid = ?");
-  $getcartstmt -> bind_param("i", $userID);
+    $stmt->execute();
+    $stmt->close();
+    
+     foreach ($newInfo as $key => $value){
+      $_SESSION["user"][$key] = $value;
+    }
   
+
 }
 
+function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
+  $stmt = $connection->prepare("SELECT userPassword FROM user WHERE userId = ?;");
 
+  if($verifyPassword){
+    $isSame = $oldpass === $newpass ? true : false;
+    $validatePassword = validatePassword($newpass);
+  }else{
+    return "Invalid Password";
+  }
+
+  if($isSame){
+    return "New Password cannot be the same as the old password";
+  }
+
+  if($validatePassword){
+    $confirmPassword = $newpass === $confimpass ? true : false;
+  }else{
+   return  "Length must be between 8 to 16 characters, 
+            including one digit, one uppercase, one lowecase 
+            character and may contain the following !@#$%&";
+  }
+
+  if($confirmPassword){
+    $hashedPassword = password_hash($newpass, PASSWORD_DEFAULT);
+    $stmt = $connection->prepare("UPDATE `user` SET `userPassword`= ?  WHERE userId = ?");
+    $stmt->bind_param("si", $hashedPassword, $id);
+    $stmt->execute();
+    $stmt->close();
+    return  "Password Changed Successfully";
+  }else{
+    return  "Password does not match";
+  }
+}
 ?>
