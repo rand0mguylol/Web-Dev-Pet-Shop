@@ -6,7 +6,7 @@ session_start();
   require_once "./function/helpers.php";
   if(isset($_GET["category"], $_GET["id"])){
 
-    $category = validateText($_GET["category"]);
+    $category = sanitizeText($_GET["category"]);
     $categoryClean = filter_var($category, FILTER_SANITIZE_STRING);
 
     $id = filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT);
@@ -47,7 +47,7 @@ session_start();
       </nav>
 
       <div class = "row">
-       
+      
         <div class = "col-12 col-md-9 col-lg-6 col-xl-5 order-lg-1">
           <div class="glider-contain">
             <div class="glider-gallery-view">
