@@ -6,7 +6,7 @@ session_start();
   require_once "./function/helpers.php";
   if(isset($_GET["category"], $_GET["id"])){
 
-    $category = validateText($_GET["category"]);
+    $category = sanitizeText($_GET["category"]);
     $categoryClean = filter_var($category, FILTER_SANITIZE_STRING);
 
     $id = filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT);

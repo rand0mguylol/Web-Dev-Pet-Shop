@@ -2,7 +2,6 @@
   require_once "./function/db.php";
   require_once "header.php";
   require_once "navbar.php";
-  if ($_SESSION['user']['userID'])
 ?>
 <div class="cart-container container-fluid px-lg-5 my-lg-3 ">
   <div class="row mx-lg-5 justify-content-around">
@@ -45,7 +44,8 @@
               <button type="button" class="btn btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
                 <i class="fas fa-minus fa-sm"></i>
               </button>
-              <input type="text" name="quant[1]" class="form-control input-number text-center quantity-input" value="1" min="1" max="">
+              <input type="hidden" name = "product[1]['productid']" value ="id2">
+              <input type="text" name="product[1]['quantity']" class="form-control input-number text-center quantity-input" value="1" min="1" max="">
               <button type="button" class="btn btn-outline-secondary btn-number" data-type="plus" data-field="quant[1]">
                 <i class="fas fa-plus fa-sm"></i>
               </button>
@@ -84,7 +84,8 @@
               <button type="button" class="btn btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
                 <i class="fas fa-minus fa-sm"></i>
               </button>
-              <input type="text" name="quant[1]" class="form-control input-number text-center quantity-input" value="1" min="1" max="">
+              <input type="hidden" name = "product[1]['productid']" value ="id2">
+              <input type="text" name="product[1]['quantity']" class="form-control input-number text-center quantity-input" value="1" min="1" max="">
               <button type="button" class="btn btn-outline-secondary btn-number" data-type="plus" data-field="quant[1]">
                 <i class="fas fa-plus fa-sm"></i>
               </button>
@@ -123,7 +124,8 @@
               <button type="button" class="btn btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
                 <i class="fas fa-minus fa-sm"></i>
               </button>
-              <input type="text" name="quant[1]" class="form-control input-number text-center quantity-input" value="1" min="1" max="">
+              <input type="hidden" name = "product[1]['productid']" value ="id2">
+              <input type="text" name="product[1]['quantity']" class="form-control input-number text-center quantity-input" value="1" min="1" max="">
               <button type="button" class="btn btn-outline-secondary btn-number" data-type="plus" data-field="quant[1]">
                 <i class="fas fa-plus fa-sm"></i>
               </button>

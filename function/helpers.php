@@ -223,7 +223,13 @@ function updateProfile($newInfo, $connection, $id){
 
 function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
   $stmt = $connection->prepare("SELECT userPassword FROM user WHERE userId = ?;");
+  $stmt->bind_param("i", $id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $row = $result->fetch_assoc();
 
+  $dbPassword = $row["userPassword"];
+  $verifyPassword = password_verify($oldpass, $dbPassword);
   if($verifyPassword){
     $isSame = $oldpass === $newpass ? true : false;
     $validatePassword = validatePassword($newpass);
