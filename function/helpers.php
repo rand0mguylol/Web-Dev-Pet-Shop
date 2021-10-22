@@ -57,6 +57,33 @@ function validateEmail($email){
   return $email;
 }
 
+function validateCartItem($cartid, $id,$category,$connection ){
+  $petArray  = ["Dog", "Cat", "Hamster"];
+  $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
+  if(in_array($category, $petArray)){
+    $sql = "SELECT * FROM cartitem WHERE cartId = ? AND petId = ?;";
+    }
+    else if(in_array($category, $productArray)){
+    $sql = "SELECT * FROM cartitem WHERE cartId = ? AND productId = ?;";
+  }
+    else{
+      return false;
+    }
+  $stmt = $connection ->prepare($sql);
+  if ($stmt){
+    $stmt -> bind_param("ii", $cartid,$id);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+    $row = $result -> fetch_assoc();
+    $stmt->close();
+    if (!$row){
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
 
 function returnType($category){
   $petArray  = ["Dog", "Cat", "Hamster"];
@@ -137,28 +164,23 @@ function createUser($newUser, $connection){
 
 function getImage($id, $category, $imageType, $connection){
     // Get item gallery
-
     $type = returnType($category);
-
     $imageArray = array();
-
     if(strtolower($type) === "pet" ){
       $stmt = $connection->prepare("SELECT petimage.imagePath FROM petimage  WHERE petimage.petId = ? AND petimage.imageType = ?; ");
     }else if(strtolower($type) === "product"){
       $stmt = $connection->prepare("SELECT productimage.imagePath FROM productimage  WHERE productimage.productId= ? AND productimage.imageType = ?; ");
     }
-
     if(!$stmt){
       return false;
     }
 
     $imageType = ucfirst($imageType);
-
     $stmt->bind_param("is", $id, $imageType);
     $stmt->execute();
     $result = $stmt->get_result();
     
-     while($row = $result->fetch_assoc()){
+    while($row = $result->fetch_assoc()){
       array_push($imageArray, $row);
     }
     $stmt->close();
@@ -206,6 +228,24 @@ function getItemInfo($id,  $category, $connection){
   return $itemInfo;
 }
 
+function getCartId($userid, $connection){
+  $stmt =$connection -> prepare ("SELECT cartId FROM cart WHERE userId = ?;") ;
+  $stmt->bind_param("i", $userid);
+  $stmt-> execute();
+  $result = $stmt -> get_result();
+  $row = $result->fetch_assoc();
+  $stmt->close();
+  if (!$row){
+    return false ;
+  } else {
+    $cartid = $row['cartId'];
+    return $cartid;
+  }
+}
+
+function getCartItems ($cartid,$connection){
+  //
+};
 
 function updateProfile($newInfo, $connection, $id){
     $stmt = $connection->prepare("UPDATE user SET firstName = ?, lastName = ?, mobileNumber = ?, addressLine = ?, city = ?, userState = ?, postcode = ? WHERE userId = ?");
@@ -214,7 +254,7 @@ function updateProfile($newInfo, $connection, $id){
     $stmt->execute();
     $stmt->close();
     
-     foreach ($newInfo as $key => $value){
+    foreach ($newInfo as $key => $value){
       $_SESSION["user"][$key] = $value;
     }
   
@@ -244,7 +284,7 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
   if($validatePassword){
     $confirmPassword = $newpass === $confimpass ? true : false;
   }else{
-   return  "Length must be between 8 to 16 characters, 
+    return  "Length must be between 8 to 16 characters, 
             including one digit, one uppercase, one lowecase 
             character and may contain the following !@#$%&";
   }
@@ -260,4 +300,37 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
     return  "Password does not match";
   }
 }
-?>
+
+
+
+function createCart($userid,$connection){
+    $stmt = $connection -> prepare("INSERT INTO cart VALUES ('',?, 0);");
+    $stmt -> bind_param('i',$userid) ;
+    $stmt -> execute();
+    $cartid = $connection ->insert_id;
+    $stmt -> close();
+    return $cartid;
+}
+
+function addCartitem($cartid,$id,$category,$quantity,$totalPrice,$connection){
+  $petArray  = ["Dog", "Cat", "Hamster"];
+  $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
+  if(in_array($category, $petArray)){
+    $sql = "INSERT INTO cartitem VALUES ('',?,NULL,?,?,?,1);";
+    }
+    else if(in_array($category, $productArray)){
+    $sql = "INSERT INTO cartitem VALUES ('',NULL,?,?,?,?,1);";
+  }
+    else{
+      return false;
+    }
+  $stmt = $connection ->prepare($sql);
+  if ($stmt){
+    $stmt -> bind_param("iiii",$id,$cartid,$quantity,$totalPrice);
+    $stmt -> execute();
+    $stmt->close();
+    return true;
+  } else {
+    return false;
+  }
+}

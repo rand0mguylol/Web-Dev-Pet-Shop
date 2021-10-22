@@ -2,12 +2,11 @@
 session_start();
 require_once "./function/db.php";
 require_once "./function/helpers.php";
-
   // var_dump($_GET);
 
 if(isset($_GET["category"])){
 
-  $category = validateText($_GET["category"]);
+  $category = sanitizeText($_GET["category"]);
   $categoryClean = filter_var($category, FILTER_SANITIZE_STRING);
   
 
@@ -200,7 +199,6 @@ else{
       </div>
     </section>
 
-   
 
     <section class = "product-section mt-5 ">
       
