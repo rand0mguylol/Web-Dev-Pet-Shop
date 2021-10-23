@@ -1,19 +1,38 @@
 <?php
   session_start();
+
   $errorArray = [];
 
-  // $test = 'F1@fffffffff';
-  // $r = preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/', $test);
-  // echo $r;
+  var_dump($_SESSION);
 
-  // $mobileRegEx = "/^[1-9][0-9]{8,9}$/";
-  // $mobileValidate = preg_match($mobileRegEx, "1234567890");
-  // echo $mobileValidate;
-  if(isset($_POST["signup"])){
-    require_once "./function/db.php";
-    require_once "./function/helpers.php"; 
-    createUser($_POST, $connection, $errorArray);
+  if(isset($_SESSION["accountCreationError"])){
+      $errorArray =  $_SESSION["accountCreationError"];
+      unset($_SESSION["accountCreationError"]);
   }
+  
+
+
+
+  // if(isset($_GET["status"])){
+  //   $status = filter_input(INPUT_GET, "status", FILTER_SANITIZE_STRING);
+
+  //   if($status === "error"){
+  //     $errorArray = isset($_SESSION["error"]) ? $_SESSION["error"] : [];
+  //     unset($_SESSION["error"]);
+  //   }
+  //   elseif($status === "success"){
+  //     header("Location:  index.php" );
+  //     exit();
+  //   }
+  // }
+  
+  // if(isset($_POST["signup"])){
+  //   require_once "./function/db.php";
+  //   require_once "./function/helpers.php"; 
+  //   createUser($_POST, $connection, $errorArray);
+  // }
+  // $currentPage = $_SERVER["REQUEST_URI"];
+  // $currentPage = basename($currentPage);
 ?>
 
 
@@ -34,27 +53,21 @@
   
   <div class = "container my-5 ">
     <h1 class = "mb-5 text-center">REGISTER AN ACCOUNT</h1> 
-    <form class="row g-3 " id = "register-form" action="register.php" method = "POST">
+    <form class="row g-3 " id = "register-form" action="./controller/register_user.php" method = "POST">
     <div class="col-md-12">
       <label for="inputFirstName" class="form-label">First Name</label>
-      <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName" value = "<?php echo isset($_POST['firstName']) && !in_array("firstName", $errorArray) ? htmlspecialchars($firstName): '' ; ?>">
-      <?php if(in_array("firstName", $errorArray)):  ?>
-      <p class = "mt-1 text-danger mb-0">Please enter a valid first name</p>
-      <?php endif; ?>
+      <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName" value = "<?php echo isset($_POST['firstName']) && !in_array("firstName", $errorArray)?htmlspecialchars($firstName):'';?>">
     </div>
     <div class="col-md-12">
       <label for="inputLastName" class="form-label">Last Name</label>
-      <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo isset($_POST['lastName']) && !in_array("lastName", $errorArray) ? htmlspecialchars($lastName): '' ; ?>">
-      <?php if(in_array("lastName", $errorArray)):  ?>
-      <p class = "mt-1 text-danger mb-0">Please enter a valid last name</p>
-      <?php endif; ?>
+      <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo isset($_POST['lastName']) && !in_array("lastName", $errorArray)?htmlspecialchars($lastName):'';?>">
     </div>
     
     <div class="col-md-12">
-      <label for="inputTelephone" class="form-label">Mobile Number</label>
+      <label for="inputTelephone" class="form-label">Mobile Number*</label>
       <div class="input-group">
         <div class="input-group-text">+60</div>
-        <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo isset($_POST['mobileNumber']) && !in_array("mobileNumber", $errorArray) ? htmlspecialchars($mobileNumber): '' ; ?>">
+        <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo isset($_POST['mobileNumber']) && !in_array("mobileNumber", $errorArray)?htmlspecialchars($mobileNumber):'';?>" required>
         <?php if(in_array("mobileNumber", $errorArray)):  ?>
         <p class = "mt-1 text-danger mb-0 ps-3 d-block">Please enter a valid mobile number</p>
         <?php endif; ?>
@@ -62,14 +75,14 @@
     </div>
    
     <div class="col-md-12">
-      <label for="inputEmail" class="form-label">Email</label>
-      <input type="text" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" value = "<?php echo isset($_POST['email']) && !in_array("email", $errorArray) ? htmlspecialchars($email): '' ; ?>" required>
+      <label for="inputEmail" class="form-label">Email*</label>
+      <input type="text" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" value = "<?php echo isset($_POST['email']) && !in_array("email", $errorArray)?htmlspecialchars($email):'' ?>" required>
       <?php if(in_array("email", $errorArray)):  ?>
       <p class = "mt-1 text-danger mb-0">Please enter a valid email</p>
       <?php endif; ?>
     </div>
     <div class="col-md-12">
-      <label for="inputPassword" class="form-label">Password</label>
+      <label for="inputPassword" class="form-label">Password*</label>
       <input type="password" class="form-control" id="inputPassword" placeholder = "Password" name = "password" required>
       <small class = "mt-1"    <?php if(in_array("password", $errorArray)):  ?> style = "color:red" <?php endif; ?>>Length must be between 8 to 16 characters, including one digit, one uppercase, one lowecase character and may contain the following !@#$%& </small>
     </div>
