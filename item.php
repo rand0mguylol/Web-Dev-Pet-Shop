@@ -1,3 +1,36 @@
+<?php 
+
+session_start();
+
+  require_once "./function/db.php";
+  require_once "./function/helpers.php";
+  if(isset($_GET["category"], $_GET["id"])){
+
+    $category = validateText($_GET["category"]);
+    $categoryClean = filter_var($category, FILTER_SANITIZE_STRING);
+
+    $id = filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT);
+
+    $id = (int) $id;
+
+    $itemInfo = getItemInfo($id, $categoryClean , $connection);
+
+    $itemGalleryArray = getImage($id,  $categoryClean, "Gallery", $connection);
+  
+    $itemThumbnailArray = getImage($id, $categoryClean , "Thumbnail", $connection);
+
+    $removeId = $itemInfo["itemSubInfo"]['id'];
+    unset($itemInfo["itemSubInfo"]['id']);
+
+    $others = getCategoryInfo($connection, $categoryClean , $removeId, true);
+    
+  }else{
+    header("Location: index.php");
+    exit();
+  }
+
+?>
+
 <?php require_once "header.php"; ?>
   
   <div class = "main-wrapper specific">
@@ -7,25 +40,26 @@
     <section class = "container item-section mt-5">
       <nav class = "mb-5" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
         <ol class="breadcrumb justify-content-start">
-          <li class="breadcrumb-item"><a href="./index.html">Home</a></li>
-          <li class="breadcrumb-item"><a href="#">Dogs</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Pomeranian</li>
+          <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
+          <li class="breadcrumb-item"><a href="./category.php?category=<?php echo ($itemInfo["itemSubInfo"]["category"]);?>"><?php echo $itemInfo["itemSubInfo"]["category"]; ?></a></li>
+          <li class="breadcrumb-item active" aria-current="page"><?php echo $itemInfo["itemMainInfo"]["name"]; ?></li>
         </ol>
       </nav>
 
       <div class = "row">
        
-
         <div class = "col-12 col-md-9 col-lg-6 col-xl-5 order-lg-1">
           <div class="glider-contain">
             <div class="glider-gallery-view">
-              <div><img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid"></div>
-              <div><img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid"></div>
-              <div><img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid"></div>
+              <?php foreach($itemGalleryArray as $galleryPic): ?>
+              <div>
+                <img src="<?php echo "$galleryPic[imagePath].jpg" ?>"alt="">
+              </div>
+              <?php endforeach; ?>
             </div>
-        
           </div>
         </div>
+    
 
         <div class = "col-12 col-md-3 col-lg-12 col-xl-1 thumbnail-col order-lg-0">
           <div role="tablist" class="thumbnail "></div>
@@ -33,10 +67,10 @@
         
         <div class = "col-12 col-lg-6 col-xl-6 item-inner-section order-5">
           <div class = " item-info-section mb-4">
-            <h1 class = "item-info-header"><span class = "fw-bold">Pomeranian</span></h1>
+            <h1 class = "item-info-header "><span class = "fw-bold"><?php echo $itemInfo['itemMainInfo']['name']; ?></span></h1>
             
             <div class = "d-flex justify-content-between align-items-baseline" >
-              <p  class = "d-inline mt-2 item-info-price lead fs-3">MYR 1000</p>
+              <p  class = "d-inline mt-2 item-info-price lead fs-3"><?php echo "RM "  . $itemInfo['itemMainInfo']['price']; ?></p>
               <div class = "item-stars d-inline me-5">
                   <img src="./svg/star-fill.svg" alt="">
                   <img src="./svg/star-fill.svg" alt="">
@@ -47,7 +81,7 @@
               </div>
             </div>
 
-            <p class = "item-info-description">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, cumque?</p>
+            <!-- <p class = "item-info-description">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, cumque?</p> -->
           </div>
           
           <hr>
@@ -93,44 +127,20 @@
         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
           <div>
             <div class="specific-item-info">
+              <?php foreach($itemInfo["itemSubInfo"] as $key => $value): ?>
               <div>
-                <p class = "specific-item-property fw-bold">Breed</p>
-                <p>Fox Face Pomeranian</p>
+                <p class = "specific-item-property fw-bold"><?php echo ucfirst($key); ?> </p>
+                <p><?php echo $value; ?></p>
               </div>
-              <div>
-                <p class = "specific-item-property fw-bold">Profile</p>
-                <p class = "col">Male, 4 Months</p>
-              </div>
-              <div>
-                <p class = "specific-item-property fw-bold">Weight</p>
-                <p class = "col">2 kg</p>
-              </div>
-              <div>
-                <p class = "specific-item-property fw-bold">Color</p>
-                <p class = "col">White, Black</p>
-              </div>
-              <div>
-                <p class = "specific-item-property fw-bold">Condition</p>
-                <p class = "col">Healthy</p>
-              </div>
-              <div>
-                <p class = "specific-item-property fw-bold">Vaccinated</p>
-                <p class = "col">Yes</p>
-              </div>
-              <div>
-                <p class = "specific-item-property fw-bold">Dewormed</p>
-                <p class = "col">Yes</p>
-              </div>
-              <div>
-                <p class = "specific-item-property fw-bold">Posted Date</p>
-                <p class = "col">16 Sep 2021</p>
-              </div>
+              <?php endforeach; ?>
             </div>
           </div>
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-          <p>Small, fox-faced Pomeranians descended from large breeds of sled dogs and are active, capable, competitive and obedient creatures. Pomeranians have triangle-shaped heads and pointed ears. They have dark-colored eyes and noses that can be either deep in color or match the shade of their coats.
-          <p>They also have a distinctive plumed tail that fans out over their back. They come in a variety of solid colors, including red, orange, white, brown, or black. In rare cases, you may see a white Pomeranian with colored markings or one with a different combination of colors. The prominent double coat of Pomeranians stands out from their bodies, with rough white fur around their chest. Although the Pomeranian (also called the Zwergspitz, Dwarf Spitz, Loulou, or Pom for short) only weighs between three and seven pounds, this lively dog has a very bold demeanor. Learn more about Pomeranians and their unique temperament and personality traits to see if Poms are the right dog breed for you!</p>
+          <?php if (isset($itemInfo["itemMainInfo"]['description'])): ?>
+          <p><?php echo nl2br(str_replace('\n', "<br>",$itemInfo["itemMainInfo"]['description'])); ?></p>
+
+          <?php endif; ?>
         </div>
 
         <div class="tab-pane fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
@@ -263,12 +273,15 @@
     <section class="other-products-section mt-5 pt-5">
       <div class = "container">
         <h3>Other Products in this Category</h3>
-        <div class="glider-contain">
+        <div class="glider-contain mt-5">
           <div class="glider-other-products">
+
+            <?php foreach ($others["categoryArray"] as $cat): ?>
+
             <div>
-              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
+              <div class = "card-wrapper specific">
                 <div class = "card-main-section">
-                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
+                  <img src="<?php echo "$cat[imagePath].jpg"?>" alt="" class = "img-fluid">
                   <div class = "card-main-section-icon">
                       <button class ="btn card-icon-wrapper">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -283,182 +296,9 @@
                   </div>
                 </div>
                 <div class = "card-content-section">
-                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-                </div>
-                <div class = "card-rating-section text-center">
-                  <div class = "stars">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <small class = " align-bottom">1 out of 5</small>
-                  </div>
-                </div>
-                <div class = "card-price-section text-center">
-                  <span>MYR 1000.00</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
-                <div class = "card-main-section">
-                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                  <div class = "card-main-section-icon">
-                      <button class ="btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                        </svg>
-                      </button>
-                      <button class = "btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                        </svg>
-                      </button>
-                  </div>
-                </div>
-                <div class = "card-content-section">
-                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-                </div>
-                <div class = "card-rating-section text-center">
-                  <div class = "stars">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <small class = " align-bottom">2 out of 5</small>
-                  </div>
-                </div>
-                <div class = "card-price-section text-center">
-                  <span>MYR 1000.00</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
-                <div class = "card-main-section">
-                  <img src="./images/card/card_pomeranian_320_410.jpg" alt="" class = "img-fluid">
-                  <div class = "card-main-section-icon">
-                      <button class ="btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                        </svg>
-                      </button>
-                      <button class = "btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                        </svg>
-                      </button>
-                  </div>
-                </div>
-                <div class = "card-content-section">
-                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-                </div>
-                <div class = "card-rating-section text-center">
-                  <div class = "stars">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <small class = " align-bottom">3 out of 5</small>
-                  </div>
-                </div>
-                <div class = "card-price-section text-center">
-                  <span>MYR 1000.00</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
-                <div class = "card-main-section">
-                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                  <div class = "card-main-section-icon">
-                      <button class ="btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                        </svg>
-                      </button>
-                      <button class = "btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                        </svg>
-                      </button>
-                  </div>
-                </div>
-                <div class = "card-content-section">
-                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-                </div>
-                <div class = "card-rating-section text-center">
-                  <div class = "stars">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <small class = " align-bottom">4 out of 5</small>
-                  </div>
-                </div>
-                <div class = "card-price-section text-center">
-                  <span>MYR 1000.00</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
-                <div class = "card-main-section">
-                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                  <div class = "card-main-section-icon">
-                      <button class ="btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                        </svg>
-                      </button>
-                      <button class = "btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                        </svg>
-                      </button>
-                  </div>
-                </div>
-                <div class = "card-content-section">
-                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
-                </div>
-                <div class = "card-rating-section text-center">
-                  <div class = "stars">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <img src="./svg/star-fill-white.svg" alt="">
-                    <small class = " align-bottom">5 out of 5</small>
-                  </div>
-                </div>
-                <div class = "card-price-section text-center">
-                  <span>MYR 1000.00</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class = "card-wrapper specific" data-aos = "fade-up" data-aos-delay = "100">
-                <div class = "card-main-section">
-                  <img src="./images/card/pomeranian_card_320_409.jpg" alt="" class = "img-fluid">
-                  <div class = "card-main-section-icon">
-                      <button class ="btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
-                          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                        </svg>
-                      </button>
-                      <button class = "btn card-icon-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                          <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
-                        </svg>
-                      </button>
-                  </div>
-                </div>
-                <div class = "card-content-section">
-                  <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                  <a href="<?php echo "item.php?category=$others[categoryName]&id=$cat[id]"; ?>" class = "text-decoration-none text-dark">
+                    <h5 class="text-center mt-2 px-2 text-truncate"><?php echo $cat["name"]?></h5>
+                  </a>
                 </div>
                 <div class = "card-rating-section text-center">
                   <div class = "stars">
@@ -471,10 +311,13 @@
                   </div>
                 </div>
                 <div class = "card-price-section text-center">
-                  <span>MYR 1000.00</span>
+                  <span><?php echo $cat["price"]?></span>
                 </div>
               </div>
             </div>
+
+            <?php endforeach; ?>
+
           </div>
           <button aria-label="Previous" class="glider-prev" id = "other-products-prev">«</button>
           <button aria-label="Next" class="glider-next" id = "other-products-next">»</button>
@@ -487,61 +330,66 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
   <script>
-    function loadThumbnail(selector) {
-      for (let thumbnail of selector){
-        thumbnail.innerHTML = `<img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid">`;
+
+    const thumbjson = `<?php echo json_encode($itemThumbnailArray); ?>`;
+    const thumb = JSON.parse(thumbjson)
+    // console.log(thumb)
+    
+    function loadThumbnail(thumbnailArray, selector) {
+      for(let i = 0; i<thumbnailArray.length; i++){
+        selector[i].innerHTML = `<img src="${thumbnailArray[i].imagePath}.jpg" alt="" class = "img-fluid">`;
       }
     }
 
     const carousel = new Glider(document.querySelector('.glider-other-products'), {
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  draggable: true,
-  dots: '.dots',
-  arrows: {
-    prev: '#other-products-prev',
-    next: '#other-products-next'
-  },
-  dragVelocity: 2,
-  scrollLock: true,
-  resizeLock: true,
-  rewind: true,
-
-  responsive: [
-      {
-        breakpoint: 0,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      draggable: true,
+      dots: '.dots',
+      arrows: {
+        prev: '#other-products-prev',
+        next: '#other-products-next'
       },
+      dragVelocity: 2,
+      scrollLock: true,
+      resizeLock: true,
+      rewind: true,
 
-      {
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1
-          }
-      },
-      
-      {
-          breakpoint: 992,
-          settings: {
-              slidesToShow: 3,
+      responsive: [
+          {
+            breakpoint: 0,
+            settings: {
+              slidesToShow: 1,
               slidesToScroll: 1
-          }
-      },
+            }
+          },
 
-      {
-        breakpoint: 1400,
-        settings: {
-            slidesToShow: 4,
-            slidesToScroll: 1
+          {
+              breakpoint: 768,
+              settings: {
+                slidesToShow: 2,
+                slidesToScroll: 1
+              }
+          },
+          
+          {
+              breakpoint: 992,
+              settings: {
+                  slidesToShow: 3,
+                  slidesToScroll: 1
+              }
+          },
+
+          {
+            breakpoint: 1400,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 1
+            }
         }
-    }
 
-  ]
-});
+      ]
+    });
 
     const gallery = new Glider(document.querySelector('.glider-gallery-view'), {
       slidesToShow: 1,
@@ -554,16 +402,16 @@
         prev: '#thumbnail-glider-prev',
         next: '#thumbnail-glider-next'
       }, 
+      eventPropagate: false,
     });
 
-    const thumbnails = gallery.dots.children;
+    thumbnailsButton = gallery.dots.children;
+    loadThumbnail(thumb, thumbnailsButton)
 
-    loadThumbnail(thumbnails)
-
-    window.addEventListener("resize", function() {
-      loadThumbnail(thumbnails)
+    window.addEventListener("resize", function (){
+      loadThumbnail(thumb, thumbnailsButton)
     })
-   
+
   </script>
 
 <?php require_once "./script_links.php"; ?>
