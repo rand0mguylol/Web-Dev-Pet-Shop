@@ -264,6 +264,7 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
   }
 }
 
+
 function validateImage($image){
   $getImageString= getimagesizefromstring($image);
 
@@ -319,4 +320,23 @@ function saveImage($mimeType, $image, $connection, $id, $hasImage){
 
 
 
-?>
+function createReview($newReview, $connection){
+    $stmt = $connection->prepare("INSERT INTO review(userId, productId, rating, feedback) VALUES (?, ?, ?, ?);");
+    $stmt->bind_param("iiis", $newReview["userId"], $newReview["productId"], $newReview["rating"], $newReview["feedback"]);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// function updateReviewID($reviewId, $connection){
+//     $stmt = $connection->prepare("SELECT reviewId FROM review WHERE = $reviewId WHERE OrderItemId = ?;");
+//     $result = $stmt->get_result();
+//     $row = $result->fetch_assoc();
+
+//     $stmt = $connection->prepare("UPDATE orderitem SET reviewId = $reviewId WHERE OrderItemId = ?;");
+//     $stmt->bind_param("i", $reviewId);
+//     $stmt->execute();
+//     $result = $stmt->get_result();
+
+//     $row = $result->fetch_assoc();
+//     $stmt->close();;
+// }
