@@ -57,10 +57,37 @@ function validateEmail($email){
   return $email;
 }
 
-
-function returnType($category){
+function validateCartItem($cartid, $id,$category,$connection ){
   $petArray  = ["Dog", "Cat", "Hamster"];
   $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
+  if(in_array($category, $petArray)){
+    $sql = "SELECT * FROM cartitem WHERE cartId = ? AND petId = ?;";
+    }
+    else if(in_array($category, $productArray)){
+    $sql = "SELECT * FROM cartitem WHERE cartId = ? AND productId = ?;";
+  }
+    else{
+      return false;
+    }
+  $stmt = $connection ->prepare($sql);
+  if ($stmt){
+    $stmt -> bind_param("ii", $cartid,$id);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+    $row = $result -> fetch_assoc();
+    $stmt->close();
+    if (!$row){
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+
+function returnType($category){
+  $petArray  = ["pet","Dog", "Cat", "Hamster"];
+  $productArray = ["product","Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
 
   if(in_array($category, $petArray)){
     $type = "pet";
@@ -136,35 +163,41 @@ function createUser($newUser, $connection){
   }
 
 
-function getImage($id, $category, $imageType, $connection){
+function getImage($id, $category, $imageType, $limit = false, $connection){
     // Get item gallery
-
     $type = returnType($category);
-
     $imageArray = array();
-
     if(strtolower($type) === "pet" ){
-      $stmt = $connection->prepare("SELECT petimage.imagePath FROM petimage  WHERE petimage.petId = ? AND petimage.imageType = ?; ");
+      $sql = "SELECT petimage.imagePath FROM petimage  WHERE petimage.petId = ? AND petimage.imageType = ?; ";
     }else if(strtolower($type) === "product"){
-      $stmt = $connection->prepare("SELECT productimage.imagePath FROM productimage  WHERE productimage.productId= ? AND productimage.imageType = ?; ");
+      $sql = "SELECT productimage.imagePath FROM productimage  WHERE productimage.productId= ? AND productimage.imageType = ?; ";
     }
 
+    $stmt = $connection->prepare($sql);
     if(!$stmt){
       return false;
     }
 
-    $imageType = ucfirst($imageType);
+    if($limit){
+      $sql = substr_replace($sql, " LIMIT 1", -1, -1);
+    }
 
+    $imageType = ucfirst($imageType);
     $stmt->bind_param("is", $id, $imageType);
     $stmt->execute();
     $result = $stmt->get_result();
     
-     while($row = $result->fetch_assoc()){
-      array_push($imageArray, $row);
+    if (!$limit){
+      while($row = $result->fetch_assoc()){
+        array_push($imageArray, $row);
+      }
+      $stmt->close();
+      return $imageArray;
+    } else {
+      $row = $result->fetch_assoc();
+      $stmt->close();
+      return $row["imagePath"];
     }
-    $stmt->close();
-
-    return $imageArray;
 }
 
 
@@ -179,7 +212,7 @@ function getItemInfo($id,  $category, $connection){
   if(strtolower($type) === "pet" ){
     $stmt = $connection->prepare("SELECT pets.petId AS id, pets.name, pets.price, pets.gender, pets.weight, pets.color, pets.petCondition, pets.vaccinated, pets.dewormed, petcategory.category FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId  WHERE pets.petID = ? AND pets.status = 1");
   }else if(strtolower($type) === "product"){
-    $stmt = $connection->prepare("SELECT products.productId AS id, products.name, products.price, products.description, products.brand,  products.weight, products.warrantyPeriod, products.productDimensions, productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1");
+    $stmt = $connection->prepare("SELECT products.productId AS id, products.name, products.price,products.quantity, products.description, products.brand,  products.weight, products.warrantyPeriod, products.productDimensions, productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1");
   }
 
   $stmt->bind_param("i", $id);
@@ -207,6 +240,86 @@ function getItemInfo($id,  $category, $connection){
   return $itemInfo;
 }
 
+function getCartId($userid, $connection){
+  $stmt =$connection -> prepare ("SELECT cartId FROM cart WHERE userId = ?;") ;
+  $stmt->bind_param("i", $userid);
+  $stmt-> execute();
+  $result = $stmt -> get_result();
+  $row = $result->fetch_assoc();
+  $stmt->close();
+  if (!$row){
+    return false ;
+  } else {
+    $cartid = $row['cartId'];
+    return $cartid;
+  }
+}
+
+function getCartItems ($cartid,$connection){
+  $cartItemArray = [];
+  $stmt = $connection -> prepare("SELECT petId, productId, quantity, totalPrice FROM cartitem WHERE cartid = ?;"); 
+  $stmt -> bind_param("i", $cartid);
+  $stmt -> execute();
+  $result = $stmt -> get_result();
+  $length = mysqli_num_rows($result);
+  if ($length === 0){
+    return null;
+  } else{
+    while ($row = $result->fetch_assoc()){
+      $cartitem =[];
+      if (isset($row['petId'])){
+        $id = $row['petId'];
+        $quantity = $row['quantity']; 
+        $totalPrice = $row['totalPrice'];
+        $category = "pet";
+        $stmt2 = $connection ->prepare ('SELECT name, price FROM pets WHERE petId =?; ');
+        $stmt2 -> bind_param("i",$id);
+        $stmt2 -> execute();
+        $result2 = $stmt2 -> get_result();
+        $row2 = $result2 ->fetch_assoc();
+        $itemName = $row2['name'];
+        $itemPrice = $row2['price'];
+        $image = getImage($id,$category,"Thumbnail",true,$connection);
+      } else {
+        $id = $row['productId'];
+        $quantity = $row['quantity'];
+        $totalPrice = $row['totalPrice'];
+        $category = "product";
+        $stmt2 = $connection ->prepare ('SELECT name, price FROM products WHERE productId =?; ');
+        $stmt2 -> bind_param("i",$id);
+        $stmt2 -> execute();
+        $result2 = $stmt2 -> get_result();
+        $row2 = $result2 ->fetch_assoc();
+        $itemName = $row2['name'];
+        $itemPrice = $row2['price'];
+        $image = getImage($id,$category,"Thumbnail",true,$connection);
+      }
+      $cartitem = [
+        "petid" => $id,
+        "category" => $category,
+        "name" => $itemName,
+        "quantity" => $quantity,
+        "price" => $itemPrice,
+        "totalPrice" => $totalPrice,
+        "image" => $image
+      ];
+      array_push($cartItemArray, $cartitem);
+    }
+    $stmt ->close();
+    return $cartItemArray;
+  }
+}
+
+function getCartSubtotal($cartid,$connection){
+  $stmt = $connection -> prepare ("SELECT subtotal FROM cart WHERE cartid = ?;");
+  $stmt -> bind_param("i", $cartid);
+  $stmt -> execute();
+  $result = $stmt -> get_result();
+  $row = $result ->fetch_assoc();
+  $subtotal = $row['subtotal'];
+  $stmt->close();
+  return $subtotal;
+}
 
 function updateProfile($newInfo, $connection, $id){
     $stmt = $connection->prepare("UPDATE user SET firstName = ?, lastName = ?, mobileNumber = ?, addressLine = ?, city = ?, userState = ?, postcode = ? WHERE userId = ?");
@@ -215,7 +328,7 @@ function updateProfile($newInfo, $connection, $id){
     $stmt->execute();
     $stmt->close();
     
-     foreach ($newInfo as $key => $value){
+    foreach ($newInfo as $key => $value){
       $_SESSION["user"][$key] = $value;
     }
   
@@ -224,7 +337,6 @@ function updateProfile($newInfo, $connection, $id){
 
 function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
   $stmt = $connection->prepare("SELECT userPassword FROM user WHERE userId = ?;");
-
   $stmt->bind_param("i", $id);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -232,7 +344,6 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
 
   $dbPassword = $row["userPassword"];
   $verifyPassword = password_verify($oldpass, $dbPassword);
-
   if($verifyPassword){
     $isSame = $oldpass === $newpass ? true : false;
     $validatePassword = validatePassword($newpass);
@@ -247,7 +358,7 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
   if($validatePassword){
     $confirmPassword = $newpass === $confimpass ? true : false;
   }else{
-   return  "Length must be between 8 to 16 characters, 
+    return  "Length must be between 8 to 16 characters, 
             including one digit, one uppercase, one lowecase 
             character and may contain the following !@#$%&";
   }
@@ -264,6 +375,39 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
   }
 }
 
+function createCart($userid,$connection){
+    $stmt = $connection -> prepare("INSERT INTO cart VALUES ('',?, 0);");
+    $stmt -> bind_param('i',$userid) ;
+    $stmt -> execute();
+    $cartid = $connection ->insert_id;
+    $stmt -> close();
+    return $cartid;
+}
+
+function addCartitem($cartid,$id,$category,$quantity,$totalPrice,$connection){
+  $type = returnType($category);
+  if(strtolower($type) === "pet" ){
+    $sql = "INSERT INTO cartitem VALUES ('',?,NULL,?,?,?,1);";
+    }
+    else if(strtolower($type) === "product" ){
+    $sql = "INSERT INTO cartitem VALUES ('',NULL,?,?,?,?,1);";
+  }
+    else{
+      return false;
+    }
+  $stmt = $connection ->prepare($sql);
+  if ($stmt){
+    $stmt -> bind_param("iiii",$id,$cartid,$quantity,$totalPrice);
+    $stmt -> execute();
+    $stmt = $connection -> prepare ("UPDATE cart SET subtotal = subtotal + ? WHERE cartid = ?;");
+    $stmt->bind_param("ii", $totalPrice,$cartid);
+    $stmt->execute();
+    $stmt->close();
+    return true;
+  } else {
+    return false;
+  }
+}
 
 function validateImage($image){
   $getImageString= getimagesizefromstring($image);

@@ -2,7 +2,6 @@
 session_start();
 require_once "./function/db.php";
 require_once "./function/helpers.php";
-
   // var_dump($_GET);
 
 if(isset($_GET["category"])){

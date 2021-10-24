@@ -1,19 +1,33 @@
 <?php
-  $loginErrorArray = [];
+require_once "./function/helpers.php";
+require_once "./function/db.php";
+$loginErrorArray = [];
+$folder = $_SERVER["REQUEST_URI"];
+$path = dirname($folder);
+$currentPage = $path !== "\\" ? basename($folder) : "";
 
-  $folder = $_SERVER["REQUEST_URI"];
-  $path = dirname($folder);
-  $currentPage = $path !== "\\" ? basename($folder): "";
- 
-  $isLoginMessage = isset($_SESSION["isValidLogin"]) ? $_SESSION["isValidLogin"] : null;
-  $loginErrorArray = isset($_SESSION["loginErrorArray"]) ? $_SESSION["loginErrorArray"]: [];
-  unset($_SESSION["isValidLogin"]);
-  unset($_SESSION["loginErrorArray"]);
+$isLoginMessage = isset($_SESSION["isValidLogin"]) ? $_SESSION["isValidLogin"] : null;
+$loginErrorArray = isset($_SESSION["loginErrorArray"]) ? $_SESSION["loginErrorArray"] : [];
+unset($_SESSION["isValidLogin"]);
+unset($_SESSION["loginErrorArray"]);
+
+$userid = $_SESSION['user']['userID'] ?? null;
+if (isset($userid)) {
+  $cartid = getCartId($userid, $connection);
+  if (!$cartid) {
+    $cartid = createCart($userid, $connection);
+  }
+  $subtotal = getCartSubtotal($cartid, $connection);
+  $cartitems = getCartItems($cartid, $connection);
+}
+
 ?>
+
 
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,6 +43,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />  <title>Document</title>
   <title>Home Page</title>
 </head>
+
 <body>
 
   <!-- Offcanvas -->
@@ -75,36 +90,60 @@
    <!-- Offcanvas -->
    <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
     <div class="offcanvas-header flex-column">
-    <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-
+      <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       <div class = "text-center mb-3">
-          <img src="<?php echo  $_SESSION["user"]["userPicture"] ?>" alt="" class = "img-fluid shadow rounded-circle userProfilePicture" >
-        </div>
+        <img src="<?php echo  $_SESSION["user"]["userPicture"] ?>" alt="" class = "img-fluid shadow rounded-circle userProfilePicture" >
+      </div>
       <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel"><?php echo $_SESSION['user']['firstName'] . " ". $_SESSION['user']['lastName']; ?> </h2>
     </div>
     <div class="offcanvas-body mb-5">
-      <div>
       <div class = "col-12 text-center"><a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">View Account</a></div>
         <form action="<?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method = "POST">
           <div class = "col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name = "logout">Log Out</button></div>
         </form>
-
       </div>
     </div>
   </div>
 
   <?php endif; ?>
 
-
   <!-- Cart offcanvas -->
   <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="cartCanvas" aria-labelledby="cartCanvasLabel">
     <div class="offcanvas-header flex-column">
       <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">CART IS EMPTY</h2>
+      <?php if (!isset($cartitems)) : ?>
+        <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">
+          Cart is empty.
+        </h2>
+      <?php else : ?>
+        <div class="text-start">
+          <h3>Cart items:</h3>
+        </div>
+        <?php foreach ($cartitems as $item) : ?>
+          <div class="card mb-3">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="<?php echo $item['image']; ?>.jpg" class="card-img" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title"><?php echo $item['name']; ?></h5>
+                  <p class="card-text m-0">
+                    Quantity : <?php echo $item['quantity']; ?>
+                  </p>
+                  <p class="card-text m-0">
+                    Total : <?php echo $item['totalPrice']; ?>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php endforeach ?>
+      <?php endif ?>
     </div>
     <div class="offcanvas-body mb-5">
       <div>
       </div>
     </div>
   </div>
-  <!-- End of Offcanvas --> 
+  <!-- End of Offcanvas -->
