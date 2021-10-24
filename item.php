@@ -4,7 +4,6 @@ require_once "./function/db.php";
 require_once "./function/helpers.php";
 $petArray  = ["Dog", "Cat", "Hamster"];
 if (isset($_GET["category"], $_GET["id"])) {
-
   $category = sanitizeText($_GET["category"]);
   $categoryClean = filter_var($category, FILTER_SANITIZE_STRING);
   $id = filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT);
