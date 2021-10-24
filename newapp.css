@@ -90,11 +90,15 @@ input[type="number"] {
   flex-grow: 0;
 }
 
-.offcanvas-sign-in, .offcanvas-view-account,  .offcanvas-save-profile{
+.offcanvas-sign-in, .offcanvas-view-account,  .offcanvas-save-profile, .uploadPicBtn{
   background-color: rgb(225, 183, 94);
   border-color: rgb(225, 183, 94);
 }
-.page-nav {
+
+.hidden{
+  display:none;
+}
+.page-nav{
   background-color: #fdcd97;
 }
 
@@ -625,6 +629,12 @@ input[type="number"] {
   border-right: 1px solid #000;
 }
 
+
+.box{
+  width: 600px;
+  height: 600px;
+  border: 1px solid #000;
+}
 
 @media (max-width: 1399px){
   .view-button{

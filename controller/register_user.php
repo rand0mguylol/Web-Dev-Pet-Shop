@@ -13,6 +13,18 @@ if(isset($_POST["signup"])) {
     $password = validatePassword($_POST["password"]);
     $email = validateEmail($_POST["email"]);
 
+    // Check to see if email has been used
+    $stmt = $connection->prepare("SELECT email FROM user WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result= $stmt->get_result();
+    $checkEmailTaken= $result->fetch_assoc();
+    $stmt->close();
+
+    if($checkEmailTaken && $email !== false){
+      array_push($errorArray, "emailTaken");
+    }
+
     $newUser = array(
       "firstName" => $firstName,
       "lastName" => $lastName,

@@ -8,34 +8,20 @@ if(isset($_POST["signin"]) && isset($_GET["page"])){
   $page = filter_input(INPUT_GET, "page", FILTER_SANITIZE_STRING);
   $lastPage = !$page? "": $page;
 
-  $filters = [
-    "email"=> FILTER_SANITIZE_EMAIL,
-    "password" => FILTER_SANITIZE_STRING,
-  ];
+  $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
 
-  $sanitizeInput = filter_input_array(INPUT_POST, $filters);
-
-  if (!filter_var($sanitizeInput["email"], FILTER_VALIDATE_EMAIL)){
-    array_push($emptyArray, "email");
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+    array_push($loginErrorArray, "email");
   }
 
   if($_POST["password"] === ""){
-    array_push($emptyArray, "password");
+    array_push($loginErrorArray, "password");
   }
 
-  if (!$emptyArray){
-    $email = $sanitizeInput["email"];
-    $password = $sanitizeInput["password"];
-
+  if (!$loginErrorArray){
+    $password = $_POST["password"];
     $stmt = $connection->prepare("SELECT * FROM user WHERE email = ?;");
-
-    if(!$stmt){
-      $_SESSION["isValidLogin"] = "error";
-
-    }
     $stmt->bind_param("s", $email);
-
-
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -60,15 +46,16 @@ if(isset($_POST["signin"]) && isset($_GET["page"])){
         "userRole" => $row["userRole"]
       );
   
-      $_SESSION["isValidLogin"] = "success";
+      $_SESSION["isValidLogin"] = "Login Successful";
     }
     else{
-      $_SESSION["isValidLogin"] = "error";
-    
+      $_SESSION["isValidLogin"] = "Incorrect Login Details";
+     
     }
   }
   else{
-    $_SESSION["isValidLogin"] = $emptyArray;
+    $_SESSION["loginErrorArray"] = $loginErrorArray;
+    $_SESSION["isValidLogin"] = "Invalid Detials";
   }
 
   header("Location: ../$lastPage");

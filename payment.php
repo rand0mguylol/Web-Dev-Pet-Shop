@@ -1,8 +1,8 @@
 <?php session_start();
   require_once "./function/db.php";
-  require_once "header.php";
-  require_once "navbar.php";
 ?>
+<?php require_once "header.php";?>
+<?php require_once "navbar.php";?>
 <div class="cart-container container-fluid px-lg-5 my-lg-3 ">
   <div class="row mx-lg-5 justify-content-around">
     <!-- cart details -->
