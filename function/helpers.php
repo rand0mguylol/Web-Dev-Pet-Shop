@@ -270,17 +270,17 @@ function createReview($newReview, $connection){
     $stmt->close();
 }
 
-function updateReviewID($reviewId, $connection){
+// function updateReviewID($reviewId, $connection){
+//     $stmt = $connection->prepare("SELECT reviewId FROM review WHERE = $reviewId WHERE OrderItemId = ?;");
+//     $result = $stmt->get_result();
+//     $row = $result->fetch_assoc();
 
-    $result = $stmt->get_result();
-  $row = $result->fetch_assoc();
+//     $stmt = $connection->prepare("UPDATE orderitem SET reviewId = $reviewId WHERE OrderItemId = ?;");
+//     $stmt->bind_param("i", $reviewId);
+//     $stmt->execute();
+//     $result = $stmt->get_result();
 
-    $stmt = $connection->prepare("UPDATE orderitem SET reviewId = $reviewId WHERE OrderItemId = ?;");
-    $stmt->bind_param("i", $reviewId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $row = $result->fetch_assoc();
-    $stmt->close();;
-}
+//     $row = $result->fetch_assoc();
+//     $stmt->close();;
+// }
 ?>

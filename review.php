@@ -5,7 +5,6 @@ session_start();
 if(isset($_POST["submit"])){
     require_once "./function/db.php";
     require_once "./function/helpers.php"; 
-    $rateError = 
 
     $errorArray = [];
     $userid = $_SESSION["user"]["userID"];
@@ -38,7 +37,7 @@ if(isset($_POST["submit"])){
 
     if(!empty($errorArray)){
     //   $_SESSION["reviewCreationError"] = $errorArray;   
-      echo "Validation Error" ;
+    //   echo "Validation Error" ;
     //   header("Location:  ./profile.php" );
     //   exit();
     }else{
@@ -113,8 +112,8 @@ if(isset($_POST["submit"])){
                         <i class="fa fa-star fa-2x" data-index-num="4"></i>
                     </div>
                     <input type="hidden" id="rating" name="rating" value="-1">
-                    <?php if(in_array("ratingErr", $errorArray)):  ?>
-                    <p class="mt-1 text-danger mb-0">Please select a rating</p>
+                    <?php if(isset($_POST["submit"]) && in_array("ratingErr", $errorArray)):  ?>
+                    <p class="mt-1 text-danger mb-0 text-center">Please select a rating</p>
                     <?php else:?>
                     <p class="mt-1 mb-0"></p>
                     <?php endif;?>
@@ -126,8 +125,8 @@ if(isset($_POST["submit"])){
                         <textarea class="form-control" resize="none" id="feedback" name="feedback" rows="5"
                             placeholder="Share your experience with the product and help others make better purchases!"></textarea>
                     </div>
-                    <?php if(in_array("feedbackErr", $errorArray)):  ?>
-                    <p class="mt-1 text-danger mb-0">Feedback must not be over 50 characters long"</p>
+                    <?php if(isset($_POST["submit"]) && in_array("feedbackErr", $errorArray)):  ?>
+                    <p class="mt-1 text-danger mb-0 text-center">Feedback must not be over 50 characters long</p>
                     <?php else:?>
                     <p class="mt-1 mb-0"></p>
                     <?php endif;?>
