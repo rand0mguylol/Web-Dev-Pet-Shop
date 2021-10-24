@@ -1,13 +1,14 @@
 <?php
-  $emptyArray = [];
+  $loginErrorArray = [];
 
   $folder = $_SERVER["REQUEST_URI"];
   $path = dirname($folder);
   $currentPage = $path !== "\\" ? basename($folder): "";
  
-  $validLogin = isset($_SESSION["isValidLogin"]) && $_SESSION["isValidLogin"] === "error" ? false: null;
-  $emptyArray = isset($_SESSION["isValidLogin"]) && is_array($_SESSION["isValidLogin"])? $_SESSION["isValidLogin"]: [];
+  $isLoginMessage = isset($_SESSION["isValidLogin"]) ? $_SESSION["isValidLogin"] : null;
+  $loginErrorArray = isset($_SESSION["loginErrorArray"]) ? $_SESSION["loginErrorArray"]: [];
   unset($_SESSION["isValidLogin"]);
+  unset($_SESSION["loginErrorArray"]);
 ?>
 
 
@@ -25,6 +26,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
   <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />  <title>Document</title>
   <title>Home Page</title>
 </head>
 <body>
@@ -45,7 +47,7 @@
           <div class = "col">
             <label for="inputEmail" class="form-label">Email</label>
             <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" required>
-            <?php if(in_array("email", $emptyArray)): ?>
+            <?php if(in_array("email", $loginErrorArray)): ?>
               <small>Please enter a valid email.</small>
             <?php endif; ?>
           </div>
@@ -53,7 +55,7 @@
           <div class = "col">
             <label for="inputPassword" class="form-label">Password</label>
             <input type="password" class="form-control" id="inputPassword" placeholder = "Password" name = "password" required>
-            <?php if(in_array("password", $emptyArray)): ?>
+            <?php if(in_array("password", $loginErrorArray)): ?>
               <small>Please do not leave the field blank.</small>
             <?php endif; ?>
           </div>
@@ -73,7 +75,11 @@
    <!-- Offcanvas -->
    <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
     <div class="offcanvas-header flex-column">
-      <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
+      <div class = "text-center mb-3">
+          <img src="<?php echo  $_SESSION["user"]["userPicture"] ?>" alt="" class = "img-fluid shadow rounded-circle userProfilePicture" >
+        </div>
       <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel"><?php echo $_SESSION['user']['firstName'] . " ". $_SESSION['user']['lastName']; ?> </h2>
     </div>
     <div class="offcanvas-body mb-5">

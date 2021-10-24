@@ -1,6 +1,6 @@
 <?php session_start(); 
 
-  if(isset($_POST["saveProfile"], $_GET["id"], $_SESSION["user"]["userID"])){
+  if(isset($_POST["saveProfile"], $_SESSION["user"]["userID"])){
     require_once "../function/db.php";
     require_once "../function/helpers.php"; 
     
@@ -39,8 +39,8 @@
         "state" =>$state,
         "postcode" => $postcode
       );
-      updateProfile($newInfo, $connection, $_GET["id"]);
-      $_SESSION["profileUpdate"] = "success";
+      updateProfile($newInfo, $connection, $_SESSION["user"]["userID"]);
+      $_SESSION["profileUpdateMessage"] = "Info Saved";
     }
     else{
       $_SESSION["profileUpdateError"] = $profileErrorArray;

@@ -126,9 +126,10 @@ function getCategoryInfo($connection, $category, $id = "", $limit = false){
 
 function createUser($newUser, $connection){
     $userRole = "CUSTOMER";
+    $imagePath =  "./svg/profile-pic-default.svg";
     $hashedPassword = password_hash($newUser["password"], PASSWORD_DEFAULT);
-    $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber, userRole) VALUES (?, ?, ?, ?, ?, ?);");
-    $stmt->bind_param("ssssis", $newUser["firstName"], $newUser["lastName"], $newUser["email"], $hashedPassword, $newUser["mobileNumber"], $userRole);
+    $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber, imagePath, userRole) VALUES (?, ?, ?, ?, ?, ?);");
+    $stmt->bind_param("ssssis", $newUser["firstName"], $newUser["lastName"], $newUser["email"], $hashedPassword, $newUser["mobileNumber"], $imagePath, $userRole);
 
     $stmt->execute();
     $stmt->close();
@@ -263,6 +264,62 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
   }
 }
 
+
+function validateImage($image){
+  $getImageString= getimagesizefromstring($image);
+
+// Using this method to check if content is image
+  if(!$getImageString){
+   return false;
+  }
+  
+  $mimeType = $getImageString["mime"];
+
+  $mimeTypeArray = ["image/png", "image/jpg", "image/jpeg"];
+
+  if (!in_array($mimeType, $mimeTypeArray)){
+   return false;
+  }
+  return $mimeType;
+}
+
+
+function saveImage($mimeType, $image, $connection, $id, $hasImage){
+  $userDir = "../Images/User/user_" . $_SESSION["user"]["userID"];
+  if(!is_dir($userDir)){
+    mkdir($userDir);
+  }
+
+  switch($mimeType){
+    case "image/png":
+      $userPic = $userDir . "/user_" . $_SESSION["user"]["userID"] . "_pic" . ".png";
+      file_put_contents($userPic, $image);
+      break;
+    
+    case "image/jpg":
+      $userPic = $userDir . "/user_" . $_SESSION["user"]["userID"] . "_pic" . ".jpg";
+      file_put_contents("$userPic", $image);
+      break;
+  
+    case "image/jpeg":
+      $userPic = $userDir . "/user_" . $_SESSION["user"]["userID"] . "_pic" . ".jpeg";
+      file_put_contents("$userPic", $image);
+      break;
+  }
+
+    $saveToDbImage = substr($userPic, 1);
+    $stmt = $connection->prepare("UPDATE user SET imagePath = ? WHERE userId = ?");
+    $stmt->bind_param("si", $saveToDbImage, $id);
+    $stmt->execute();
+    $stmt->close();
+
+
+    $_SESSION["user"]["userPicture"] = $saveToDbImage;
+}
+
+
+
+
 function createReview($newReview, $connection){
     $stmt = $connection->prepare("INSERT INTO review(userId, productId, rating, feedback) VALUES (?, ?, ?, ?);");
     $stmt->bind_param("iiis", $newReview["userId"], $newReview["productId"], $newReview["rating"], $newReview["feedback"]);
@@ -283,4 +340,3 @@ function createReview($newReview, $connection){
 //     $row = $result->fetch_assoc();
 //     $stmt->close();;
 // }
-?>
