@@ -1,24 +1,61 @@
-<?php // require_once "db_review.php"; ?>
 <?php
-    // $rating = $_POST["star_rating"];
-    // $review = $_POST["feedback"];
-    ?>
 
-<?php
-    // if(isset($_POST["submit"])){
-    //     $createdAt = date('Y-m-d H:i:s');
+session_start();
     
-    //     $sqlquery = "INSERT INTO review VALUES
-    //     (NULL, userId, productId, $rating, $feedback, createdAt)";
+if(isset($_POST["submit"])){
+    require_once "./function/db.php";
+    require_once "./function/helpers.php"; 
+    $rateError = 
+
+    $errorArray = [];
+    $userid = $_SESSION["user"]["userID"];
+    $productid = 1;
+
+    if($_POST["rating"] != -1){
+        $rating = $_POST["rating"];
+        $rating++;
+    }
+    else{
+        array_push($errorArray, "ratingErr");
+        // $rateError = "Select a rating";
+    }
+
+    if(strlen($_POST["feedback"]) <= 50){
+        $feedback = sanitizeText($_POST["feedback"]);
+    }
+    else{
+        array_push($errorArray, "feedbackErr");
+        // $feedbackError = "Feedback must not be over 50 characters long";
+    }
     
-    //     if ($connection->query($sqlquery) === TRUE) {
-    //         echo "Review has been submitted.";
-    //     } else {
-    //         echo "Error: " . $sql . $connection->error;
-    //     }
+    
+    
+    // foreach($newReview as $key => $value){
+    //   if($value === false){
+    //     array_push($errorArray, $key);
+    //   }
     // }
-    // ?>
-<?php // endif; ?>
+
+    if(!empty($errorArray)){
+    //   $_SESSION["reviewCreationError"] = $errorArray;   
+      echo "Validation Error" ;
+    //   header("Location:  ./profile.php" );
+    //   exit();
+    }else{
+        $newReview = array(
+        "userId" => $userid,
+        "productId" => $productid,
+        "rating" => $rating,
+        "feedback" => $feedback
+        );
+        createReview($newReview, $connection);
+        // $_SESSION["reviewCreation"] = "success";
+        echo "Review successfully added";
+        header("Location:  ./review.php" );
+        exit();
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,13 +76,20 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <!-- Added for Star Rating System -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- <script src="https://kit.fontawesome.com/1c713f6eed.js" crossorigin="anonymous"></script> -->
-
     <title>Review</title>
 </head>
 
 <body>
     <!-- Remove lines until here when completed -->
+    <div class="container">
+        <!-- Button for Review (Cut and Paste in Account page & Specific Product/item.php page's Review Tab) -->
+        <div class="">
+            <button class="btn btn-warning" data-bs-toggle="offcanvas" href="#reviewCanvas" role="button"
+                aria-controls="reviewCanvasExample">Review</button>
+        </div>
+    </div>
+
+
     <!-- Offcanvas -->
     <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="reviewCanvas"
         aria-labelledby="reviewCanvasLabel">
@@ -62,23 +106,19 @@
                     <!-- Star Rating -->
                     <div class="card-rating-section d-inline-block text-center">
                         <p>Rating: </p>
-                        <i class="fa fa-star fa-2x" data-index-num="0" style="color: gray"></i>
-                        <i class="fa fa-star fa-2x" data-index-num="1" style="color: gray"></i>
-                        <i class="fa fa-star fa-2x" data-index-num="2" style="color: gray"></i>
-                        <i class="fa fa-star fa-2x" data-index-num="3" style="color: gray"></i>
-                        <i class="fa fa-star fa-2x" data-index-num="4" style="color: gray"></i>
+                        <i class="fa fa-star fa-2x" data-index-num="0"></i>
+                        <i class="fa fa-star fa-2x" data-index-num="1"></i>
+                        <i class="fa fa-star fa-2x" data-index-num="2"></i>
+                        <i class="fa fa-star fa-2x" data-index-num="3"></i>
+                        <i class="fa fa-star fa-2x" data-index-num="4"></i>
                     </div>
+                    <input type="hidden" id="rating" name="rating" value="-1">
+                    <?php if(in_array("ratingErr", $errorArray)):  ?>
+                    <p class="mt-1 text-danger mb-0">Please select a rating</p>
+                    <?php else:?>
+                    <p class="mt-1 mb-0"></p>
+                    <?php endif;?>
 
-                    <!-- WaiYuan's Star Rating Template -->
-                    <!-- <div class="card-rating-section text-center">
-                        <div class="stars">
-                            <img src="./svg/star-fill.svg" alt="">
-                            <img src="./svg/star-fill.svg" alt="">
-                            <img src="./svg/star-fill.svg" alt="">
-                            <img src="./svg/star-fill-white.svg" alt="">
-                            <img src="./svg/star-fill-white.svg" alt="">
-                        </div>
-                    </div> -->
 
                     <!-- Feedback Textarea -->
                     <div class="col">
@@ -86,6 +126,11 @@
                         <textarea class="form-control" resize="none" id="feedback" name="feedback" rows="5"
                             placeholder="Share your experience with the product and help others make better purchases!"></textarea>
                     </div>
+                    <?php if(in_array("feedbackErr", $errorArray)):  ?>
+                    <p class="mt-1 text-danger mb-0">Feedback must not be over 50 characters long"</p>
+                    <?php else:?>
+                    <p class="mt-1 mb-0"></p>
+                    <?php endif;?>
 
                     <!-- Submit Button -->
                     <div class="col-12 text-center">
@@ -96,11 +141,42 @@
             </div>
         </div>
     </div>
-
-    <!-- Button for Review (Cut and Paste in Account page & Specific Product/item.php page's Review Tab) -->
-    <button class="btn btn-warning" data-bs-toggle="offcanvas" href="#reviewCanvas" role="button"
-        aria-controls="reviewCanvasExample">Review</button>
-
     <!-- After Submit button for review is clicked, remove button -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+    let ratedIndex = -1;
+
+    $(document).ready(function() {
+        starColorGray();
+
+        $(".fa-star").on("click", function() {
+            ratedIndex = parseInt($(this).data("index-num"));
+            $("#rating").val(ratedIndex);
+        });
+
+        $(".fa-star").mouseover(function() {
+            starColorGray();
+
+            let hoverIndex = parseInt($(this).data("index-num"));
+            for (let i = 0; i <= hoverIndex; i++)
+                $(".fa-star:eq(" + i + ")").css("color", "orange");
+        });
+
+        $(".fa-star").mouseleave(function() {
+            starColorGray();
+
+            if (ratedIndex != -1)
+                for (let i = 0; i <= ratedIndex; i++)
+                    $(".fa-star:eq(" + i + ")").css("color", "orange");
+        });
+    });
+
+    function starColorGray() {
+        $(".fa-star").css("color", "gray");
+    }
+    </script>
 
     <?php require_once "script_links.php"; ?>
