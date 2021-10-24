@@ -7,7 +7,7 @@ require_once "./function/helpers.php";
 
 if(isset($_GET["category"])){
 
-  $category = validateText($_GET["category"]);
+  $category = sanitizeText($_GET["category"]);
   $categoryClean = filter_var($category, FILTER_SANITIZE_STRING);
   
 

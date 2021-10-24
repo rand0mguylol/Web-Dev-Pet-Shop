@@ -3,7 +3,7 @@
 
   $errorArray = [];
 
-  var_dump($_SESSION);
+  // var_dump($_SESSION);
 
   if(isset($_SESSION["accountCreationError"])){
       $errorArray =  $_SESSION["accountCreationError"];
@@ -80,6 +80,10 @@
       <?php if(in_array("email", $errorArray)):  ?>
       <p class = "mt-1 text-danger mb-0">Please enter a valid email</p>
       <?php endif; ?>
+      <?php if(in_array("emailTaken", $errorArray)):  ?>
+      <p class = "mt-1 text-danger mb-0">Email has been taken</p>
+      <?php endif; ?>
+      
     </div>
     <div class="col-md-12">
       <label for="inputPassword" class="form-label">Password*</label>
