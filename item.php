@@ -57,7 +57,7 @@ if (isset($_POST['add-to-cart-btn'])) {
           <div class="glider-gallery-view">
             <?php foreach ($itemGalleryArray as $galleryPic) : ?>
               <div>
-                <img src="<?php echo "$galleryPic[imagePath].jpg" ?>" alt="">
+                <img src="<?php echo "$galleryPic[imagePath]" ?>" alt="">
               </div>
             <?php endforeach; ?>
           </div>
@@ -82,7 +82,6 @@ if (isset($_POST['add-to-cart-btn'])) {
               <span class="ms-2">(4)</span>
             </div>
           </div>
-
           <!-- <p class = "item-info-description">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, cumque?</p> -->
         </div>
         <hr>
@@ -270,10 +269,6 @@ if (isset($_POST['add-to-cart-btn'])) {
             <!-- </div> -->
           </div>
         </div>
-      </div>
-
-    </div>
-  </section>
 
   <section class="other-products-section mt-5 pt-5">
     <div class="container">
@@ -285,7 +280,7 @@ if (isset($_POST['add-to-cart-btn'])) {
             <div>
               <div class="card-wrapper specific">
                 <div class="card-main-section">
-                  <img src="<?php echo "$cat[imagePath].jpg" ?>" alt="" class="img-fluid">
+                  <img src="<?php echo "$cat[imagePath]" ?>" alt="" class="img-fluid">
                   <div class="card-main-section-icon">
                     <button class="btn card-icon-wrapper">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -332,13 +327,13 @@ if (isset($_POST['add-to-cart-btn'])) {
 </div>
 <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
 <script>
-  const thumbjson = `<?php echo json_encode($itemThumbnailArray); ?>`;
+  const thumbjson = `<?php echo json_encode($itemGalleryArray); ?>`;
   const thumb = JSON.parse(thumbjson)
   // console.log(thumb)
 
   function loadThumbnail(thumbnailArray, selector) {
     for (let i = 0; i < thumbnailArray.length; i++) {
-      selector[i].innerHTML = `<img src="${thumbnailArray[i].imagePath}.jpg" alt="" class = "img-fluid">`;
+      selector[i].innerHTML = `<img src="${thumbnailArray[i].imagePath}" alt="" class = "img-fluid">`;
     }
   }
 
@@ -412,5 +407,14 @@ if (isset($_POST['add-to-cart-btn'])) {
     loadThumbnail(thumb, thumbnailsButton)
   })
 </script>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init(
+      {
+        offset: 300
+      }
+    )
+  </script>
 
 <?php require_once "./script_links.php"; ?>

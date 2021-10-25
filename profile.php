@@ -11,12 +11,12 @@
   }
   
   if(isset($_SESSION["passwordChangeMsg"])){
-    $updateMsg= $_SESSION["passwordChangeMsg"];
+    $profileUpdateMsg= $_SESSION["passwordChangeMsg"];
     unset($_SESSION["passwordChangeMsg"]);
   }
 
   if(isset($_SESSION["profileUpdateMessage"])){
-    $updateMsg= $_SESSION["profileUpdateMessage"];
+    $profileUpdateMsg= $_SESSION["profileUpdateMessage"];
     unset($_SESSION["profileUpdateMessage"]);
   }
 
@@ -26,7 +26,7 @@
   }
 
   if(isset($_SESSION["uploadImageMessage"])){
-    $updateMsg = $_SESSION["uploadImageMessage"];
+    $profileUpdateMsg = $_SESSION["uploadImageMessage"];
     unset($_SESSION["uploadImageMessage"]);
   }
 
@@ -36,10 +36,10 @@
 <div class="main-wrapper profile">
 <?php require_once "navbar.php"; ?>
 
-
+<!-- 
   <div class="container mt-5">
-    <p class = "lead"><?php if(isset($updateMsg)) echo $updateMsg; ?></p>
-  </div>
+    <p class = "lead"><?php if(isset($profileUpdateMsg)) echo $profileUpdateMsg; ?></p>
+  </div> -->
 
 
   <div class="container border border-dark profile-container my-5  d-flex align-items-stretch">
@@ -287,4 +287,12 @@
   }
 
 </script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init(
+      {
+        offset: 300
+      }
+    )
+    </script>
 <?php require_once "script_links.php"; ?>

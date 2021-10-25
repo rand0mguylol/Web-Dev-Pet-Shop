@@ -36,56 +36,7 @@ else{
         <button type="button" class="btn-close text-reset " data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-column">
-            <li class="nav-item">
-                <h6>Pets</h6>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Dog</a>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Cat</a>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Hamster</a>
-            </li>
-            <li class="nav-item mt-3">
-                <h6>Care Products</h6>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Dog Care Products</a>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Cat Care Products</a>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Hamster Care Products</a>
-            </li>
-            <li class="nav-item mt-3">
-                <h6>Accessories</h6>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Dog Accessories</a>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Cat Accessories</a>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Hamster Accessories</a>
-            </li>
-            <li class="nav-item mt-3">
-                <h6>Food</h6>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Dog Food</a>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Cat Food</a>
-            </li>
-            <li class="nav-item ps-2">
-                <a class="nav-link" href="#">Hamster Food</a>
-            </li>
-        </ul>
+       <?php include "./category_nav.php"; ?>
     </div>
 </div>
 
@@ -98,20 +49,7 @@ else{
     <div class="offcanvas-body">
         <form action="" class="filter-form ">
             <fieldset class="mb-3">
-                <legend>Sort By</legend>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortBy" id="sortBestSeller">
-                    <label class="form-check-label" for="sortBestSeller">
-                        Best Seller
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortBy" id="sortNewArrival">
-                    <label class="form-check-label" for="sortNewArrival">
-                        New Arrival
-                    </label>
-                </div>
-
+                <legend>Sort By</legend>            
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="sortBy" id="sortHighestPrice">
                     <label class="form-check-label" for="sortHighestPrice">
@@ -214,56 +152,7 @@ else{
             <nav class="navbar navbar-expand-xxl navbar-light bg-transparent d-inline-block ps-4 general-side-nav">
                 <div class="collapse navbar-collapse flex-column" id="navbarTogglerDemo01">
 
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-column">
-                        <li class="nav-item">
-                            <h6>Pets</h6>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Dog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Cat</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Hamster</a>
-                        </li>
-                        <li class="nav-item mt-3">
-                            <h6>Care Products</h6>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Dog Care Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Cat Care Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Hamster Care Products</a>
-                        </li>
-                        <li class="nav-item mt-3">
-                            <h6>Accessories</h6>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Dog Accessories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Cat Accessories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Hamster Accessories</a>
-                        </li>
-                        <li class="nav-item mt-3">
-                            <h6>Food</h6>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Dog Food</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Cat Food</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Hamster Food</a>
-                        </li>
-                    </ul>
+                <?php include "./category_nav.php"; ?>
                 </div>
             </nav>
             <div class="container d-flex flex-wrap">
@@ -272,7 +161,7 @@ else{
                 <div class="product-indi">
                     <div class="card-wrapper general">
                         <div class="card-main-section">
-                            <img src="<?php echo "$cat[imagePath].jpg"; ?>" alt="" class="img-fluid">
+                            <img src="<?php echo "$cat[imagePath]"; ?>" alt="" class="img-fluid">
                             <div class="card-main-section-icon">
                                 <button class="btn card-icon-wrapper">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -338,85 +227,15 @@ window.addEventListener("scroll", () => {
     } else {
         toTop.classList.remove("active");
     }
-})
-</script>
-<script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
-<script>
-function loadThumbnail(selector) {
-    for (let thumbnail of selector) {
-        thumbnail.innerHTML =
-            `<img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid">`;
-    }
-}
-
-const carousel = new Glider(document.querySelector('.glider-other-products'), {
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    draggable: true,
-    dots: '.dots',
-    arrows: {
-        prev: '#other-products-prev',
-        next: '#other-products-next'
-    },
-    dragVelocity: 2,
-    scrollLock: true,
-    resizeLock: true,
-    rewind: true,
-
-    responsive: [{
-            breakpoint: 0,
-            settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1
-            }
-        },
-
-        {
-            breakpoint: 768,
-            settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1
-            }
-        },
-
-        {
-            breakpoint: 992,
-            settings: {
-                slidesToShow: 3,
-                slidesToScroll: 1
-            }
-        },
-
-        {
-            breakpoint: 1400,
-            settings: {
-                slidesToShow: 4,
-                slidesToScroll: 1
-            }
-        }
-
-    ]
-});
-
-const gallery = new Glider(document.querySelector('.glider-gallery-view'), {
-    slidesToShow: 1,
-    dots: '.thumbnail',
-    draggable: true,
-    dragVelocity: 2,
-    scrollLock: true,
-    resizeLock: true,
-    arrows: {
-        prev: '#thumbnail-glider-prev',
-        next: '#thumbnail-glider-next'
-    },
-});
-
-const thumbnails = gallery.dots.children;
-
-loadThumbnail(thumbnails)
-
-window.addEventListener("resize", function() {
-    loadThumbnail(thumbnails)
-})
-</script>
+    })
+  </script>
+   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init(
+      {
+        offset: 300
+      }
+    )
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
 <?php require_once "script_links.php"; ?>

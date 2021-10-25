@@ -81,6 +81,14 @@ input[type="number"] {
   }
 }
 
+.login-alert{
+  /* right: 0px; */
+  width: 350px;
+  top: 10%;
+  left: 42%;
+  z-index: 1000;
+}
+
 .logo img {
   width: 155px;
   height: 40px;
