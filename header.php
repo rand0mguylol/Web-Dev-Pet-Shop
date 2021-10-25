@@ -11,15 +11,15 @@ $loginErrorArray = isset($_SESSION["loginErrorArray"]) ? $_SESSION["loginErrorAr
 unset($_SESSION["loginMessage"]);
 unset($_SESSION["loginErrorArray"]);
 
-$userid = $_SESSION['user']['userID'] ?? null;
-if (isset($userid)) {
-  $cartid = getCartId($userid, $connection);
-  if (!$cartid) {
-    $cartid = createCart($userid, $connection);
-  }
-  $subtotal = getCartSubtotal($cartid, $connection);
-  $cartitems = getCartItems($cartid, $connection);
-}
+// $userid = $_SESSION['user']['userID'] ?? null;
+// if (isset($userid)) {
+//   $cartid = getCartId($userid, $connection);
+//   if (!$cartid) {
+//     $cartid = createCart($userid, $connection);
+//   }
+//   $subtotal = getCartSubtotal($cartid, $connection);
+//   $cartitems = getCartItems($cartid, $connection);
+// }
 ?>
 
 

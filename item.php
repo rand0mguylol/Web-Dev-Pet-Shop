@@ -269,6 +269,9 @@ if (isset($_POST['add-to-cart-btn'])) {
             <!-- </div> -->
           </div>
         </div>
+        </div>
+        </div>
+        </section>
 
   <section class="other-products-section mt-5 pt-5">
     <div class="container">
