@@ -240,6 +240,40 @@ function getItemInfo($id,  $category, $connection){
   return $itemInfo;
 }
 
+function createCart($userid,$connection){
+  $stmt = $connection -> prepare("INSERT INTO cart VALUES ('',?, 0);");
+  $stmt -> bind_param('i',$userid) ;
+  $stmt -> execute();
+  $cartid = $connection ->insert_id;
+  $stmt -> close();
+  return $cartid;
+}
+
+function addCartitem($cartid,$id,$category,$quantity,$subtotal,$connection){
+$type = returnType($category);
+if(strtolower($type) === "pet" ){
+  $sql = "INSERT INTO cartitem VALUES ('',?,NULL,?,?,?,1);";
+  }
+  else if(strtolower($type) === "product" ){
+  $sql = "INSERT INTO cartitem VALUES ('',NULL,?,?,?,?,1);";
+}
+  else{
+    return false;
+  }
+$stmt = $connection ->prepare($sql);
+if ($stmt){
+  $stmt -> bind_param("iiii",$id,$cartid,$quantity,$subtotal);
+  $stmt -> execute();
+  $stmt = $connection -> prepare ("UPDATE cart SET total = total + ? WHERE cartid = ?;");
+  $stmt->bind_param("ii", $subtotal,$cartid);
+  $stmt->execute();
+  $stmt->close();
+  return true;
+} else {
+  return false;
+}
+}
+
 function getCartId($userid, $connection){
   $stmt =$connection -> prepare ("SELECT cartId FROM cart WHERE userId = ?;") ;
   $stmt->bind_param("i", $userid);
@@ -257,7 +291,7 @@ function getCartId($userid, $connection){
 
 function getCartItems ($cartid,$connection){
   $cartItemArray = [];
-  $stmt = $connection -> prepare("SELECT petId, productId, quantity, totalPrice FROM cartitem WHERE cartid = ?;"); 
+  $stmt = $connection -> prepare("SELECT cartItemId, petId, productId, quantity, subtotal FROM cartitem WHERE cartid = ?;"); 
   $stmt -> bind_param("i", $cartid);
   $stmt -> execute();
   $result = $stmt -> get_result();
@@ -267,10 +301,11 @@ function getCartItems ($cartid,$connection){
   } else{
     while ($row = $result->fetch_assoc()){
       $cartitem =[];
+      $cartItemId = $row['cartItemId'];
+      $quantity = $row['quantity']; 
+      $subtotal = $row['subtotal'];
       if (isset($row['petId'])){
         $id = $row['petId'];
-        $quantity = $row['quantity']; 
-        $totalPrice = $row['totalPrice'];
         $category = "pet";
         $stmt2 = $connection ->prepare ('SELECT name, price FROM pets WHERE petId =?; ');
         $stmt2 -> bind_param("i",$id);
@@ -279,28 +314,29 @@ function getCartItems ($cartid,$connection){
         $row2 = $result2 ->fetch_assoc();
         $itemName = $row2['name'];
         $itemPrice = $row2['price'];
-        $image = getImage($id,$category,"Thumbnail",true,$connection);
+        $image = getImage($id,$category,"Card",true,$connection);
       } else {
         $id = $row['productId'];
-        $quantity = $row['quantity'];
-        $totalPrice = $row['totalPrice'];
         $category = "product";
-        $stmt2 = $connection ->prepare ('SELECT name, price FROM products WHERE productId =?; ');
+        $stmt2 = $connection ->prepare ('SELECT name, price ,quantity as maxQuantity FROM products WHERE productId =?; ');
         $stmt2 -> bind_param("i",$id);
         $stmt2 -> execute();
         $result2 = $stmt2 -> get_result();
         $row2 = $result2 ->fetch_assoc();
         $itemName = $row2['name'];
         $itemPrice = $row2['price'];
-        $image = getImage($id,$category,"Thumbnail",true,$connection);
+        $itemMaxQuantity = $row2['maxQuantity'];
+        $image = getImage($id,$category,"Card",true,$connection);
       }
       $cartitem = [
-        "petid" => $id,
+        "cartItemId" => $cartItemId,
+        "id" => $id,
         "category" => $category,
         "name" => $itemName,
         "quantity" => $quantity,
+        "maxQuantity" => $itemMaxQuantity ?? 1,
         "price" => $itemPrice,
-        "totalPrice" => $totalPrice,
+        "subtotal" => $subtotal,
         "image" => $image
       ];
       array_push($cartItemArray, $cartitem);
@@ -311,14 +347,32 @@ function getCartItems ($cartid,$connection){
 }
 
 function getCartSubtotal($cartid,$connection){
-  $stmt = $connection -> prepare ("SELECT subtotal FROM cart WHERE cartid = ?;");
+  $stmt = $connection -> prepare ("SELECT SUM(subtotal) as total FROM cartitem WHERE cartid = ?;");
   $stmt -> bind_param("i", $cartid);
+  $stmt-> execute();
+  $row = $stmt->get_result() -> fetch_assoc();
+  $newTotal = $row['total'];
+  $stmt = $connection -> prepare ("SELECT total FROM cart WHERE cartId = ?");
+  $stmt -> bind_param("i", $cartid);
+  $stmt-> execute();
+  $row = $stmt->get_result() -> fetch_assoc();
+  $total = $row['total'];
+  if ($newTotal == $total){
+    return $total;
+  } else{
+    $stmt = $connection -> prepare ("UPDATE cart SET total = ? WHERE cartId = ?;");
+    $stmt -> bind_param("ii", $cartid,$newTotal);
+    $stmt -> execute();
+    $stmt->close();
+    return $newTotal;
+  }
+}
+
+function removeCartItem($cartItemId,$connection){
+  $stmt = $connection -> prepare ("DELETE FROM cartitem where cartItemId =?");
+  $stmt -> bind_param("i",$cartItemId);
   $stmt -> execute();
-  $result = $stmt -> get_result();
-  $row = $result ->fetch_assoc();
-  $subtotal = $row['subtotal'];
-  $stmt->close();
-  return $subtotal;
+  $stmt -> close();
 }
 
 function updateProfile($newInfo, $connection, $id){
@@ -331,8 +385,6 @@ function updateProfile($newInfo, $connection, $id){
     foreach ($newInfo as $key => $value){
       $_SESSION["user"][$key] = $value;
     }
-  
-
 }
 
 function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
@@ -372,40 +424,6 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection){
     return  "Password Changed Successfully";
   }else{
     return  "Password does not match";
-  }
-}
-
-function createCart($userid,$connection){
-    $stmt = $connection -> prepare("INSERT INTO cart VALUES ('',?, 0);");
-    $stmt -> bind_param('i',$userid) ;
-    $stmt -> execute();
-    $cartid = $connection ->insert_id;
-    $stmt -> close();
-    return $cartid;
-}
-
-function addCartitem($cartid,$id,$category,$quantity,$totalPrice,$connection){
-  $type = returnType($category);
-  if(strtolower($type) === "pet" ){
-    $sql = "INSERT INTO cartitem VALUES ('',?,NULL,?,?,?,1);";
-    }
-    else if(strtolower($type) === "product" ){
-    $sql = "INSERT INTO cartitem VALUES ('',NULL,?,?,?,?,1);";
-  }
-    else{
-      return false;
-    }
-  $stmt = $connection ->prepare($sql);
-  if ($stmt){
-    $stmt -> bind_param("iiii",$id,$cartid,$quantity,$totalPrice);
-    $stmt -> execute();
-    $stmt = $connection -> prepare ("UPDATE cart SET subtotal = subtotal + ? WHERE cartid = ?;");
-    $stmt->bind_param("ii", $totalPrice,$cartid);
-    $stmt->execute();
-    $stmt->close();
-    return true;
-  } else {
-    return false;
   }
 }
 

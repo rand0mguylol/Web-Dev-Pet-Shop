@@ -22,7 +22,7 @@ if (isset($_POST['add-to-cart-btn'])) {
   $itemID = $id;
   $itemQuantity = (int) $_POST['item_quantity'];
   $itemPrice = $itemInfo['itemMainInfo']['price'];
-  $totalPrice = $itemQuantity * $itemPrice;
+  $subtotal = $itemQuantity * $itemPrice;
   $userid = $_SESSION['user']['userID'];
   $cartid = getCartId($userid, $connection);
   if (!$cartid) {
@@ -30,7 +30,7 @@ if (isset($_POST['add-to-cart-btn'])) {
   }
   $validation = validateCartItem($cartid, $itemID, $categoryClean, $connection);
   if ($validation) {
-    $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $totalPrice, $connection);
+    $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $subtotal, $connection);
   }
 }
 ?>
@@ -55,7 +55,8 @@ if (isset($_POST['add-to-cart-btn'])) {
       <div class="col-12 col-md-9 col-lg-6 col-xl-5 order-lg-1">
         <div class="glider-contain">
           <div class="glider-gallery-view">
-            <?php foreach ($itemGalleryArray as $galleryPic) : ?>
+            <?php 
+            foreach ($itemGalleryArray as $galleryPic) : ?>
               <div>
                 <img src="<?php echo "$galleryPic[imagePath]" ?>" alt="">
               </div>
@@ -96,7 +97,7 @@ if (isset($_POST['add-to-cart-btn'])) {
                   <?php echo "<div class='text-danger'>There is only $quantity stock left.</div>"; ?>
                 </div>
                 <div>
-                  <button type="submit" class="rounded-pill btn btn-success add-to-cart-btn" name="add-to-cart-btn">Add to Cart</button>
+                  <button type="submit" class="rounded-pill btn btn-success add-to-cart-btn mb-3" name="add-to-cart-btn">Add to Cart</button>
                 </div>
               </form>
               <?php

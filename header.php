@@ -122,22 +122,23 @@ if (isset($userid)) {
           <div class="card mb-3">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src="<?php echo $item['image']; ?>.jpg" class="card-img" alt="...">
+                <img src="<?php echo $item['image']; ?>" class="card-img" alt="<?php echo $item['name'].' Image';?>">
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <h5 class="card-title"><?php echo $item['name']; ?></h5>
+                  <h5 class="card-title text-muted <?php  if(strlen($item['name']) > 20){echo "h6";}?>"><?php echo $item['name']; ?></h5>
                   <p class="card-text m-0">
-                    Quantity : <?php echo $item['quantity']; ?>
+                    Quantity :<?php echo $item['quantity']; ?>
                   </p>
                   <p class="card-text m-0">
-                    Total : <?php echo $item['totalPrice']; ?>
+                    Total : RM<?php echo number_format((float)$item['subtotal'], 2, '.', ''); ?>
                   </p>
                 </div>
               </div>
             </div>
           </div>
         <?php endforeach ?>
+        <a href="./payment.php" class="btn btn-outline-dark" href="./payment.php">Pay >></a>
       <?php endif ?>
     </div>
     <div class="offcanvas-body mb-5">
