@@ -17,17 +17,17 @@ session_start();
 
     $itemGalleryArray = getImage($id,  $categoryClean, "Gallery", $connection);
   
-    $itemThumbnailArray = getImage($id, $categoryClean , "Thumbnail", $connection);
+    // $itemThumbnailArray = getImage($id, $categoryClean , "Thumbnail", $connection);
 
     $removeId = $itemInfo["itemSubInfo"]['id'];
     unset($itemInfo["itemSubInfo"]['id']);
 
     $others = getCategoryInfo($connection, $categoryClean , $removeId, true);
-    
-  }else{
-    header("Location: index.php");
-    exit();
   }
+  // }else{
+  //   header("Location: index.php");
+  //   exit();
+  // }
 
 ?>
 
@@ -53,7 +53,7 @@ session_start();
             <div class="glider-gallery-view">
               <?php foreach($itemGalleryArray as $galleryPic): ?>
               <div>
-                <img src="<?php echo "$galleryPic[imagePath].jpg" ?>"alt="">
+                <img src="<?php echo "$galleryPic[imagePath]" ?>"alt="">
               </div>
               <?php endforeach; ?>
             </div>
@@ -281,7 +281,7 @@ session_start();
             <div>
               <div class = "card-wrapper specific">
                 <div class = "card-main-section">
-                  <img src="<?php echo "$cat[imagePath].jpg"?>" alt="" class = "img-fluid">
+                  <img src="<?php echo "$cat[imagePath]"?>" alt="" class = "img-fluid">
                   <div class = "card-main-section-icon">
                       <button class ="btn card-icon-wrapper">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -311,7 +311,7 @@ session_start();
                   </div>
                 </div>
                 <div class = "card-price-section text-center">
-                  <span><?php echo $cat["price"]?></span>
+                  <span><?php echo "RM " .$cat["price"]?></span>
                 </div>
               </div>
             </div>
@@ -331,13 +331,13 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
   <script>
 
-    const thumbjson = `<?php echo json_encode($itemThumbnailArray); ?>`;
+    const thumbjson = `<?php echo json_encode($itemGalleryArray); ?>`;
     const thumb = JSON.parse(thumbjson)
     // console.log(thumb)
     
     function loadThumbnail(thumbnailArray, selector) {
       for(let i = 0; i<thumbnailArray.length; i++){
-        selector[i].innerHTML = `<img src="${thumbnailArray[i].imagePath}.jpg" alt="" class = "img-fluid">`;
+        selector[i].innerHTML = `<img src="${thumbnailArray[i].imagePath}" alt="" class = "img-fluid">`;
       }
     }
 
@@ -412,6 +412,15 @@ session_start();
       loadThumbnail(thumb, thumbnailsButton)
     })
 
+  </script>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init(
+      {
+        offset: 300
+      }
+    )
   </script>
 
 <?php require_once "./script_links.php"; ?>

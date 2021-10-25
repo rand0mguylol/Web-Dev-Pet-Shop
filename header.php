@@ -3,11 +3,11 @@
 
   $folder = $_SERVER["REQUEST_URI"];
   $path = dirname($folder);
-  $currentPage = $path !== "\\" ? basename($folder): "";
+  $currentPage = $path !== "\\" ?basename($folder):"";
  
-  $isLoginMessage = isset($_SESSION["isValidLogin"]) ? $_SESSION["isValidLogin"] : null;
+  $loginMessage = isset($_SESSION["loginMessage"]) ? $_SESSION["loginMessage"] : null;
   $loginErrorArray = isset($_SESSION["loginErrorArray"]) ? $_SESSION["loginErrorArray"]: [];
-  unset($_SESSION["isValidLogin"]);
+  unset($_SESSION["loginMessage"]);
   unset($_SESSION["loginErrorArray"]);
 ?>
 
@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
   <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Home Page</title>
 </head>
 <body>
@@ -43,7 +43,7 @@
       <div class="p-3 mb-2 bg-danger text-white text-center rounded-pill">INCORRECT LOGIN DETAILS</div>
     <?php endif; ?>
       <div>
-        <form action=" <?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method = "POST">
+        <form action=" <?php echo './controller/login.php?page='.$currentPage;?>" class="row g-3 row-cols-1" method = "POST">
           <div class = "col">
             <label for="inputEmail" class="form-label">Email</label>
             <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" required>
@@ -85,7 +85,7 @@
     <div class="offcanvas-body mb-5">
       <div>
       <div class = "col-12 text-center"><a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">View Account</a></div>
-        <form action="<?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method = "POST">
+        <form action="<?php echo './controller/login.php?page='.$currentPage;?>" class="row g-3 row-cols-1" method = "POST">
           <div class = "col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name = "logout">Log Out</button></div>
         </form>
 
@@ -108,3 +108,11 @@
     </div>
   </div>
   <!-- End of Offcanvas --> 
+  
+  <?php if (isset($loginMessage)): ?>
+  <div data-aos = "fade-down"  class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
+  <strong><?php echo $loginMessage; ?></strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php endif; ?>
+

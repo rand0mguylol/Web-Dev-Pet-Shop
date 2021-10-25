@@ -266,7 +266,7 @@ else{
           <div class = "product-indi">
             <div class = "card-wrapper general">
               <div class = "card-main-section">
-                <img src="<?php echo "$cat[imagePath].jpg"; ?>" alt="" class = "img-fluid">
+                <img src="<?php echo "$cat[imagePath]"; ?>" alt="" class = "img-fluid">
                 <div class = "card-main-section-icon">
                     <button class ="btn card-icon-wrapper">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -329,83 +329,13 @@ else{
     }
     })
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
+   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
   <script>
-    function loadThumbnail(selector) {
-      for (let thumbnail of selector){
-        thumbnail.innerHTML = `<img src="./images/specific_pets/pomeranian_gallery_sqaure_550_550.jpg" alt="" class = "img-fluid">`;
+    AOS.init(
+      {
+        offset: 300
       }
-    }
-
-    const carousel = new Glider(document.querySelector('.glider-other-products'), {
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      draggable: true,
-      dots: '.dots',
-      arrows: {
-        prev: '#other-products-prev',
-        next: '#other-products-next'
-      },
-      dragVelocity: 2,
-      scrollLock: true,
-      resizeLock: true,
-      rewind: true,
-
-      responsive: [
-          {
-            breakpoint: 0,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1
-            }
-          },
-
-          {
-              breakpoint: 768,
-              settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1
-              }
-          },
-          
-          {
-              breakpoint: 992,
-              settings: {
-                  slidesToShow: 3,
-                  slidesToScroll: 1
-              }
-          },
-
-          {
-            breakpoint: 1400,
-            settings: {
-                slidesToShow: 4,
-                slidesToScroll: 1
-            }
-        }
-
-      ]
-    });
-
-    const gallery = new Glider(document.querySelector('.glider-gallery-view'), {
-      slidesToShow: 1,
-      dots: '.thumbnail',
-      draggable: true,
-      dragVelocity: 2,
-      scrollLock: true,
-      resizeLock: true,
-      arrows: {
-        prev: '#thumbnail-glider-prev',
-        next: '#thumbnail-glider-next'
-      }, 
-    });
-
-    const thumbnails = gallery.dots.children;
-
-    loadThumbnail(thumbnails)
-
-    window.addEventListener("resize", function() {
-      loadThumbnail(thumbnails)
-    })
+    )
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
 <?php require_once "script_links.php"; ?>
