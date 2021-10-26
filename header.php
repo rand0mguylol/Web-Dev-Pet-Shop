@@ -21,7 +21,6 @@ if (isset($userid)) {
   $subtotal = getCartSubtotal($cartid, $connection);
   $cartitems = getCartItems($cartid, $connection);
 }
-
 ?>
 
 

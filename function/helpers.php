@@ -126,8 +126,34 @@ function returnType($category){
   return $type;
 }
 
+function getCategoryInfo($connection, $category){
 
-function getCategoryInfo($connection, $category, $id = "", $limit = false){
+  $petArray  = ["Dog", "Cat", "Hamster"];
+  $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
+
+
+ if(in_array($category, $petArray)){
+  $sql = "SELECT petCategory.category, petcategory.description FROM  petcategory  WHERE petCategory.category = ?;";
+  }
+  else if(in_array($category, $productArray)){
+  $sql = "SELECT productcategory.category, productcategory.description FROM productcategory WHERE productCategory.category = ?;";
+}
+  else{
+    return false;
+  }
+
+  $stmt = $connection->prepare($sql);
+  $stmt->bind_param("s", $category);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  $categoryHeader = $result->fetch_assoc();
+  $stmt->close();
+
+  return $categoryHeader;
+}
+
+function getCategoryProduct($connection, $category, $searchKeyword = "",  $id = "", $limit = false) {
   $categoryArray = [];
 
   $petArray  = ["Dog", "Cat", "Hamster"];
@@ -135,10 +161,10 @@ function getCategoryInfo($connection, $category, $id = "", $limit = false){
 
 
  if(in_array($category, $petArray)){
-  $sql = "SELECT pets.petId as id , pets.name, pets.price, petcategory.category, petcategory.description, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card' AND pets.petId != ?;";
+  $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card' AND pets.petId != ? AND pets.name LIKE ? ;";
   }
   else if(in_array($category, $productArray)){
-  $sql = "SELECT products.productId as id, products.name, products.price,  productcategory.category, productcategory.description, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.productId != ?;";
+  $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.productId != ? AND products.name LIKE ?;";
 }
   else{
     return false;
@@ -148,32 +174,31 @@ function getCategoryInfo($connection, $category, $id = "", $limit = false){
     $sql = substr_replace($sql, " LIMIT 6", -1, -1);
   }
 
-
   $stmt = $connection->prepare($sql);
 
-  if(!$stmt){
-    return false;
-  }
+  // if(!$stmt){
+  //   return false;
+  // }
 
-  $stmt->bind_param("si", $category, $id);
+  $searchKeyword = "%$searchKeyword%";
+  $stmt->bind_param("sis", $category, $id, $searchKeyword);
+
   $stmt->execute();
   $result = $stmt->get_result();
 
   while($row = $result->fetch_assoc()){
     array_push($categoryArray, $row);
-    $categoryDescription = $row["description"];
-    $categoryName = $row["category"];
   }
 
   $stmt->close();
 
-  $resultArray = [
-    "categoryArray" => $categoryArray,
-    "categoryDescription" => $categoryDescription,
-    "categoryName" => $categoryName
-  ];
+  // $resultArray = [
+  //   "categoryArray" => $categoryArray,
+  //   "categoryDescription" => $categoryDescription,
+  //   "categoryName" => $categoryName
+  // ];
 
-  return $resultArray;
+  return $categoryArray;
 }
 
 
