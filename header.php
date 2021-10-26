@@ -62,14 +62,6 @@ if (isset($userid)) {
       <div class="p-3 mb-2 bg-danger text-white text-center rounded-pill">INCORRECT LOGIN DETAILS</div>
     <?php endif; ?>
       <div>
-        <form action=" <?php echo './controller/login.php?page='.$currentPage;?>" class="row g-3 row-cols-1" method = "POST">
-          <div class = "col">
-            <label for="inputEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name = "email" required>
-            <?php if(in_array("email", $loginErrorArray)): ?>
-              <small>Please enter a valid email.</small>
-            <?php endif; ?>
-            <div>
                 <form action=" <?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1"
                     method="POST">
                     <div class="col">
@@ -101,6 +93,8 @@ if (isset($userid)) {
             </div>
         </div>
     </div>
+                        </div>
+                        </div>
     <?php else: ?>
 
     <!-- Offcanvas -->
@@ -126,15 +120,6 @@ if (isset($userid)) {
             </form>
         </div>
     </div>
-
-    <div class="offcanvas-body mb-5">
-      <div class = "col-12 text-center"><a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">View Account</a></div>
-        <form action="<?php echo './controller/login.php?page='.$currentPage;?>" class="row g-3 row-cols-1" method = "POST">
-          <div class = "col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name = "logout">Log Out</button></div>
-        </form>
-      </div>
-    </div>
-
     <?php endif; ?>
 
   <!-- Cart offcanvas -->
@@ -152,18 +137,19 @@ if (isset($userid)) {
         <?php foreach ($cartitems as $item) : ?>
           <div class="card mb-3">
             <div class="row no-gutters">
-              <div class="col-md-4">
-                <img src="<?php echo $item['image']; ?>" class="card-img" alt="<?php echo $item['name'].' Image';?>">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title text-muted <?php  if(strlen($item['name']) > 20){echo "h6";}?>"><?php echo $item['name']; ?></h5>
-                  <p class="card-text m-0">
-                    Quantity :<?php echo $item['quantity']; ?>
-                  </p>
-                  <p class="card-text m-0">
-                    Total : RM<?php echo number_format((float)$item['subtotal'], 2, '.', ''); ?>
-                  </p>
+                <div class="col-md-4">
+                  <img src="<?php echo $item['image']; ?>" class="card-img" alt="<?php echo $item['name'].' Image';?>">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title text-muted <?php  if(strlen($item['name']) > 20){echo "h6";}?>"><?php echo $item['name']; ?></h5>
+                      <p class="card-text m-0">
+                        Quantity :<?php echo $item['quantity']; ?>
+                      </p>
+                      <p class="card-text m-0">
+                        Total : RM<?php echo number_format((float)$item['subtotal'], 2, '.', ''); ?>
+                      </p>
+                    </div>
                 </div>
             </div>
           </div>
@@ -176,7 +162,6 @@ if (isset($userid)) {
       </div>
     </div>
   </div>
-
   <!-- End of Offcanvas --> 
   <!-- Alert for pages. AOS CSS and JS required -->
   <!-- The variable depends on the page -->
