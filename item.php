@@ -22,15 +22,15 @@ if (isset($_POST['add-to-cart-btn'])) {
   $itemID = $id;
   $itemQuantity = (int) $_POST['item_quantity'];
   $itemPrice = $itemInfo['itemMainInfo']['price'];
-  $totalPrice = $itemQuantity * $itemPrice;
+  $subtotal = $itemQuantity * $itemPrice;
   $userid = $_SESSION['user']['userID'];
   $cartid = getCartId($userid, $connection);
   if (!$cartid) {
     $cartid = createCart($userid, $connection);
   }
-  $validation = validateCartItem($cartid, $itemID, $categoryClean, $connection);
-  if ($validation) {
-    $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $totalPrice, $connection);
+  $validation = validateCartItem($cartid, $itemID,$itemQuantity, $categoryClean, $connection);
+  if (!$validation) {
+    $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $subtotal, $connection);
   }
 }
 ?>
@@ -55,7 +55,8 @@ if (isset($_POST['add-to-cart-btn'])) {
       <div class="col-12 col-md-9 col-lg-6 col-xl-5 order-lg-1">
         <div class="glider-contain">
           <div class="glider-gallery-view">
-            <?php foreach ($itemGalleryArray as $galleryPic) : ?>
+            <?php 
+            foreach ($itemGalleryArray as $galleryPic) : ?>
               <div>
                 <img src="<?php echo "$galleryPic[imagePath]" ?>" alt="">
               </div>
@@ -72,7 +73,7 @@ if (isset($_POST['add-to-cart-btn'])) {
           <h1 class="item-info-header "><span class="fw-bold"><?php echo $itemInfo['itemMainInfo']['name']; ?></span></h1>
           <div class="d-flex justify-content-between align-items-baseline">
             <p class="d-inline mt-2 item-info-price lead fs-3">
-              <?php echo "RM "  . $itemInfo['itemMainInfo']['price']; ?></p>
+              <?php echo "RM "  . number_format($itemInfo['itemMainInfo']['price'],2,'.',''); ?></p>
             <div class="item-stars d-inline me-5">
               <img src="./svg/star-fill.svg" alt="">
               <img src="./svg/star-fill.svg" alt="">
@@ -96,15 +97,22 @@ if (isset($_POST['add-to-cart-btn'])) {
                   <?php echo "<div class='text-danger'>There is only $quantity stock left.</div>"; ?>
                 </div>
                 <div>
-                  <button type="submit" class="rounded-pill btn btn-success add-to-cart-btn" name="add-to-cart-btn">Add to Cart</button>
+                  <button type="submit" class="rounded-pill btn btn-success add-to-cart-btn mb-3" name="add-to-cart-btn">Add to Cart</button>
                 </div>
               </form>
               <?php
               if (isset($_POST['add-to-cart-btn'])) {
-                if (!$validation) {
+                if ($validation) {
+                  if($validation === "maxed"){
+                    echo "<div class='alert alert-warning' role='alert'>
+                Maxed amount of this item has been added into your cart. </div>";
+                  }elseif($validation === "updated"){
+                  echo "<div class='alert alert-info' role='alert'>
+                $itemQuantity of this item has been added into your cart.</div>";
+                }else{
                   echo "<div class='alert alert-danger' role='alert'>
-              This item already existed in your cart.
-            </div>";
+                This item is already in your cart. </div>";
+                }
                 } else {
                   if ($addCartItem) {
                     echo "<div class='alert alert-success' role='alert'>
