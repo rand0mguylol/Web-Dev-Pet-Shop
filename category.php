@@ -2,28 +2,35 @@
 session_start();
 require_once "./function/db.php";
 require_once "./function/helpers.php";
-  // var_dump($_GET);
 
 if(isset($_GET["category"])){
 
   $category = sanitizeText($_GET["category"]);
-  $categoryClean = filter_var($category, FILTER_SANITIZE_STRING);
+
+    $categoryHeader = getCategoryInfo($connection, $category);
+    $categoryName = $categoryHeader["category"];
+    $categoryDescription = $categoryHeader["description"];
+
+    if(!$categoryHeader){
+        header("Location: index.php");
+        exit();
+    }
   
-
-  $informaton = getCategoryInfo($connection, $categoryClean);
-
-  if(!$informaton){
-    header("Location: index.php");
-    exit();
+  if(isset($_GET["q"]) && $_GET["q"] !== ""){
+    $q = sanitizeText($_GET["q"]);
+    $categoryArray= getCategoryProduct($connection, $category, $q);
+  }else{
+    $categoryArray = getCategoryProduct($connection, $category);
   }
-
-  $categoryDescription = $informaton["categoryDescription"];
-  $categoryArray = $informaton["categoryArray"];
-  $categoryName = $informaton["categoryName"];
+  
 }
 else{
   header("Location: index.php");
   exit();
+}
+
+if(isset($_GET["category"], $_GET["q"])){
+
 }
 ?>
 
@@ -47,7 +54,7 @@ else{
         <button type="button" class="btn-close text-reset " data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <form action="" class="filter-form ">
+        <form action="" class="filter-form">
             <fieldset class="mb-3">
                 <legend>Sort By</legend>            
                 <div class="form-check">
@@ -128,10 +135,11 @@ else{
             </div>
 
             <div class="search-container">
-                <form action="" class="search-form d-flex d-inline justify-content-between">
+                <form action="" class="search-form d-flex d-inline justify-content-between" method="GET">
                     <input type="text" class="form-control search-bar d-inline" id="inputFirstName"
-                        placeholder="Search for Products">
-                    <button class="btn search text-end"><img src="./svg/search (1).svg" alt=""></button>
+                        placeholder="Search for Products" name = "q" value ="<?php if(isset($q)) echo $q?>">
+                    <input type="hidden" value = "<?php echo $category; ?>" name = "category">
+                    <button class="btn search text-end" name = "search"><img src="./svg/search (1).svg" alt=""></button>
                 </form>
             </div>
             <div class="filter-container">
@@ -157,6 +165,11 @@ else{
             </nav>
             <div class="container d-flex flex-wrap">
 
+            <?php if (empty($categoryArray) && isset($_GET["q"])): ?>
+                <p class = 'text-center lead'> There are no products that match your search</p>
+            <?php elseif (empty($categoryArray)): ?>
+                <p class = 'text-center lead'> There are no products in this category</p>
+            <?php else: ?>
                 <?php foreach($categoryArray as $cat): ?>
                 <div class="product-indi">
                     <div class="card-wrapper general">
@@ -201,6 +214,7 @@ else{
                     </div>
                 </div>
                 <?php endforeach; ?>
+            <?php endif; ?>
             </div>
         </div>
     </section>

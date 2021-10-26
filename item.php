@@ -13,7 +13,7 @@ if (isset($_GET["category"], $_GET["id"])) {
   $itemThumbnailArray = getImage($id, $categoryClean, "Thumbnail", false, $connection);
   $removeId = $itemInfo["itemSubInfo"]['id'];
   $quantity = $itemInfo['itemSubInfo']['quantity'] ?? 1;
-  $others = getCategoryInfo($connection, $categoryClean, $removeId, true);
+  $others = getCategoryProduct($connection, $categoryClean, $removeId, false, true);
 } else {
   header("Location: index.php");
   exit();
