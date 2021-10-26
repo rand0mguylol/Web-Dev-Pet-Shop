@@ -1,53 +1,47 @@
-<?php session_start(); 
+<?php session_start();
 
-  if(isset($_POST["saveProfile"], $_SESSION["user"]["userID"])){
+if (isset($_POST["saveProfile"], $_SESSION["user"]["userID"])) {
     require_once "../function/db.php";
-    require_once "../function/helpers.php"; 
-    
+    require_once "../function/helpers.php";
+    //
     $profileErrorArray = [];
-
     $firstName = sanitizeText($_POST["firstName"]);
     $lastName = sanitizeText($_POST["lastName"]);
     $addressLine = sanitizeText($_POST["addressLine"]);
     $city = sanitizeText($_POST["city"]);
-  
+    //
     $mobileNumber = validateMobileNumber($_POST["mobileNumber"]);
-  
-    if($mobileNumber === false){
-      array_push( $profileErrorArray , "mobileNumber");
+    if ($mobileNumber === false) {
+        array_push($profileErrorArray, "mobileNumber");
     }
-  
+    //
     $postcode = validatePostcode($_POST['postcode']);
-  
-    if($postcode === false){
-      array_push( $profileErrorArray , "postcode");
+    if ($postcode === false) {
+        array_push($profileErrorArray, "postcode");
     }
-  
+    //
     $state = validateState($_POST['state']);
-  
-    if($state === false){
-      array_push( $profileErrorArray , "state");
+    if ($state === false) {
+        array_push($profileErrorArray, "state");
     }
-
-    if(!$profileErrorArray){
-      $newInfo = array(
-        "firstName" => $firstName,
-        "lastName" => $lastName,
-        "mobileNumber" => $mobileNumber,
-        "addressLine" => $addressLine,
-        "city" => $city,
-        "state" =>$state,
-        "postcode" => $postcode
-      );
-      updateProfile($newInfo, $connection, $_SESSION["user"]["userID"]);
-      $_SESSION["profileUpdateMessage"] = "Info Saved";
+    //
+    if (!$profileErrorArray) {
+        $newInfo = array(
+            "firstName" => $firstName,
+            "lastName" => $lastName,
+            "mobileNumber" => $mobileNumber,
+            "addressLine" => $addressLine,
+            "city" => $city,
+            "state" => $state,
+            "postcode" => $postcode
+        );
+        updateProfile($newInfo, $connection, $_SESSION["user"]["userID"]);
+        $_SESSION["profileUpdateMessage"] = "Info Saved";
+    } else {
+        $_SESSION["profileUpdateMessage"] = "Invalid Details";
+        $_SESSION["profileUpdateError"] = $profileErrorArray;
     }
-    else{
-      $_SESSION["profileUpdateMessage"] = "Invalid Details";
-      $_SESSION["profileUpdateError"] = $profileErrorArray;
-    }
-
+    //
     header("Location: ../profile.php");
     exit();
-  }
-?>
+}
