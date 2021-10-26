@@ -321,6 +321,7 @@ function getCartItems ($cartid,$connection){
         $image = getImage($id,$category,"Card",true,$connection);
       }
       $cartitem = [
+
         "cartItemId" => $cartItemId,
         "id" => $id,
         "category" => $category,
@@ -530,4 +531,126 @@ function createReview($newReview, $connection){
 
 //     $row = $result->fetch_assoc();
 //     $stmt->close();;
+// }
+
+function getOrderId($userid, $connection){
+  $stmt = $connection -> prepare("SELECT orderId FROM orders WHERE userId = ? ORDER BY orderId DESC;");
+  $stmt -> bind_param("i", $userid);
+  $stmt -> execute();
+  $result = $stmt -> get_result();
+  $orderIdArray=[];
+  while($row = $result -> fetch_assoc()){  
+    $id=$row["orderId"];
+    array_push($orderIdArray, $id);
+  };
+  $stmt -> close();
+  return $orderIdArray;
+}
+
+function getOrderTotal($orderid, $connection){
+  $stmt = $connection -> prepare ("SELECT total FROM orders WHERE orderid = ?;");
+  $stmt -> bind_param("i", $orderid);
+  $stmt -> execute();
+  $result = $stmt -> get_result();
+  $row = $result ->fetch_assoc();
+  $total = $row['total'];
+  $stmt->close();
+  return $total;
+}
+
+function getOrderItems($orderId, $connection){
+  $orderItemArray = [];
+  // foreach($orderIdArray as $orderId){}
+  $stmt = $connection -> prepare("SELECT petId, productId, quantity, subtotal FROM orderitem WHERE orderid = ?;");
+  $stmt -> bind_param("i", $orderId);
+  $stmt -> execute();
+  $result = $stmt -> get_result();
+  while($row = $result -> fetch_assoc()){
+    $orderitem = [];
+    if (isset($row['petId'])){
+        $id = $row['petId'];
+        $quantity = $row['quantity']; 
+        $subtotal = $row['subtotal'];
+        $category = "pet";
+        $stmt2 = $connection ->prepare ('SELECT name FROM pets WHERE petId =?; ');
+        $stmt2 -> bind_param("i",$id);
+        $stmt2 -> execute();
+        $result2 = $stmt2 -> get_result();
+        $row2 = $result2 ->fetch_assoc();
+        $itemName = $row2['name'];
+        $image = getImage($id,$category,"Thumbnail",true,$connection);
+      } else {
+        $id = $row['productId'];
+        $quantity = $row['quantity'];
+        $subtotal = $row['subtotal'];
+        $category = "product";
+        $stmt2 = $connection ->prepare ('SELECT name FROM products WHERE productId =?; ');
+        $stmt2 -> bind_param("i",$id);
+        $stmt2 -> execute();
+        $result2 = $stmt2 -> get_result();
+        $row2 = $result2 ->fetch_assoc();
+        $itemName = $row2['name'];
+        $image = getImage($id,$category,"Thumbnail",true,$connection);
+      }
+    $orderitem = [
+      "id" => $id,
+      "category" => $category,
+      "name" => $itemName,
+      "quantity" => $quantity,
+      "subtotal" => $subtotal,
+      "image" => $image
+    ];
+    array_push($orderItemArray, $orderitem);
+  }
+  $stmt -> close();
+  $stmt2 -> close();
+  return $orderItemArray;
+}
+
+// function getOrderItems($orderId, $connection){
+//   $orderItemArray = [];
+//   $stmt = $connection -> prepare("SELECT petId, productId, quantity, totalPrice FROM orderitem WHERE orderid = ?;");
+//   $stmt -> bind_param("i", $orderId);
+//   $stmt -> execute();
+//   $result = $stmt -> get_result();
+//   while($row = $result -> fetch_assoc()){
+//     $orderitem = [];
+//     if (isset($row['petId'])){
+//         $id = $row['petId'];
+//         $quantity = $row['quantity']; 
+//         $totalPrice = $row['totalPrice'];
+//         $category = "pet";
+//         $stmt2 = $connection ->prepare ('SELECT name FROM pets WHERE petId =?; ');
+//         $stmt2 -> bind_param("i",$id);
+//         $stmt2 -> execute();
+//         $result2 = $stmt2 -> get_result();
+//         $row2 = $result2 ->fetch_assoc();
+//         $itemName = $row2['name'];
+//         $image = getImage($id,$category,"Thumbnail",true,$connection);
+//       } else {
+//         $id = $row['productId'];
+//         $quantity = $row['quantity'];
+//         $totalPrice = $row['totalPrice'];
+//         $category = "product";
+//         $stmt2 = $connection ->prepare ('SELECT name FROM products WHERE productId =?; ');
+//         $stmt2 -> bind_param("i",$id);
+//         $stmt2 -> execute();
+//         $result2 = $stmt2 -> get_result();
+//         $row2 = $result2 ->fetch_assoc();
+//         $itemName = $row2['name'];
+//         $image = getImage($id,$category,"Thumbnail",true,$connection);
+//       }
+//     $orderitem = [
+//       "id" => $id,
+//       "category" => $category,
+//       "name" => $itemName,
+//       "quantity" => $quantity,
+//       "totalPrice" => $totalPrice,
+//       "image" => $image
+//     ];
+//     array_push($orderItemArray, $orderitem);
+//   }
+//   $stmt -> close();
+//   $stmt2 -> close();
+//   return $orderItemArray;
 // }
