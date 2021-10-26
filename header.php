@@ -19,7 +19,7 @@ if (isset($userid)) {
     if (!$cartid) {
         $cartid = createCart($userid, $connection);
     }
-    $subtotal = getCartSubtotal($cartid, $connection);
+    $total = getCartTotal($cartid, $connection);
     $cartitems = getCartItems($cartid, $connection);
 }
 ?>
@@ -51,8 +51,7 @@ if (isset($userid)) {
                 <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">SIGN IN</h2>
             </div>
-        </div>
-        <div class="offcanvas-body mb-5">
+            <div class="offcanvas-body mb-5">
             <?php if (isset($validLogin) && $validLogin === false) : ?>
                 <div class="p-3 mb-2 bg-danger text-white text-center rounded-pill">INCORRECT LOGIN DETAILS</div>
             <?php endif; ?>
@@ -79,6 +78,7 @@ if (isset($userid)) {
                     <a href="" class="text-decoration-none"><small>Create Account</small></a>
                 </div>
             </div>
+        </div>
         </div>
 
     <?php else: ?>

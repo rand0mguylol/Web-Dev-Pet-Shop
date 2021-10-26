@@ -6,15 +6,9 @@
 $userid = $_SESSION['user']['userID'] ?? null;
 if (isset($userid)) {
     $cartid = getCartId($userid, $connection);
-    $subtotal = getCarttotal($cartid, $connection);
+    $subtotal = getCartTotal($cartid, $connection);
     $cartitems = getCartItems($cartid, $connection);
-    $cartSubtotal = getCartSubtotal($cartid, $connection);
-}
-if (isset($_POST['remove-item-from-cart-btn'])) {
-    $deleted_cartitem_id = $_POST['remove-item-from-cart-btn'];
-    $removal = removeCartItem($deleted_cartitem_id, $cartid, $connection);
-    echo "<meta http-equiv='refresh' content='0'>";
-    unset($_POST['remove-item-from-cart-btn']);
+    $cartSubtotal = getCartTotal($cartid, $connection);
 }
 ?>
 <div class="cart-container container-fluid px-lg-5 my-lg-3 ">
@@ -37,7 +31,7 @@ if (isset($_POST['remove-item-from-cart-btn'])) {
                 <?php else : ?>
                     <?php foreach ($cartitems as $index => $item) : ?>
                         <!-- Product -->
-                        <form method="POST">
+                        <form method="POST" action= "./controller/remove_cart_item.php">
                             <div class="row product-container mb-4 align-items-center">
                                 <div class="col-1 text-center">
                                     <button type="submit" name="remove-item-from-cart-btn" value="<?php echo $cartitems[$index]['cartItemId']; ?>"><i class="fas fa-times fa-sm"></i></button>
@@ -221,11 +215,11 @@ if (isset($_POST['remove-item-from-cart-btn'])) {
 <?php require_once "footer.php"; ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script>
-  $total = $("#totalAmount").text();
-  $subtotal = $("#subtotal").text();
-  $shippingFee = $("#shippingFee").text();
-  $totalInput = $(".payment-total").val($subtotal);
-  console.log($totalInput);
+    $total = $("#totalAmount").text();
+    $subtotal = $("#subtotal").text();
+    $shippingFee = $("#shippingFee").text();
+    $totalInput = $(".payment-total").val($subtotal);
+    console.log($totalInput);
 ;
 </script>
 <?php require_once "script_links.php"; ?>
