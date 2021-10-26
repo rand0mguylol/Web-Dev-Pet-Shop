@@ -339,7 +339,7 @@ function getCartItems ($cartid,$connection){
   }
 }
 
-function updateCartSubtotal($cartid,$connection){
+function updateCartTotal($cartid,$connection){
   $stmt = $connection -> prepare ("SELECT SUM(subtotal) as total FROM cartitem WHERE cartId = ? AND STATUS = 1;");
   $stmt -> bind_param("i", $cartid);
   $stmt-> execute();
@@ -351,8 +351,8 @@ function updateCartSubtotal($cartid,$connection){
   $stmt-> close();
 }
 
-function getCartSubtotal($cartid,$connection){
-  updateCartSubtotal($cartid,$connection);
+function getCartTotal($cartid,$connection){
+  updateCartTotal($cartid,$connection);
   $stmt = $connection -> prepare ("SELECT total FROM cart WHERE cartId = ?");
   $stmt -> bind_param("i", $cartid);
   $stmt-> execute();
@@ -389,20 +389,12 @@ if ($stmt){
   $stmt = $connection -> prepare ("UPDATE cart SET total = total + ? WHERE cartId = ?;");
   $stmt->bind_param("ii", $subtotal,$cartid);
   $stmt->execute();
-  updateCartSubtotal($cartid,$connection);
+  updateCartTotal($cartid,$connection);
   $stmt->close();
   return true;
 } else {
   return false;
 }
-}
-
-function removeCartItem($cartItemId,$cartid,$connection){
-  $stmt = $connection -> prepare ("DELETE FROM cartitem where cartItemId =?");
-  $stmt -> bind_param("i",$cartItemId);
-  $stmt -> execute();
-  $newTotal = updateCartSubtotal($cartid,$connection);
-  $stmt -> close();
 }
 
 function updateProfile($newInfo, $connection, $id){

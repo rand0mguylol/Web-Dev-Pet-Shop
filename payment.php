@@ -6,15 +6,15 @@
   $userid = $_SESSION['user']['userID'] ?? null;
   if (isset($userid)) {
     $cartid = getCartId($userid, $connection);
-    $subtotal = getCartSubtotal($cartid, $connection);
+    $subtotal = getCarttotal($cartid, $connection);
     $cartitems = getCartItems($cartid, $connection);
-    $cartSubtotal = getCartSubtotal($cartid, $connection);
+    $cartTotal = getCartTotal($cartid, $connection);
   }
-  if (isset($_POST['remove-item-from-cart-btn'])){
-    $deleted_cartitem_id = $_POST['remove-item-from-cart-btn'];
-    $removal = removeCartItem($deleted_cartitem_id,$cartid,$connection);
-    echo "<meta http-equiv='refresh' content='0'>";
-    unset($_POST['remove-item-from-cart-btn']);
+  if (isset($_POST['bank-payment-btn'])){
+    var_dump($_POST);
+  }
+  if (isset($_POST['credit-card-btn'])){
+    var_dump($_POST);
   }
 ?>
 <div class="cart-container container-fluid px-lg-5 my-lg-3 ">
@@ -37,7 +37,7 @@
         <?php else:?>
           <?php foreach($cartitems as $index =>$item):?>
             <!-- Product -->
-            <form method="POST">
+            <form method="POST" action = "./controller/remove_cart_item.php">
               <div class="row product-container mb-4 align-items-center">
                 <div class="col-1 text-center">
                   <button type= "submit" name ="remove-item-from-cart-btn" value = "<?php echo $cartitems[$index]['cartItemId'];?>"><i class="fas fa-times fa-sm"></i></button>
@@ -89,7 +89,7 @@
               <h6>Subtotal: </h6>
             </div>
             <div class="col-6">
-              <h6>RM <?php echo number_format($cartSubtotal, 2, '.', '');?></h6>
+              <h6>RM <span id = "subtotal"><?php echo number_format($cartTotal, 2, '.', '');?></span></h6>
             </div>
           </div>
           <div class="row">
@@ -97,7 +97,7 @@
               <h6>Shipping:</h6>
             </div>
             <div class="col-6">
-              <h6 id="Shipping Fee">FREE</h6>
+              <h6><span id = "shippingFee">FREE</span></h6>
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
               <h5>Total:</h5>
             </div>
             <div class="col-6">
-              <h5 id = "totalAmount">RM <?php echo number_format($cartSubtotal, 2, '.', '');?></h5>
+              <h5>RM <span id= "totalAmount"><?php echo number_format($cartTotal, 2, '.', '');?></span></h5>
             </div>
           </div>
         </div>
@@ -122,10 +122,13 @@
     <!-- payment -->
     <section class="col-md-4 py-2 px-lg-2 border bg-light rounded-3">
       <div class="row">
+
+      </div>
+      <div class="row">
         <h3 class="m-4">Payment Info</h3>
       </div>
       <div class="container">
-        <div class="card">
+        <div class="card my-3">
           <!-- Payment Method -->
           <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
             <li class="nav-item credit-card" role="presentation">
@@ -144,11 +147,14 @@
           <!-- End of Payment Method -->
           <!-- Credit Card -->
           <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active m-4" id="credit-card-method" role="tabpanel" aria-labelledby="credit-card-tab">
+            <div class="tab-pane fade show active m-3" id="credit-card-method" role="tabpanel" aria-labelledby="credit-card-tab">
+              <form action="" method = "POST">
+              <input type="hidden"  class = "payment-total" name = "total" value="">
+              <input type="hidden" class = "cartId" value = "<?php echo $cartid;?>">
               <div class="form-group m-3">
                 <h5>Payment method: </h5>
                 <div class="custom-control custom-radio m-2">
-                  <input type="radio" id="visa-card" name="payment-method" class="custom-control-input" value ="visa card">
+                  <input type="radio" id="visa-card" name="payment-method" class="custom-control-input" value ="Visa Card">
                   <label class="custom-control-label" for="visa-card"><i class="fab fa-cc-visa fa-lg me-2"></i>VISA</label>
                 </div>
                 <div class="custom-control custom-radio m-2">
@@ -167,8 +173,8 @@
               <div class="form-group m-3">
                 <label>Expiration Date</label>
                 <div class="input-group">
-                  <input type="number" class="form-control" placeholder="MM" name="expiration-m">
-                  <input type="number" class="form-control" placeholder="YY" name="expiration-y">
+                  <input type="number" class="form-control" placeholder="MM" name="expiration-month">
+                  <input type="number" class="form-control" placeholder="YY" name="expiration-year">
                 </div>
               </div>
               <div class="form-group m-3">
@@ -176,28 +182,32 @@
                 <input type="number" class="form-control" name="cvv" id="cvv">
               </div>
               <div class="form-group text-center m-3">
-                <button class="btn btn-primary <?php if(!$cartitems){echo 'disabled' ;}?>" type="button">Confirm</button>
+                <button class="btn btn-primary <?php if(!$cartitems){echo 'disabled' ;}?>" type="submit" name="credit-card-btn">Confirm</button>
               </div>
               </form>
             </div>
             <!-- End of Credit Card -->
-            <div class="tab-pane fade" id="online-banking-method" role="tabpanel" aria-labelledby="online-banking-tab">
+            <div class="tab-pane fade m-3" id="online-banking-method" role="tabpanel" aria-labelledby="online-banking-tab">
+              <form action="" method = "POST">
               <div class="form-group m-3">
+                <input type="hidden"  class ="payment-total" name = "total" value="">
+                <input type="hidden" class = "cartId" value = "<?php echo $cartid;?>">
                 <h5>Select Your Bank:</h5>
                 <div class="custom-control custom-radio m-2">
-                  <input type="radio" id="maybank" name="payment-method" class="custom-control-input">
+                  <input type="radio" id="maybank" name="payment-method" value = "Maybank" class="custom-control-input">
                   <label class="custom-control-label" for="maybank">Maybank2u</label>
                 </div>
                 <div class="custom-control custom-radio m-2">
-                  <input type="radio" id="cimb-bank" name="payment-method" class="custom-control-input">
+                  <input type="radio" id="cimb-bank" name="payment-method" value = "CIMB Bank" class="custom-control-input">
                   <label class="custom-control-label" for="cimb-bank">CIMB Bank</label>
                 </div>
                 <div class="custom-control custom-radio m-2">
-                  <input type="radio" id="public-bank" name="payment-method" class="custom-control-input">
+                  <input type="radio" id="public-bank" name="payment-method" value = "Public Bank" class="custom-control-input">
                   <label class="custom-control-label" for="public-bank">Public Bank</label>
                 </div>
               </div>
               <div class="form-group m-3">
+                <input type="hidden"  class ="total" value="">
                 <label for="bank-account">Account Name</label>
                 <input type="text" class="form-control" placeholder="" name="bank-account" id="bank-account">
               </div>
@@ -206,13 +216,23 @@
                 <input type="password" class="form-control" placeholder="" name="bank-password" id="bank-password">
               </div>
               <div class="form-group text-center m-3">
-                <button class="btn btn-primary <?php if(!$cartitems){echo 'disabled';}?>" type="button">Confirm</button>
+                <button class="btn btn-primary <?php if(!$cartitems){echo 'disabled';}?>" type="submit" name="bank-payment-btn">Confirm</button>
               </div>
             </div>
+            </form>
           </div>
     </section>
     <!-- end of payment -->
   </div>
 </div>
 <?php require_once "footer.php"; ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+  $total = $("#totalAmount").text();
+  $subtotal = $("#subtotal").text();
+  $shippingFee = $("#shippingFee").text();
+  $totalInput = $(".payment-total").val($subtotal);
+  console.log($totalInput);
+;
+</script>
 <?php require_once "script_links.php"; ?>

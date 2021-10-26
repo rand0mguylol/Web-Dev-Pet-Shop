@@ -18,7 +18,7 @@ if (isset($userid)) {
   if (!$cartid) {
     $cartid = createCart($userid, $connection);
   }
-  $subtotal = getCartSubtotal($cartid, $connection);
+  $total = getCartTotal($cartid, $connection);
   $cartitems = getCartItems($cartid, $connection);
 }
 
@@ -93,8 +93,8 @@ if (isset($userid)) {
             </div>
         </div>
     </div>
-                        </div>
-                        </div>
+</div>
+</div>
     <?php else: ?>
 
     <!-- Offcanvas -->
@@ -124,11 +124,11 @@ if (isset($userid)) {
 
   <!-- Cart offcanvas -->
   <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="cartCanvas" aria-labelledby="cartCanvasLabel">
-    <div class="offcanvas-header flex-column">
+    <div class="offcanvas-header flex-column overflow-auto">
       <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       <?php if (!isset($cartitems)) : ?>
         <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">
-          Cart is empty.
+          Your cart is empty.
         </h2>
       <?php else : ?>
         <div class="text-start">
@@ -156,10 +156,6 @@ if (isset($userid)) {
         <?php endforeach ?>
         <a href="./payment.php" class="btn btn-outline-dark" href="./payment.php">Pay >></a>
       <?php endif ?>
-    </div>
-    <div class="offcanvas-body mb-5">
-      <div>
-      </div>
     </div>
   </div>
   <!-- End of Offcanvas --> 
