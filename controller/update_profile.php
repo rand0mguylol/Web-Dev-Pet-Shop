@@ -43,6 +43,7 @@
       $_SESSION["profileUpdateMessage"] = "Info Saved";
     }
     else{
+      $_SESSION["profileUpdateMessage"] = "Invalid Details";
       $_SESSION["profileUpdateError"] = $profileErrorArray;
     }
 

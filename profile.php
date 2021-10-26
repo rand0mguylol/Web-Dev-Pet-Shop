@@ -11,12 +11,12 @@
   }
   
   if(isset($_SESSION["passwordChangeMsg"])){
-    $updateMsg= $_SESSION["passwordChangeMsg"];
+    $profileUpdateMsg= $_SESSION["passwordChangeMsg"];
     unset($_SESSION["passwordChangeMsg"]);
   }
 
   if(isset($_SESSION["profileUpdateMessage"])){
-    $updateMsg= $_SESSION["profileUpdateMessage"];
+    $profileUpdateMsg= $_SESSION["profileUpdateMessage"];
     unset($_SESSION["profileUpdateMessage"]);
   }
 
@@ -26,7 +26,7 @@
   }
 
   if(isset($_SESSION["uploadImageMessage"])){
-    $updateMsg = $_SESSION["uploadImageMessage"];
+    $profileUpdateMsg = $_SESSION["uploadImageMessage"];
     unset($_SESSION["uploadImageMessage"]);
   }
 
@@ -40,34 +40,46 @@
 
 <?php require_once "header.php"; ?>
 <div class="main-wrapper profile">
-    <?php require_once "navbar.php"; ?>
-    <div class="container mt-5">
-        <p class="lead"><?php if(isset($updateMsg)) echo $updateMsg; ?></p>
-    </div>
+
+<?php require_once "navbar.php"; ?>
+
+<!-- 
+  <div class="container mt-5">
+    <p class = "lead"><?php if(isset($profileUpdateMsg)) echo $profileUpdateMsg; ?></p>
+  </div> -->
 
 
-    <div class="container border border-dark profile-container my-5  d-flex align-items-stretch">
-        <div class="row align-items-stretch">
-            <div class="col-3 px-0  pb-5 nav-tab-container d-flex flex-column justify-content-center">
-                <div>
-                    <div class="text-center mb-5">
-                        <img src="<?php echo  $_SESSION["user"]["userPicture"] ?>" alt=""
-                            class="img-fluid shadow rounded-circle userProfilePicture">
-                    </div>
-                    <div class="nav nav-tabs profile-tab flex-column" id="nav-tab" role="tablist">
-                        <button class=" nav-link active" id="nav-profile-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
-                            aria-selected="true">Profile</button>
-                        <button class=" nav-link" id="nav-pic-tab" data-bs-toggle="tab" data-bs-target="#nav-pic"
-                            type="button" role="tab" aria-controls="nav-pic" aria-selected="false">Profile
-                            Picture</button>
-                        <button class=" nav-link" id="nav-privacy-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-privacy" type="button" role="tab" aria-controls="nav-privacy"
-                            aria-selected="false">Privacy</button>
-                        <button class=" nav-link" id="nav-order-tab" data-bs-toggle="tab" data-bs-target="#nav-order"
-                            type="button" role="tab" aria-controls="nav-order" aria-selected="false">Order
-                            History</button>
-                    </div>
+  <div class="container border border-dark profile-container my-5  d-flex align-items-stretch">
+    <div class = "row align-items-stretch">
+      <div class="col-3 px-0  pb-5 nav-tab-container d-flex flex-column justify-content-center">
+        <div>
+          <div class = "text-center mb-5">
+            <img src="<?php echo  $_SESSION["user"]["userPicture"] ?>" alt="" class = "img-fluid shadow rounded-circle userProfilePicture" >
+          </div>
+            <div class="nav nav-tabs profile-tab flex-column" id="nav-tab" role="tablist">
+              <button class=" nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Profile</button>
+              <button class=" nav-link" id="nav-pic-tab" data-bs-toggle="tab" data-bs-target="#nav-pic" type="button" role="tab" aria-controls="nav-pic" aria-selected="false">Profile Picture</button>
+              <button class=" nav-link" id="nav-privacy-tab" data-bs-toggle="tab" data-bs-target="#nav-privacy" type="button" role="tab" aria-controls="nav-privacy" aria-selected="false">Privacy</button>
+              <button class=" nav-link" id="nav-order-tab" data-bs-toggle="tab" data-bs-target="#nav-order" type="button" role="tab" aria-controls="nav-order" aria-selected="false">Order</button>
+            </div>
+        </div>
+      </div>
+      <div class="col-9 my-auto">  
+        <div class="tab-content mt-3" id="nav-tabContent">
+          <!-- Profile Tab  -->
+          <div class="tab-pane fade show active mx-auto" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <form action="./controller/update_profile.php" class = "row g-3 justify-content-center" id = "profile-form" method="POST">
+              <div class="col-md-12">
+                <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name = "firstName"  value = "<?php echo $_SESSION["user"]["firstName"];?>">        
+              </div>
+              <div class="col-md-12">
+                <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name = "lastName" value = "<?php echo $_SESSION["user"]["lastName"];?>">              
+              </div>
+              <div class="col-md-12">
+                <div class="input-group">
+                  <div class="input-group-text">+60</div>
+                  <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name = "mobileNumber" value = "<?php echo $_SESSION["user"]["mobileNumber"];?>">             
+
                 </div>
             </div>
             <div class="col-9 my-auto">
@@ -359,4 +371,12 @@ function getImageURL(input) {
     }
 }
 </script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init(
+      {
+        offset: 300
+      }
+    )
+    </script>
 <?php require_once "script_links.php"; ?>

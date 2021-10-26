@@ -22,15 +22,15 @@ if (isset($_POST['add-to-cart-btn'])) {
   $itemID = $id;
   $itemQuantity = (int) $_POST['item_quantity'];
   $itemPrice = $itemInfo['itemMainInfo']['price'];
-  $totalPrice = $itemQuantity * $itemPrice;
+  $subtotal = $itemQuantity * $itemPrice;
   $userid = $_SESSION['user']['userID'];
   $cartid = getCartId($userid, $connection);
   if (!$cartid) {
     $cartid = createCart($userid, $connection);
   }
-  $validation = validateCartItem($cartid, $itemID, $categoryClean, $connection);
-  if ($validation) {
-    $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $totalPrice, $connection);
+  $validation = validateCartItem($cartid, $itemID,$itemQuantity, $categoryClean, $connection);
+  if (!$validation) {
+    $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $subtotal, $connection);
   }
 }
 ?>
@@ -55,9 +55,10 @@ if (isset($_POST['add-to-cart-btn'])) {
       <div class="col-12 col-md-9 col-lg-6 col-xl-5 order-lg-1">
         <div class="glider-contain">
           <div class="glider-gallery-view">
-            <?php foreach ($itemGalleryArray as $galleryPic) : ?>
+            <?php 
+            foreach ($itemGalleryArray as $galleryPic) : ?>
               <div>
-                <img src="<?php echo "$galleryPic[imagePath].jpg" ?>" alt="">
+                <img src="<?php echo "$galleryPic[imagePath]" ?>" alt="">
               </div>
             <?php endforeach; ?>
           </div>
@@ -72,7 +73,7 @@ if (isset($_POST['add-to-cart-btn'])) {
           <h1 class="item-info-header "><span class="fw-bold"><?php echo $itemInfo['itemMainInfo']['name']; ?></span></h1>
           <div class="d-flex justify-content-between align-items-baseline">
             <p class="d-inline mt-2 item-info-price lead fs-3">
-              <?php echo "RM "  . $itemInfo['itemMainInfo']['price']; ?></p>
+              <?php echo "RM "  . number_format($itemInfo['itemMainInfo']['price'],2,'.',''); ?></p>
             <div class="item-stars d-inline me-5">
               <img src="./svg/star-fill.svg" alt="">
               <img src="./svg/star-fill.svg" alt="">
@@ -82,7 +83,6 @@ if (isset($_POST['add-to-cart-btn'])) {
               <span class="ms-2">(4)</span>
             </div>
           </div>
-
           <!-- <p class = "item-info-description">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt, cumque?</p> -->
         </div>
         <hr>
@@ -97,15 +97,22 @@ if (isset($_POST['add-to-cart-btn'])) {
                   <?php echo "<div class='text-danger'>There is only $quantity stock left.</div>"; ?>
                 </div>
                 <div>
-                  <button type="submit" class="rounded-pill btn btn-success add-to-cart-btn" name="add-to-cart-btn">Add to Cart</button>
+                  <button type="submit" class="rounded-pill btn btn-success add-to-cart-btn mb-3" name="add-to-cart-btn">Add to Cart</button>
                 </div>
               </form>
               <?php
               if (isset($_POST['add-to-cart-btn'])) {
-                if (!$validation) {
+                if ($validation) {
+                  if($validation === "maxed"){
+                    echo "<div class='alert alert-warning' role='alert'>
+                Maxed amount of this item has been added into your cart. </div>";
+                  }elseif($validation === "updated"){
+                  echo "<div class='alert alert-info' role='alert'>
+                $itemQuantity of this item has been added into your cart.</div>";
+                }else{
                   echo "<div class='alert alert-danger' role='alert'>
-              This item already existed in your cart.
-            </div>";
+                This item is already in your cart. </div>";
+                }
                 } else {
                   if ($addCartItem) {
                     echo "<div class='alert alert-success' role='alert'>
@@ -270,10 +277,9 @@ if (isset($_POST['add-to-cart-btn'])) {
             <!-- </div> -->
           </div>
         </div>
-      </div>
-
-    </div>
-  </section>
+        </div>
+        </div>
+        </section>
 
   <section class="other-products-section mt-5 pt-5">
     <div class="container">
@@ -285,7 +291,7 @@ if (isset($_POST['add-to-cart-btn'])) {
             <div>
               <div class="card-wrapper specific">
                 <div class="card-main-section">
-                  <img src="<?php echo "$cat[imagePath].jpg" ?>" alt="" class="img-fluid">
+                  <img src="<?php echo "$cat[imagePath]" ?>" alt="" class="img-fluid">
                   <div class="card-main-section-icon">
                     <button class="btn card-icon-wrapper">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -332,13 +338,13 @@ if (isset($_POST['add-to-cart-btn'])) {
 </div>
 <script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
 <script>
-  const thumbjson = `<?php echo json_encode($itemThumbnailArray); ?>`;
+  const thumbjson = `<?php echo json_encode($itemGalleryArray); ?>`;
   const thumb = JSON.parse(thumbjson)
   // console.log(thumb)
 
   function loadThumbnail(thumbnailArray, selector) {
     for (let i = 0; i < thumbnailArray.length; i++) {
-      selector[i].innerHTML = `<img src="${thumbnailArray[i].imagePath}.jpg" alt="" class = "img-fluid">`;
+      selector[i].innerHTML = `<img src="${thumbnailArray[i].imagePath}" alt="" class = "img-fluid">`;
     }
   }
 
@@ -412,5 +418,14 @@ if (isset($_POST['add-to-cart-btn'])) {
     loadThumbnail(thumb, thumbnailsButton)
   })
 </script>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init(
+      {
+        offset: 300
+      }
+    )
+  </script>
 
 <?php require_once "./script_links.php"; ?>

@@ -20,6 +20,7 @@ label {
   font-family: "Inter", sans-serif;
 }
 
+
 footer {
   background-color: #333333;
   font-size: 0.95rem;
@@ -79,6 +80,14 @@ input[type="number"] {
   75% {
     background-image: url(images/home/petshop4.jpg);
   }
+}
+
+.login-alert{
+  /* right: 0px; */
+  width: 350px;
+  top: 10%;
+  left: 42%;
+  z-index: 1000;
 }
 
 .logo img {
