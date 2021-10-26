@@ -12,7 +12,7 @@
   }
   if (isset($_POST['remove-item-from-cart-btn'])){
     $deleted_cartitem_id = $_POST['remove-item-from-cart-btn'];
-    $removal = removeCartItem($deleted_cartitem_id,$connection);
+    $removal = removeCartItem($deleted_cartitem_id,$cartid,$connection);
     echo "<meta http-equiv='refresh' content='0'>";
     unset($_POST['remove-item-from-cart-btn']);
   }
@@ -30,6 +30,11 @@
           <h6 class=" col-3 text-center">Quantity</h6>
           <h6 class=" col-2 text-end">Total Price</h6>
         </div>
+        <?php if (!$cartitems):?>
+          <div class="row">
+            <h6 class= "col">Sadly there is nothing left in your cart... Back to your shopping journey Go Go Go~</h6>
+          </div>
+        <?php else:?>
           <?php foreach($cartitems as $index =>$item):?>
             <!-- Product -->
             <form method="POST">
@@ -71,7 +76,8 @@
               </div>
             </form>
             <!-- End of Product -->
-          <?php endforeach?>
+            <?php endforeach?>
+          <?php endif ?>
       </div>
       <!-- End of product list -->
       <div class="row p-4 border-top ">
@@ -170,7 +176,7 @@
                 <input type="number" class="form-control" name="cvv" id="cvv">
               </div>
               <div class="form-group text-center m-3">
-                <button class="btn btn-primary" type="button">Confirm</button>
+                <button class="btn btn-primary <?php if(!$cartitems){echo 'disabled' ;}?>" type="button">Confirm</button>
               </div>
               </form>
             </div>
@@ -200,7 +206,7 @@
                 <input type="password" class="form-control" placeholder="" name="bank-password" id="bank-password">
               </div>
               <div class="form-group text-center m-3">
-                <button class="btn btn-primary" type="button">Confirm</button>
+                <button class="btn btn-primary <?php if(!$cartitems){echo 'disabled';}?>" type="button">Confirm</button>
               </div>
             </div>
           </div>
