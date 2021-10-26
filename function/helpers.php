@@ -57,14 +57,16 @@ function validateEmail($email){
   return $email;
 }
 
-function validateCartItem($cartid, $id,$category,$connection ){
+function validateCartItem($cartid,$id,$quantity,$category,$connection ){
   $petArray  = ["Dog", "Cat", "Hamster"];
   $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
   if(in_array($category, $petArray)){
     $sql = "SELECT * FROM cartitem WHERE cartId = ? AND petId = ?;";
+    $category = "pet";
     }
     else if(in_array($category, $productArray)){
     $sql = "SELECT * FROM cartitem WHERE cartId = ? AND productId = ?;";
+    $category = "product";
   }
     else{
       return false;
@@ -75,11 +77,35 @@ function validateCartItem($cartid, $id,$category,$connection ){
     $stmt -> execute();
     $result = $stmt -> get_result();
     $row = $result -> fetch_assoc();
-    $stmt->close();
     if (!$row){
-      return true;
+      $status = null;
     } else {
-      return false;
+      if($category === "product"){
+        $cartItemId = $row['cartItemId'];
+        $oldQuantity = $row['quantity'];
+        $stmt = $connection -> prepare("SELECT price, quantity FROM products WHERE productId = ?;"); 
+        $stmt-> bind_param("i",$id) ;
+        $stmt->execute();
+        $row = $stmt -> get_result() -> fetch_assoc();
+        $maxQuantity = $row['quantity'];
+        $price = $row['price'];
+        $newQuantity = $oldQuantity + $quantity;
+        if($newQuantity > $maxQuantity){
+          $newQuantity = $maxQuantity;
+          $status = "maxed";
+        } else{
+          $newQuantity = $newQuantity;
+          $status = "updated";
+        }
+        $newSubtotal = $newQuantity * $price;
+        $stmt = $connection -> prepare ("UPDATE cartitem SET quantity = ?, subtotal =? WHERE cartItemId = ?;");
+        $stmt -> bind_param("iii",$newQuantity,$newSubtotal,$cartItemId);
+        $stmt ->execute();
+        $stmt ->close();
+      }else{
+        $status = "pet-maxed";
+      }
+      return $status;
     }
   }
 }
@@ -240,40 +266,6 @@ function getItemInfo($id,  $category, $connection){
   return $itemInfo;
 }
 
-function createCart($userid,$connection){
-  $stmt = $connection -> prepare("INSERT INTO cart VALUES ('',?, 0);");
-  $stmt -> bind_param('i',$userid) ;
-  $stmt -> execute();
-  $cartid = $connection ->insert_id;
-  $stmt -> close();
-  return $cartid;
-}
-
-function addCartitem($cartid,$id,$category,$quantity,$subtotal,$connection){
-$type = returnType($category);
-if(strtolower($type) === "pet" ){
-  $sql = "INSERT INTO cartitem VALUES ('',?,NULL,?,?,?,1);";
-  }
-  else if(strtolower($type) === "product" ){
-  $sql = "INSERT INTO cartitem VALUES ('',NULL,?,?,?,?,1);";
-}
-  else{
-    return false;
-  }
-$stmt = $connection ->prepare($sql);
-if ($stmt){
-  $stmt -> bind_param("iiii",$id,$cartid,$quantity,$subtotal);
-  $stmt -> execute();
-  $stmt = $connection -> prepare ("UPDATE cart SET total = total + ? WHERE cartid = ?;");
-  $stmt->bind_param("ii", $subtotal,$cartid);
-  $stmt->execute();
-  $stmt->close();
-  return true;
-} else {
-  return false;
-}
-}
-
 function getCartId($userid, $connection){
   $stmt =$connection -> prepare ("SELECT cartId FROM cart WHERE userId = ?;") ;
   $stmt->bind_param("i", $userid);
@@ -346,32 +338,69 @@ function getCartItems ($cartid,$connection){
   }
 }
 
-function getCartSubtotal($cartid,$connection){
-  $stmt = $connection -> prepare ("SELECT SUM(subtotal) as total FROM cartitem WHERE cartid = ?;");
+function updateCartSubtotal($cartid,$connection){
+  $stmt = $connection -> prepare ("SELECT SUM(subtotal) as total FROM cartitem WHERE cartId = ? AND STATUS = 1;");
   $stmt -> bind_param("i", $cartid);
   $stmt-> execute();
   $row = $stmt->get_result() -> fetch_assoc();
   $newTotal = $row['total'];
+  $stmt = $connection -> prepare ("UPDATE cart SET total = ? WHERE cartId = ?;");
+  $stmt -> bind_param("ii",$newTotal, $cartid);
+  $stmt -> execute();
+  $stmt-> close();
+}
+
+function getCartSubtotal($cartid,$connection){
+  updateCartSubtotal($cartid,$connection);
   $stmt = $connection -> prepare ("SELECT total FROM cart WHERE cartId = ?");
   $stmt -> bind_param("i", $cartid);
   $stmt-> execute();
   $row = $stmt->get_result() -> fetch_assoc();
   $total = $row['total'];
-  if ($newTotal == $total){
-    return $total;
-  } else{
-    $stmt = $connection -> prepare ("UPDATE cart SET total = ? WHERE cartId = ?;");
-    $stmt -> bind_param("ii", $cartid,$newTotal);
-    $stmt -> execute();
-    $stmt->close();
-    return $newTotal;
-  }
+  $stmt -> close();
+  return $total;
 }
 
-function removeCartItem($cartItemId,$connection){
+function createCart($userid,$connection){
+  $stmt = $connection -> prepare("INSERT INTO cart VALUES ('',?, 0);");
+  $stmt -> bind_param('i',$userid) ;
+  $stmt -> execute();
+  $cartid = $connection ->insert_id;
+  $stmt -> close();
+  return $cartid;
+}
+
+function addCartitem($cartid,$id,$category,$quantity,$subtotal,$connection){
+$type = returnType($category);
+if(strtolower($type) === "pet" ){
+  $sql = "INSERT INTO cartitem VALUES ('',?,NULL,?,?,?,1);";
+  }
+  else if(strtolower($type) === "product" ){
+  $sql = "INSERT INTO cartitem VALUES ('',NULL,?,?,?,?,1);";
+}
+  else{
+    return false;
+  }
+$stmt = $connection ->prepare($sql);
+if ($stmt){
+  $stmt -> bind_param("iiii",$id,$cartid,$quantity,$subtotal);
+  $stmt -> execute();
+  $stmt = $connection -> prepare ("UPDATE cart SET total = total + ? WHERE cartId = ?;");
+  $stmt->bind_param("ii", $subtotal,$cartid);
+  $stmt->execute();
+  updateCartSubtotal($cartid,$connection);
+  $stmt->close();
+  return true;
+} else {
+  return false;
+}
+}
+
+function removeCartItem($cartItemId,$cartid,$connection){
   $stmt = $connection -> prepare ("DELETE FROM cartitem where cartItemId =?");
   $stmt -> bind_param("i",$cartItemId);
   $stmt -> execute();
+  $newTotal = updateCartSubtotal($cartid,$connection);
   $stmt -> close();
 }
 

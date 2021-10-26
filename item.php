@@ -28,8 +28,8 @@ if (isset($_POST['add-to-cart-btn'])) {
   if (!$cartid) {
     $cartid = createCart($userid, $connection);
   }
-  $validation = validateCartItem($cartid, $itemID, $categoryClean, $connection);
-  if ($validation) {
+  $validation = validateCartItem($cartid, $itemID,$itemQuantity, $categoryClean, $connection);
+  if (!$validation) {
     $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $subtotal, $connection);
   }
 }
@@ -73,7 +73,7 @@ if (isset($_POST['add-to-cart-btn'])) {
           <h1 class="item-info-header "><span class="fw-bold"><?php echo $itemInfo['itemMainInfo']['name']; ?></span></h1>
           <div class="d-flex justify-content-between align-items-baseline">
             <p class="d-inline mt-2 item-info-price lead fs-3">
-              <?php echo "RM "  . $itemInfo['itemMainInfo']['price']; ?></p>
+              <?php echo "RM "  . number_format($itemInfo['itemMainInfo']['price'],2,'.',''); ?></p>
             <div class="item-stars d-inline me-5">
               <img src="./svg/star-fill.svg" alt="">
               <img src="./svg/star-fill.svg" alt="">
@@ -102,10 +102,17 @@ if (isset($_POST['add-to-cart-btn'])) {
               </form>
               <?php
               if (isset($_POST['add-to-cart-btn'])) {
-                if (!$validation) {
+                if ($validation) {
+                  if($validation === "maxed"){
+                    echo "<div class='alert alert-warning' role='alert'>
+                Maxed amount of this item has been added into your cart. </div>";
+                  }elseif($validation === "updated"){
+                  echo "<div class='alert alert-info' role='alert'>
+                $itemQuantity of this item has been added into your cart.</div>";
+                }else{
                   echo "<div class='alert alert-danger' role='alert'>
-              This item already existed in your cart.
-            </div>";
+                This item is already in your cart. </div>";
+                }
                 } else {
                   if ($addCartItem) {
                     echo "<div class='alert alert-success' role='alert'>
