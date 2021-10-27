@@ -106,45 +106,46 @@ function validateCartItem($cartid, $id, $quantity, $category, $connection)
     }
 }
 
-function validateCreditCard($cardNumber,$cardType,$expiryMonth,$expiryYear,$cvv){
-    $invalidCardMsg ="Invalid card number.";
+function validateCreditCard($cardNumber, $cardType, $expiryMonth, $expiryYear, $cvv)
+{
+    $invalidCardMsg = "Invalid card number.";
     $expiredCardMsg = "Your card is expired.";
-    $InvalidCVVMsg ="Invalid CVV.";
+    $InvalidCVVMsg = "Invalid CVV.";
     $cardValidationArray = [
         "VISA Card"  => "/^4[0-9]{12}(?:[0-9]{3})?$/",
         "MasterCard" => "/^5[1-5][0-9]{14}$/",
     ];
-    foreach ($cardValidationArray as $key => $value){
-        if (preg_match($value,$cardNumber)){
+    foreach ($cardValidationArray as $key => $value) {
+        if (preg_match($value, $cardNumber)) {
             $card = $key;
         }
     }
-    if ($card === $cardType){
+    if ($card === $cardType) {
         $invalidCardMsg = NULL;
     }
 
-    $cardExpiryDate = DateTime::createFromFormat('my',$expiryMonth.$expiryYear);
+    $cardExpiryDate = DateTime::createFromFormat('my', $expiryMonth . $expiryYear);
     $now = new DateTime();
     if ($cardExpiryDate > $now) {
         $expiredCardMsg = NULL;
     }
 
     $cvvFormat = "/^[0-9]{3,4}$/";
-    if(preg_match($cvvFormat,$cvv)){
+    if (preg_match($cvvFormat, $cvv)) {
         $InvalidCVVMsg = NULL;
     }
 
-    $errMsgArray= [
+    $errMsgArray = [
         "cardErr" => $invalidCardMsg,
         "expiryErr" => $expiredCardMsg,
         "CVVErr" => $InvalidCVVMsg
     ];
-    foreach($errMsgArray as $key=>$value){
-        if(is_null($value)){
+    foreach ($errMsgArray as $key => $value) {
+        if (is_null($value)) {
             unset($errMsgArray[$key]);
         }
     }
-    if(!empty($errMsgArray)){
+    if (!empty($errMsgArray)) {
         return $errMsgArray;
     } else {
         return false;
@@ -189,29 +190,26 @@ function getCategoryInfo($connection, $category)
     return $categoryHeader;
 }
 
-function getCategoryProduct($connection, $category, $searchKeyword = "",  $id = "", $limit = false)
+function getCategoryProduct($connection, $category, $searchKeyword = "")
 {
     $categoryArray = [];
     $petArray  = ["Dog", "Cat", "Hamster"];
     $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
     //
     if (in_array($category, $petArray)) {
-        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card' AND pets.petId != ? AND pets.name LIKE ? ;";
+        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card'  AND pets.name LIKE ? ;";
     } else if (in_array($category, $productArray)) {
-        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.productId != ? AND products.name LIKE ?;";
+        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.name LIKE ?;";
     } else {
         return false;
     }
     //
-    if ($limit) {
-        $sql = substr_replace($sql, " LIMIT 6", -1, -1);
-    }
     $stmt = $connection->prepare($sql);
     // if(!$stmt){
     //   return false;
     // }
     $searchKeyword = "%$searchKeyword%";
-    $stmt->bind_param("sis", $category, $id, $searchKeyword);
+    $stmt->bind_param("ss", $category, $searchKeyword);
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {
@@ -224,6 +222,33 @@ function getCategoryProduct($connection, $category, $searchKeyword = "",  $id = 
     //   "categoryName" => $categoryName
     // ];
     return $categoryArray;
+}
+
+function getCategoryOther($connection, $category, $removeID)
+{
+    $otherArray = [];
+    $petArray  = ["Dog", "Cat", "Hamster"];
+    $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
+    //
+    if (in_array($category, $petArray)) {
+        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card' AND pets.petId != ? LIMIT 6";
+    } else if (in_array($category, $productArray)) {
+        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.productId != ? LIMIT 6";
+    } else {
+        return false;
+    }
+
+    $stmt = $connection->prepare($sql);
+
+    $stmt->bind_param("si", $category, $removeID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        array_push($otherArray, $row);
+    }
+    $stmt->close();
+
+    return $otherArray;
 }
 
 
@@ -284,9 +309,9 @@ function getItemInfo($id,  $category, $connection)
 
     $type = returnType($category);
     if (strtolower($type) === "pet") {
-        $stmt = $connection->prepare("SELECT pets.petId AS id, pets.name, pets.price, pets.gender, pets.weight, pets.color, pets.petCondition, pets.vaccinated, pets.dewormed, petcategory.category FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId  WHERE pets.petID = ? AND pets.status = 1");
+        $stmt = $connection->prepare("SELECT  pets.name, pets.price, pets.gender, pets.weight, pets.color, pets.petCondition, pets.vaccinated, pets.dewormed, petcategory.category FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId  WHERE pets.petID = ? AND pets.status = 1");
     } else if (strtolower($type) === "product") {
-        $stmt = $connection->prepare("SELECT products.productId AS id, products.name, products.price,products.quantity, products.description, products.brand,  products.weight, products.warrantyPeriod, products.productDimensions, productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1");
+        $stmt = $connection->prepare("SELECT products.name, products.price,products.quantity, products.description, products.brand,  products.weight, products.warrantyPeriod, products.productDimensions, productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1");
     }
 
     $stmt->bind_param("i", $id);
@@ -538,40 +563,43 @@ function saveImage($mimeType, $image, $connection, $id, $hasImage)
     $_SESSION["user"]["userPicture"] = $saveToDbImage;
 }
 
-function createOrder($userid,$paymentMethod,$type = null,$deliveryMethod,$total,$connection){
-    $stmt = $connection ->prepare("INSERT INTO orders VALUES('',?,?,?,NULL,?);");
+function createOrder($userid, $paymentMethod, $type = null, $deliveryMethod, $total, $connection)
+{
+    $stmt = $connection->prepare("INSERT INTO orders VALUES('',?,?,?,NULL,?);");
     $paymentMethod = "$paymentMethod - $type";
-    $stmt -> bind_param ("issi",$userid,$paymentMethod,$deliveryMethod,$total);
-    $stmt -> execute();
-    $orderid = $connection -> insert_id;
+    $stmt->bind_param("issi", $userid, $paymentMethod, $deliveryMethod, $total);
+    $stmt->execute();
+    $orderid = $connection->insert_id;
     return $orderid;
 }
 
-function reduceItemQuantity($id,$category,$quantity,$connection){
-    if ($category === "pet"){
-        $stmt = $connection -> prepare ("DELETE FROM pets WHERE petId = ?");
-        $stmt -> bind_param("i",$id);
-        $stmt -> execute();
+function reduceItemQuantity($id, $category, $quantity, $connection)
+{
+    if ($category === "pet") {
+        $stmt = $connection->prepare("DELETE FROM pets WHERE petId = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
     } else {
-        $stmt = $connection -> prepare ("UPDATE products SET quantity = quantity - ? WHERE productId = ?");
-        $stmt -> bind_param("ii",$quantity,$id);
-        $stmt -> execute();
-        $stmt = $connection -> prepare ("UPDATE products SET status = 0 WHERE quantity = 0;");
-        $stmt -> execute();
+        $stmt = $connection->prepare("UPDATE products SET quantity = quantity - ? WHERE productId = ?");
+        $stmt->bind_param("ii", $quantity, $id);
+        $stmt->execute();
+        $stmt = $connection->prepare("UPDATE products SET status = 0 WHERE quantity = 0;");
+        $stmt->execute();
     }
-    $stmt -> close();
+    $stmt->close();
 }
 
 //test
-function addOrderItems ($cartid,$orderid,$connection){
+function addOrderItems($cartid, $orderid, $connection)
+{
     $pets = [];
     $products = [];
-    $stmt = $connection -> prepare("SELECT petId, productId, quantity, subtotal FROM cartitem WHERE cartId = ? AND STATUS = 1;");
-    $stmt ->bind_param("i",$cartid);
-    $stmt ->execute();
-    $result = $stmt ->get_result();
-    while($row = $result->fetch_assoc()){
-        if ($row['petId']){
+    $stmt = $connection->prepare("SELECT petId, productId, quantity, subtotal FROM cartitem WHERE cartId = ? AND STATUS = 1;");
+    $stmt->bind_param("i", $cartid);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        if ($row['petId']) {
             $petid = $row['petId'];
             $quantity = $row["quantity"];
             $subtotal = $row["subtotal"];
@@ -580,8 +608,8 @@ function addOrderItems ($cartid,$orderid,$connection){
                 'quantity' => $quantity,
                 'subtotal' => $subtotal,
             ];
-            array_push($pets,$pet);
-        } else{
+            array_push($pets, $pet);
+        } else {
             $productid = $row['productId'];
             $quantity = $row["quantity"];
             $subtotal = $row["subtotal"];
@@ -590,37 +618,37 @@ function addOrderItems ($cartid,$orderid,$connection){
                 'quantity' => $quantity,
                 'subtotal' => $subtotal,
             ];
-            array_push($products,$product);
+            array_push($products, $product);
         }
     }
-    $stmt = $connection ->prepare ("UPDATE cartitem SET status = 0 WHERE cartId = ?;");
-    $stmt ->bind_param("i",$cartid);
-    $stmt ->execute();
-    if (!empty($pets)){
-        foreach ($pets as $pet){
+    $stmt = $connection->prepare("UPDATE cartitem SET status = 0 WHERE cartId = ?;");
+    $stmt->bind_param("i", $cartid);
+    $stmt->execute();
+    if (!empty($pets)) {
+        foreach ($pets as $pet) {
             $id = $pet['id'];
             $category = "pet";
             $quantity = $pet['quantity'];
             $subtotal = $pet['subtotal'];
-            reduceItemQuantity($id,$category,$quantity,$connection);
-            $stmt = $connection -> prepare ("INSERT INTO orderitem (petId,orderId,quantity,subtotal)VALUES(?,?,?,?);");
-            $stmt ->bind_param("iiii", $id,$orderid,$quantity,$subtotal);
-            $stmt -> execute();
+            reduceItemQuantity($id, $category, $quantity, $connection);
+            $stmt = $connection->prepare("INSERT INTO orderitem (petId,orderId,quantity,subtotal)VALUES(?,?,?,?);");
+            $stmt->bind_param("iiii", $id, $orderid, $quantity, $subtotal);
+            $stmt->execute();
         }
     }
-    if (!empty($products)){
-        foreach ($products as $product){
+    if (!empty($products)) {
+        foreach ($products as $product) {
             $id = $product['id'];
             $category = "product";
             $quantity = $product['quantity'];
             $subtotal = $product['subtotal'];
-            reduceItemQuantity($id,$category,$quantity,$connection);
-            $stmt = $connection -> prepare ("INSERT INTO orderitem (productId,orderId,quantity,subtotal)VALUES(?,?,?,?);");
-            $stmt ->bind_param("iiii", $id,$orderid,$quantity,$subtotal);
-            $stmt -> execute();
+            reduceItemQuantity($id, $category, $quantity, $connection);
+            $stmt = $connection->prepare("INSERT INTO orderitem (productId,orderId,quantity,subtotal)VALUES(?,?,?,?);");
+            $stmt->bind_param("iiii", $id, $orderid, $quantity, $subtotal);
+            $stmt->execute();
         }
     }
-    $stmt ->close();
+    $stmt->close();
 }
 
 
@@ -678,13 +706,14 @@ function getOrderItems($orderId, $connection)
 {
     $orderItemArray = [];
     // foreach($orderIdArray as $orderId){}
-    $stmt = $connection->prepare("SELECT petId, productId, quantity, subtotal FROM orderitem WHERE orderid = ?;");
+    $stmt = $connection->prepare("SELECT orderItemId, petId, productId, quantity, subtotal FROM orderitem WHERE orderid = ?;");
     $stmt->bind_param("i", $orderId);
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {
         $orderitem = [];
         if (isset($row['petId'])) {
+            $orderItemId = $row["orderItemId"];
             $id = $row['petId'];
             $quantity = $row['quantity'];
             $subtotal = $row['subtotal'];
@@ -695,8 +724,9 @@ function getOrderItems($orderId, $connection)
             $result2 = $stmt2->get_result();
             $row2 = $result2->fetch_assoc();
             $itemName = $row2['name'];
-            $image = getImage($id, $category, "Thumbnail", true, $connection);
+            $image = getImage($id, $category, "Card", true, $connection);
         } else {
+            $orderItemId = $row["orderItemId"];
             $id = $row['productId'];
             $quantity = $row['quantity'];
             $subtotal = $row['subtotal'];
@@ -707,9 +737,10 @@ function getOrderItems($orderId, $connection)
             $result2 = $stmt2->get_result();
             $row2 = $result2->fetch_assoc();
             $itemName = $row2['name'];
-            $image = getImage($id, $category, "Thumbnail", true, $connection);
+            $image = getImage($id, $category, "Card", true, $connection);
         }
         $orderitem = [
+            "orderItemId" => $orderItemId,
             "id" => $id,
             "category" => $category,
             "name" => $itemName,
@@ -724,50 +755,26 @@ function getOrderItems($orderId, $connection)
     return $orderItemArray;
 }
 
-// function getOrderItems($orderId, $connection){
-//   $orderItemArray = [];
-//   $stmt = $connection -> prepare("SELECT petId, productId, quantity, totalPrice FROM orderitem WHERE orderid = ?;");
-//   $stmt -> bind_param("i", $orderId);
-//   $stmt -> execute();
-//   $result = $stmt -> get_result();
-//   while($row = $result -> fetch_assoc()){
-//     $orderitem = [];
-//     if (isset($row['petId'])){
-//         $id = $row['petId'];
-//         $quantity = $row['quantity']; 
-//         $totalPrice = $row['totalPrice'];
-//         $category = "pet";
-//         $stmt2 = $connection ->prepare ('SELECT name FROM pets WHERE petId =?; ');
-//         $stmt2 -> bind_param("i",$id);
-//         $stmt2 -> execute();
-//         $result2 = $stmt2 -> get_result();
-//         $row2 = $result2 ->fetch_assoc();
-//         $itemName = $row2['name'];
-//         $image = getImage($id,$category,"Thumbnail",true,$connection);
-//       } else {
-//         $id = $row['productId'];
-//         $quantity = $row['quantity'];
-//         $totalPrice = $row['totalPrice'];
-//         $category = "product";
-//         $stmt2 = $connection ->prepare ('SELECT name FROM products WHERE productId =?; ');
-//         $stmt2 -> bind_param("i",$id);
-//         $stmt2 -> execute();
-//         $result2 = $stmt2 -> get_result();
-//         $row2 = $result2 ->fetch_assoc();
-//         $itemName = $row2['name'];
-//         $image = getImage($id,$category,"Thumbnail",true,$connection);
-//       }
-//     $orderitem = [
-//       "id" => $id,
-//       "category" => $category,
-//       "name" => $itemName,
-//       "quantity" => $quantity,
-//       "totalPrice" => $totalPrice,
-//       "image" => $image
-//     ];
-//     array_push($orderItemArray, $orderitem);
-//   }
-//   $stmt -> close();
-//   $stmt2 -> close();
-//   return $orderItemArray;
+// function getOrderItemId($orderItemId){
+//     return $orderItemId;
 // }
+
+function createReview($orderItemId, $newReview, $connection)
+{
+    $stmt = $connection->prepare("INSERT INTO review(userId, orderItemId, rating, feedback) VALUES (?, ?, ?, ?);");
+    $stmt->bind_param("iiis", $newReview["userId"], $orderItemId, $newReview["rating"], $newReview["feedback"]);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// If Order Item is already rated, return 1, else 0
+function rateEligibility($orderItemId, $connection)
+{
+    $stmt = $connection->prepare("SELECT reviewId FROM review WHERE orderItemId = ?;");
+    $stmt->bind_param("i", $orderItemId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $length = mysqli_num_rows($result);
+    $stmt->close();
+    return $length;
+}
