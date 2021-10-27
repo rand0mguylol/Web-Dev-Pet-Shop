@@ -1,6 +1,6 @@
 <?php session_start(); ?>
 <?php require_once "header.php"; ?>
-<?php unset($_SESSION['payment']);?>
+<?php unset($_SESSION['payment']); ?>
 <!-- Main Section - Navbar & Hero Section -->
 <section class="main-section">
     <div class="background-filter">
@@ -246,31 +246,9 @@
     <img src="./svg/chevron-up.svg" alt="">
 </a>
 
-<script>
-    const toTop = document.querySelector(".to-top");
-    const subNavToggle = document.querySelectorAll(".dropdown-toggle");
-    const subNavMenu = document.querySelectorAll(".dropdown-menu");
-    const navCol = document.querySelector(".navbar-collapse")
-    window.addEventListener("scroll", () => {
-        if (window.pageYOffset > 100) {
-            toTop.classList.add("active");
-            for (i = 0; i < subNavToggle.length; ++i) {
-                subNavToggle[i].classList.remove("show")
-            };
-            for (i = 0; i < subNavMenu.length; ++i) {
-                subNavMenu[i].classList.remove("show")
-            };
-            navCol.classList.remove("show")
-        } else {
-            toTop.classList.remove("active");
-        }
-    })
-</script>
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script>
-    AOS.init({
-        offset: 300
-    })
-</script>
+<?php require_once "./script/general_scripts.php"; ?>
+<script src="./js/index.js"></script>
+<script src="./js/to-top.js"></script>
+</body>
 
-<?php require_once "script_links.php"; ?>
+</html>
