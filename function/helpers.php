@@ -503,17 +503,6 @@ function saveImage($mimeType, $image, $connection, $id, $hasImage)
     $_SESSION["user"]["userPicture"] = $saveToDbImage;
 }
 
-
-
-
-function createReview($newReview, $connection)
-{
-    $stmt = $connection->prepare("INSERT INTO review(userId, productId, rating, feedback) VALUES (?, ?, ?, ?);");
-    $stmt->bind_param("iiis", $newReview["userId"], $newReview["productId"], $newReview["rating"], $newReview["feedback"]);
-    $stmt->execute();
-    $stmt->close();
-}
-
 // function updateReviewID($reviewId, $connection){
 //     $stmt = $connection->prepare("SELECT reviewId FROM review WHERE = $reviewId WHERE OrderItemId = ?;");
 //     $result = $stmt->get_result();
@@ -605,50 +594,24 @@ function getOrderItems($orderId, $connection)
     return $orderItemArray;
 }
 
-// function getOrderItems($orderId, $connection){
-//   $orderItemArray = [];
-//   $stmt = $connection -> prepare("SELECT petId, productId, quantity, totalPrice FROM orderitem WHERE orderid = ?;");
-//   $stmt -> bind_param("i", $orderId);
-//   $stmt -> execute();
-//   $result = $stmt -> get_result();
-//   while($row = $result -> fetch_assoc()){
-//     $orderitem = [];
-//     if (isset($row['petId'])){
-//         $id = $row['petId'];
-//         $quantity = $row['quantity']; 
-//         $totalPrice = $row['totalPrice'];
-//         $category = "pet";
-//         $stmt2 = $connection ->prepare ('SELECT name FROM pets WHERE petId =?; ');
-//         $stmt2 -> bind_param("i",$id);
-//         $stmt2 -> execute();
-//         $result2 = $stmt2 -> get_result();
-//         $row2 = $result2 ->fetch_assoc();
-//         $itemName = $row2['name'];
-//         $image = getImage($id,$category,"Thumbnail",true,$connection);
-//       } else {
-//         $id = $row['productId'];
-//         $quantity = $row['quantity'];
-//         $totalPrice = $row['totalPrice'];
-//         $category = "product";
-//         $stmt2 = $connection ->prepare ('SELECT name FROM products WHERE productId =?; ');
-//         $stmt2 -> bind_param("i",$id);
-//         $stmt2 -> execute();
-//         $result2 = $stmt2 -> get_result();
-//         $row2 = $result2 ->fetch_assoc();
-//         $itemName = $row2['name'];
-//         $image = getImage($id,$category,"Thumbnail",true,$connection);
-//       }
-//     $orderitem = [
-//       "id" => $id,
-//       "category" => $category,
-//       "name" => $itemName,
-//       "quantity" => $quantity,
-//       "totalPrice" => $totalPrice,
-//       "image" => $image
-//     ];
-//     array_push($orderItemArray, $orderitem);
-//   }
-//   $stmt -> close();
-//   $stmt2 -> close();
-//   return $orderItemArray;
+// function getOrderItemId($orderItemId){
+//     return $orderItemId;
 // }
+
+function createReview($orderItemId, $newReview, $connection){
+    $stmt = $connection->prepare("INSERT INTO review(userId, orderItemId, rating, feedback) VALUES (?, ?, ?, ?);");
+    $stmt->bind_param("iiis", $newReview["userId"], $orderItemId, $newReview["rating"], $newReview["feedback"]);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// If Order Item is already rated, return 1, else 0
+function rateEligibility($orderItemId, $connection){
+    $stmt = $connection->prepare("SELECT reviewId FROM review WHERE orderItemId = ?;");
+    $stmt ->bind_param("i", $orderItemId);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+    $length = mysqli_num_rows($result);
+    $stmt -> close();
+    return $length;
+}
