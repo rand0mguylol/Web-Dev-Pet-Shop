@@ -4,7 +4,7 @@ session_start();
 
 // var_dump(($_GET));
 if (isset($_POST["signin"]) && isset($_GET["page"])) {
-    require_once "../function/db.php";
+    require_once "../connection/db.php";
     $loginErrorArray = [];
     $lastPageQuery = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
     $lastPage = !$lastPageQuery["page"] ? "" : $lastPageQuery["page"];

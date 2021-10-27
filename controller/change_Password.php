@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once "../function/db.php";
-require_once "../function/helpers.php";
+require_once "./connection/db.php";
+require_once "./helper/helpers.php";
 
 if (isset($_POST["changePass"], $_SESSION["user"]["userID"])) {
     //

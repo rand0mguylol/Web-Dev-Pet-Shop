@@ -4,9 +4,6 @@
 </script>
 <script src="./js/script.js"></script>
 <script>
-    if (window.history.replaceState) {
-        window.history.replaceState(null, null, window.location.href);
-    }
     const oldTotal = parseFloat($("#totalAmount").text());
     const subtotal = parseFloat($("#subtotal").text());
     var totalInput = $(".payment-total").val(subtotal);

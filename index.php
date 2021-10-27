@@ -1,10 +1,11 @@
 <?php session_start(); ?>
-<?php require_once "header.php"; ?>
+<?php $title = "PetterTogether - Home Page";?>
+<?php require_once "./components/header.php"; ?>
 <?php unset($_SESSION['payment']); ?>
 <!-- Main Section - Navbar & Hero Section -->
 <section class="main-section">
     <div class="background-filter">
-        <?php require_once "navbar.php"; ?>
+        <?php require_once "./components/navbar.php"; ?>
         <div class="container lead-content pb-5">
             <div class="row">
                 <div class="col-12 col-xl-6">
@@ -241,13 +242,13 @@
     </div>
 </section>
 
-<?php require_once "footer.php"; ?>
+<?php require_once "./components/footer.php"; ?>
 <a href="#" class="to-top">
     <img src="./svg/chevron-up.svg" alt="">
 </a>
 
 <?php require_once "./script/general_scripts.php"; ?>
-<script src="./js/index.js"></script>
+<script src="./js/aos.js"></script>
 <script src="./js/to-top.js"></script>
 </body>
 

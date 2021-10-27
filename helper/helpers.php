@@ -120,8 +120,10 @@ function validateCreditCard($cardNumber, $cardType, $expiryMonth, $expiryYear, $
             $card = $key;
         }
     }
-    if ($card === $cardType) {
-        $invalidCardMsg = NULL;
+    if($card){
+        if ($card === $cardType) {
+            $invalidCardMsg = NULL;
+        }
     }
 
     $cardExpiryDate = DateTime::createFromFormat('my', $expiryMonth . $expiryYear);
@@ -648,16 +650,6 @@ function addOrderItems($cartid, $orderid, $connection)
             $stmt->execute();
         }
     }
-    $stmt->close();
-}
-
-
-
-function createReview($newReview, $connection)
-{
-    $stmt = $connection->prepare("INSERT INTO review(userId, productId, rating, feedback) VALUES (?, ?, ?, ?);");
-    $stmt->bind_param("iiis", $newReview["userId"], $newReview["productId"], $newReview["rating"], $newReview["feedback"]);
-    $stmt->execute();
     $stmt->close();
 }
 

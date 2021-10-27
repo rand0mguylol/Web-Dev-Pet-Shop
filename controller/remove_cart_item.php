@@ -1,5 +1,5 @@
-<?php require_once "../function/db.php" ?>
-<?php require_once "../function/helpers.php" ?>
+<?php require_once "../connection/db.php" ?>
+<?php require_once "../helper/helpers.php" ?>
 <?php
 function removeCartItem($cartItemId,$cartid,$connection){
   $stmt = $connection -> prepare ("DELETE FROM cartitem where cartItemId =?");

@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once "./function/db.php";
-require_once "./function/helpers.php";
+require_once "./connection/db.php";
+require_once "./helper/helpers.php";
 
 if (isset($_GET["category"])) {
     $category = sanitizeText($_GET["category"]);
@@ -9,7 +9,7 @@ if (isset($_GET["category"])) {
     $categoryName = $categoryHeader["category"];
     $categoryDescription = $categoryHeader["description"];
     if (!$categoryHeader) {
-        header("Location: index.php");
+        header("Location: ./index.php");
         exit();
     }
     //
@@ -20,18 +20,19 @@ if (isset($_GET["category"])) {
         $categoryArray = getCategoryProduct($connection, $category);
     }
 } else {
-    header("Location: index.php");
+    header("Location: ./index.php");
     exit();
 }
 ?>
-<?php require_once "header.php"; ?>
+<?php $title = "$category";?>
+<?php require_once "./components/header.php"; ?>
 
 <div class="offcanvas offcanvas-start justify-content-center" tabindex="-1" id="sidenavCanvas" aria-labelledby="sidenavCanvasLabel">
     <div class="offcanvas-header justify-content-end">
         <button type="button" class="btn-close text-reset " data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <?php include "./category_nav.php"; ?>
+        <?php include "./components/category_nav.php"; ?>
     </div>
 </div>
 
@@ -77,7 +78,7 @@ if (isset($_GET["category"])) {
 </div>
 
 <div class="main-wrapper general">
-    <?php require_once "navbar.php"; ?>
+    <?php require_once "./components/navbar.php"; ?>
     <section class="breadcrumb-section">
         <div class="container  mt-5">
             <nav class="mb-5 " style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
@@ -128,7 +129,7 @@ if (isset($_GET["category"])) {
         <div class="d-flex ">
             <nav class="navbar navbar-expand-xxl navbar-light bg-transparent d-inline-block ps-4 general-side-nav">
                 <div class="collapse navbar-collapse flex-column" id="navbarTogglerDemo01">
-                    <?php include "./category_nav.php"; ?>
+                    <?php include "./components/category_nav.php"; ?>
                 </div>
             </nav>
             <div class="container d-flex flex-wrap">
@@ -184,32 +185,9 @@ if (isset($_GET["category"])) {
 <a href="#" class="to-top">
     <img src="./svg/chevron-up.svg" alt="">
 </a>
+<?php require_once "./script/general_scripts.php"; ?>
+<script src="./js/aos.js"></script>
+<script src ="./js/category.js"></script>
+</body>
 
-<script>
-    const toTop = document.querySelector(".to-top");
-    const subNavToggle = document.querySelectorAll(".dropdown-toggle");
-    const subNavMenu = document.querySelectorAll(".dropdown-menu");
-    const navCol = document.querySelector(".navbar-collapse")
-    window.addEventListener("scroll", () => {
-        if (window.pageYOffset > 100) {
-            toTop.classList.add("active");
-            for (i = 0; i < subNavToggle.length; ++i) {
-                subNavToggle[i].classList.remove("show")
-            };
-            for (i = 0; i < subNavMenu.length; ++i) {
-                subNavMenu[i].classList.remove("show")
-            };
-            navCol.classList.remove("show")
-        } else {
-            toTop.classList.remove("active");
-        }
-    })
-</script>
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script>
-    AOS.init({
-        offset: 300
-    })
-</script>
-<script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
-<?php require_once "script_links.php"; ?>
+</html>
