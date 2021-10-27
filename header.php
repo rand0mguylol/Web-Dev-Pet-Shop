@@ -138,15 +138,19 @@ if (isset($userid)) {
                                     </p>
                                 </div>
                             </div>
+                     </div>
                 <?php endforeach ?>
                 <a href="./payment.php" class="btn btn-outline-dark" href="./payment.php">Pay >></a>
             <?php endif ?>
         </div>
+
+
         <div class="offcanvas-body mb-5">
             <div>
             </div>
         </div>
     </div>
+                                                                    </div>
     <!-- End of Offcanvas -->
     <!-- Alert for pages. AOS CSS and JS required -->
     <!-- The variable depends on the page -->
@@ -163,7 +167,7 @@ if (isset($userid)) {
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
-    
+
     <!-- Review Offcanvas -->
     <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="reviewCanvas"
         aria-labelledby="reviewCanvasLabel">

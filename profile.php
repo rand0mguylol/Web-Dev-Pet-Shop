@@ -114,7 +114,7 @@ if(isset($_POST["submit"])){
             <div class="col-9 my-auto">
                 <div class="tab-content mt-3" id="nav-tabContent">
                     <!-- Profile Tab  -->
-                    <div class="tab-pane fade mx-auto" id="nav-profile" role="tabpanel"
+                    <div class="tab-pane fade mx-auto active show" id="nav-profile" role="tabpanel"
                         aria-labelledby="nav-profile-tab">
                         <form action="./controller/update_profile.php" class="row g-3 justify-content-center"
                             id="profile-form" method="POST">
@@ -211,8 +211,8 @@ if(isset($_POST["submit"])){
                     <!--  End of privacy tab-->
 
 
-                    <!-- Order History Tab -->
-                    <div class="tab-pane fade active show" id="nav-order" role="tabpanel"
+                     <!-- Order History Tab -->
+                     <div class="tab-pane fade"  id="nav-order" role="tabpanel"
                         aria-labelledby="nav-order-tab">
                         <div class="container">
                             <!-- Container for each Order -->
@@ -261,6 +261,9 @@ if(isset($_POST["submit"])){
                                                     <?php endif;?>
                                                     <!-- End of To Rate Button -->
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <?php endforeach;?>
                                 <div class="card-footer">

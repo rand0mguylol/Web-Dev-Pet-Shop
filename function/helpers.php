@@ -544,55 +544,57 @@ function getOrderTotal($orderid, $connection)
     return $total;
 }
 
-function getOrderItems($orderId, $connection)
-{
+function getOrderItems($orderId, $connection){
     $orderItemArray = [];
     // foreach($orderIdArray as $orderId){}
-    $stmt = $connection->prepare("SELECT petId, productId, quantity, subtotal FROM orderitem WHERE orderid = ?;");
-    $stmt->bind_param("i", $orderId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    while ($row = $result->fetch_assoc()) {
-        $orderitem = [];
-        if (isset($row['petId'])) {
-            $id = $row['petId'];
-            $quantity = $row['quantity'];
-            $subtotal = $row['subtotal'];
-            $category = "pet";
-            $stmt2 = $connection->prepare('SELECT name FROM pets WHERE petId =?; ');
-            $stmt2->bind_param("i", $id);
-            $stmt2->execute();
-            $result2 = $stmt2->get_result();
-            $row2 = $result2->fetch_assoc();
-            $itemName = $row2['name'];
-            $image = getImage($id, $category, "Thumbnail", true, $connection);
+    $stmt = $connection -> prepare("SELECT orderItemId, petId, productId, quantity, subtotal FROM orderitem WHERE orderid = ?;");
+    $stmt -> bind_param("i", $orderId);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+    while($row = $result -> fetch_assoc()){
+      $orderitem = [];
+      if (isset($row['petId'])){
+          $orderItemId = $row["orderItemId"];
+          $id = $row['petId'];
+          $quantity = $row['quantity']; 
+          $subtotal = $row['subtotal'];
+          $category = "pet";
+          $stmt2 = $connection ->prepare ('SELECT name FROM pets WHERE petId =?; ');
+          $stmt2 -> bind_param("i",$id);
+          $stmt2 -> execute();
+          $result2 = $stmt2 -> get_result();
+          $row2 = $result2 ->fetch_assoc();
+          $itemName = $row2['name'];
+          $image = getImage($id,$category,"Card",true,$connection);
         } else {
-            $id = $row['productId'];
-            $quantity = $row['quantity'];
-            $subtotal = $row['subtotal'];
-            $category = "product";
-            $stmt2 = $connection->prepare('SELECT name FROM products WHERE productId =?; ');
-            $stmt2->bind_param("i", $id);
-            $stmt2->execute();
-            $result2 = $stmt2->get_result();
-            $row2 = $result2->fetch_assoc();
-            $itemName = $row2['name'];
-            $image = getImage($id, $category, "Thumbnail", true, $connection);
+          $orderItemId = $row["orderItemId"];
+          $id = $row['productId'];
+          $quantity = $row['quantity'];
+          $subtotal = $row['subtotal'];
+          $category = "product";
+          $stmt2 = $connection ->prepare ('SELECT name FROM products WHERE productId =?; ');
+          $stmt2 -> bind_param("i",$id);
+          $stmt2 -> execute();
+          $result2 = $stmt2 -> get_result();
+          $row2 = $result2 ->fetch_assoc();
+          $itemName = $row2['name'];
+          $image = getImage($id,$category,"Card",true,$connection);
         }
-        $orderitem = [
-            "id" => $id,
-            "category" => $category,
-            "name" => $itemName,
-            "quantity" => $quantity,
-            "subtotal" => $subtotal,
-            "image" => $image
-        ];
-        array_push($orderItemArray, $orderitem);
+      $orderitem = [
+        "orderItemId" => $orderItemId,
+        "id" => $id,
+        "category" => $category,
+        "name" => $itemName,
+        "quantity" => $quantity,
+        "subtotal" => $subtotal,
+        "image" => $image
+      ];
+      array_push($orderItemArray, $orderitem);
     }
-    $stmt->close();
-    $stmt2->close();
+    $stmt -> close();
+    $stmt2 -> close();
     return $orderItemArray;
-}
+  }
 
 // function getOrderItemId($orderItemId){
 //     return $orderItemId;
