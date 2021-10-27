@@ -1,7 +1,6 @@
 <?php session_start();
-require_once "./function/helpers.php";
-require_once "./function/db.php";
-
+require_once "./connection/db.php";
+require_once "./helper/helpers.php";
 $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
 
 // Return to index if not login
@@ -38,36 +37,34 @@ if (isset($userid)) {
 ?>
 
 <?php
-if(isset($_POST["submit"])){
+if (isset($_POST["submit"])) {
     $errorArray = [];
     $userid = $_SESSION["user"]["userID"];
 
-    if($_POST["rating"] != -1){
+    if ($_POST["rating"] != -1) {
         $rating = $_POST["rating"];
         $rating++;
-    }
-    else{
+    } else {
         array_push($errorArray, "ratingErr");
         // $rateError = "Select a rating";
     }
 
-    if(strlen($_POST["feedback"]) <= 50){
+    if (strlen($_POST["feedback"]) <= 50) {
         $feedback = sanitizeText($_POST["feedback"]);
-    }
-    else{
+    } else {
         array_push($errorArray, "feedbackErr");
         // $feedbackError = "Feedback must not be over 50 characters long";
     }
 
-    if(empty($errorArray)){
+    if (empty($errorArray)) {
         $newReview = array(
-        "userId" => $userid,
-        "rating" => $rating,
-        "feedback" => $feedback
+            "userId" => $userid,
+            "rating" => $rating,
+            "feedback" => $feedback
         );
         createReview($_POST["reviewItemId"], $newReview, $connection);
         echo "Review successfully added";
-        header("Location:  ./profile.php" );
+        header("Location:  ./profile.php");
         exit();
     }
 }
@@ -76,11 +73,11 @@ if(isset($_POST["submit"])){
 //     $reviewOrderItemId = "<script>document.write(reviewOrderItemId)</script>";
 // }
 ?>
-
-<?php require_once "header.php"; ?>
+<?php $title = "Profile -" . $_SESSION['user']['firstName'] . " " . $_SESSION['user']['lastName']; ?>
+<?php require_once "./components/header.php"; ?>
 <div class="main-wrapper profile">
 
-    <?php require_once "navbar.php"; ?>
+    <?php require_once "./components/navbar.php"; ?>
 
     <!-- 
   <div class="container mt-5">
@@ -281,183 +278,14 @@ if(isset($_POST["submit"])){
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js" integrity="sha512-ooSWpxJsiXe6t4+PPjCgYmVfr1NS5QXJACcR/FPpsdm6kqG1FmQ2SVyg2RXeVuCRBLr0lWHnWJP6Zs1Efvxzww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    const image = document.querySelector("#cropBox")
-
-    const fileInput = document.querySelector(".fileInput")
-    const uploadPicBtn = document.querySelector(".uploadPicBtn")
-    const resetImageBtn = document.querySelector(".fileInputResetBtn")
-    const removePicBtn = document.querySelector(".removePicBtn")
-    const imageForm = document.querySelector(".imageForm")
-    const outerCropWrapper = document.querySelector(".outer-crop-wrapper")
-    const userProfilePicture = document.querySelector(".userProfilePicture")
-
-    console.dir(
-        userProfilePicture
-    )
-
-    console.log(typeof(userProfilePicture.src))
-
-    if (userProfilePicture.src !== userProfilePicture.baseURI && userProfilePicture.src.includes(
-            "/svg/profile-pic-default.svg") === false) {
-        removePicBtn.classList.remove("hidden")
-    }
-
-    // imageForm.addEventListener("submit", function(e){
-    //   e.preventDefault()
-    // })
-
-    const imageCrop = new Cropper(image, {
-        aspectRatio: 1,
-        viewMode: 2,
-
-        preview: ".preview",
-
-        minCropBoxWidth: 550,
-        minCropBoxHeight: 550,
-
-        minContainerHeight: 550,
-        minContainerWidth: 550,
-
-        minCanvasWidth: 550,
-        minCanvasHeight: 550
-    })
-
-
-    resetImageBtn.addEventListener("click", function() {
-        uploadPicBtn.classList.add("hidden")
-        imageCrop.destroy()
-
-    })
-
-    fileInput.addEventListener("change", function(e) {
-        const imageCrop = new Cropper(image, {
-            aspectRatio: 1,
-            viewMode: 2,
-
-            preview: ".preview",
-
-            minCropBoxWidth: 550,
-            minCropBoxHeight: 550,
-
-            minContainerHeight: 550,
-            minContainerWidth: 550,
-
-            minCanvasWidth: 550,
-            minCanvasHeight: 550
-        })
-        const result = getImageURL(this)
-
-        if (e.target.value) {
-            uploadPicBtn.classList.remove("hidden")
-        }
-    })
-
-    const inputImageErrorMessage = document.createElement("small")
-    inputImageErrorMessage.innerHTML = "Only images are allowed"
-    inputImageErrorMessage.classList.add("d-block")
-
-    uploadPicBtn.addEventListener("click", function() {
-        const cropImage = imageCrop.getCroppedCanvas({
-            width: 200,
-            height: 200,
-            fillColor: '#fff',
-            imageSmoothingEnabled: false,
-            imageSmoothingQuality: 'low',
-        })
-
-        if (!cropImage) {
-
-            if (outerCropWrapper.contains(inputImageErrorMessage) === false) {
-                outerCropWrapper.appendChild(inputImageErrorMessage)
-            }
-
-        } else {
-            const finalImage = cropImage.toDataURL();
-            const inputWithImageData = document.createElement("input")
-            inputWithImageData.type = "text"
-            inputWithImageData.name = "newProfilePic"
-            inputWithImageData.setAttribute("value", finalImage)
-            imageForm.appendChild(inputWithImageData)
-            imageForm.submit()
-        }
-    })
-
-    // resetImageBtn.addEventListener("click", function(){
-    // })
-
-    function getImageURL(input) {
-        const reader = new FileReader()
-        reader.addEventListener("load", function(e) {
-            imageCrop.replace(e.target.result)
-        })
-        if (input) {
-            reader.readAsDataURL(input.files[0])
-        }
-    }
-</script>
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script>
-AOS.init({
-    offset: 300
-})
-</script>
-
-
+<?php require_once "./script/general_scripts.php"; ?>
+<script src="./js/profile.js"></script>
+<script src="./js/aos.js"></script>
 <!-- For Rating System -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="./js/rating.js"></script>
+<?php require_once "./components/footer.php"; ?>
+</body>
 
-<script>
-let ratedIndex = -1;
-
-$(document).ready(function() {
-    starColorGray();
-
-    $(".fa-star").on("click", function() {
-        ratedIndex = parseInt($(this).data("index-num"));
-        $("#rating").val(ratedIndex);
-    });
-
-    $(".fa-star").mouseover(function() {
-        starColorGray();
-
-        let hoverIndex = parseInt($(this).data("index-num"));
-        for (let i = 0; i <= hoverIndex; i++)
-            $(".fa-star:eq(" + i + ")").css("color", "orange");
-    });
-
-    $(".fa-star").mouseleave(function() {
-        starColorGray();
-
-        if (ratedIndex != -1)
-            for (let i = 0; i <= ratedIndex; i++)
-                $(".fa-star:eq(" + i + ")").css("color", "orange");
-    });
-});
-
-function starColorGray() {
-    $(".fa-star").css("color", "gray");
-}
-</script>
-
-<script>
-const reviewIdInput = document.querySelector(".reviewItemInput")
-const submitButtonContainer = document.querySelector(".submitButtonContainer")
-
-function clickForId(clicked_id) {
-
-    reviewIdInput.value = clicked_id;
-    console.dir(reviewIdInput)
-
-    // submitButtonContainer.appendChild(reviewIdInput)
-}
-</script>
-
-
-<?php require_once "script_links.php"; ?>
+</html>

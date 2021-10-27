@@ -20,7 +20,7 @@ if (isset($_SESSION["accountCreationError"])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <title>Register For An Account</title>
+    <title>Registration</title>
 </head>
 
 <body>
@@ -78,15 +78,8 @@ if (isset($_SESSION["accountCreationError"])) {
             </div>
         </form>
     </div>
+    <?php require_once "./script/general_scripts.php"; ?>
+    <script src="./js/register.js"></script>
+</body>
 
-    <script>
-        function viewPassword() {
-            const password = document.querySelector("#inputPassword")
-            if (password.type === "password") {
-                password.type = "text";
-            } else {
-                password.type = "password"
-            }
-        }
-    </script>
-    <?php require_once "script_links.php"; ?>
+</html>

@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once "./function/db.php";
-require_once "./function/helpers.php";
+require_once "./connection/db.php";
+require_once "./helper/helpers.php";
 $petArray  = ["Dog", "Cat", "Hamster"];
 if (isset($_GET["category"], $_GET["id"])) {
     $category = sanitizeText($_GET["category"]);
@@ -33,13 +33,11 @@ if (isset($_POST['add-to-cart-btn'])) {
     }
 }
 ?>
-
-<?php require_once "header.php"; ?>
+<?php $title = $itemInfo['itemMainInfo']['name'];?>
+<?php require_once "./components/header.php"; ?>
 
 <div class="main-wrapper specific">
-    <?php require_once "navbar.php"; ?>
-
-
+    <?php require_once "./components/navbar.php"; ?>
     <section class="container item-section mt-5">
         <nav class="mb-5" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
             <ol class="breadcrumb justify-content-start">
@@ -118,7 +116,7 @@ if (isset($_POST['add-to-cart-btn'])) {
                                     if ($addCartItem) {
                                         echo "<div class='alert alert-success' role='alert'>
                 Congratulations! You added this item to cart successfully!
-              </div>";
+            </div>";
                                     }
                                 }
                             }
@@ -334,92 +332,11 @@ if (isset($_POST['add-to-cart-btn'])) {
         </div>
     </section>
 
-    <?php require_once "footer.php"; ?>
+    <?php require_once "./components/footer.php"; ?>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/glider-js@1/glider.min.js"></script>
-<script>
-    const thumbjson = `<?php echo json_encode($itemGalleryArray); ?>`;
-    const thumb = JSON.parse(thumbjson)
-    // console.log(thumb)
-    function loadThumbnail(thumbnailArray, selector) {
-        for (let i = 0; i < thumbnailArray.length; i++) {
-            selector[i].innerHTML = `<img src="${thumbnailArray[i].imagePath}" alt="" class = "img-fluid">`;
-        }
-    }
-    const carousel = new Glider(document.querySelector('.glider-other-products'), {
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        draggable: true,
-        dots: '.dots',
-        arrows: {
-            prev: '#other-products-prev',
-            next: '#other-products-next'
-        },
-        dragVelocity: 2,
-        scrollLock: true,
-        resizeLock: true,
-        rewind: true,
-
-        responsive: [{
-                breakpoint: 0,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            },
-
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1
-                }
-            },
-
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 1
-                }
-            },
-
-            {
-                breakpoint: 1400,
-                settings: {
-                    slidesToShow: 4,
-                    slidesToScroll: 1
-                }
-            }
-
-        ]
-    });
-
-    const gallery = new Glider(document.querySelector('.glider-gallery-view'), {
-        slidesToShow: 1,
-        dots: '.thumbnail',
-        draggable: true,
-        dragVelocity: 2,
-        scrollLock: true,
-        resizeLock: true,
-        arrows: {
-            prev: '#thumbnail-glider-prev',
-            next: '#thumbnail-glider-next'
-        },
-        eventPropagate: false,
-    });
-    thumbnailsButton = gallery.dots.children;
-    loadThumbnail(thumb, thumbnailsButton)
-    window.addEventListener("resize", function() {
-        loadThumbnail(thumb, thumbnailsButton)
-    })
-</script>
-
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script>
-    AOS.init({
-        offset: 300
-    })
-</script>
-
-<?php require_once "./script_links.php"; ?>
+<?php require_once "./script/general_scripts.php"?>
+<script>const thumbjson = `<?php echo json_encode($itemGalleryArray); ?>`;</script>
+<script src= "./js/aos.js"></script>
+<script src ="./js/item.js"></script>
+</body>
+</html>
