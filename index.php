@@ -1,6 +1,6 @@
 <?php session_start(); ?>
 <?php require_once "header.php"; ?>
-
+<?php unset($_SESSION['payment']);?>
 <!-- Main Section - Navbar & Hero Section -->
 <section class="main-section">
     <div class="background-filter">
