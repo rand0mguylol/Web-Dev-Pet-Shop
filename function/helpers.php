@@ -144,29 +144,26 @@ function getCategoryInfo($connection, $category)
     return $categoryHeader;
 }
 
-function getCategoryProduct($connection, $category, $searchKeyword = "",  $id = "", $limit = false)
+function getCategoryProduct($connection, $category, $searchKeyword = "")
 {
     $categoryArray = [];
     $petArray  = ["Dog", "Cat", "Hamster"];
     $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
     //
     if (in_array($category, $petArray)) {
-        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card' AND pets.petId != ? AND pets.name LIKE ? ;";
+        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card'  AND pets.name LIKE ? ;";
     } else if (in_array($category, $productArray)) {
-        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.productId != ? AND products.name LIKE ?;";
+        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.name LIKE ?;";
     } else {
         return false;
     }
     //
-    if ($limit) {
-        $sql = substr_replace($sql, " LIMIT 6", -1, -1);
-    }
     $stmt = $connection->prepare($sql);
     // if(!$stmt){
     //   return false;
     // }
     $searchKeyword = "%$searchKeyword%";
-    $stmt->bind_param("sis", $category, $id, $searchKeyword);
+    $stmt->bind_param("ss", $category, $searchKeyword);
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {
@@ -179,6 +176,32 @@ function getCategoryProduct($connection, $category, $searchKeyword = "",  $id = 
     //   "categoryName" => $categoryName
     // ];
     return $categoryArray;
+}
+
+function getCategoryOther($connection, $category, $removeID){
+    $otherArray = [];
+    $petArray  = ["Dog", "Cat", "Hamster"];
+    $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
+    //
+    if (in_array($category, $petArray)) {
+        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card' AND pets.petId != ? LIMIT 6";
+    } else if (in_array($category, $productArray)) {
+        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.productId != ? LIMIT 6";
+    } else {
+        return false;
+    }
+
+    $stmt = $connection->prepare($sql);
+
+    $stmt->bind_param("si", $category, $removeID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        array_push($otherArray, $row);
+    }
+    $stmt->close();
+
+    return $otherArray;
 }
 
 
@@ -239,9 +262,9 @@ function getItemInfo($id,  $category, $connection)
 
     $type = returnType($category);
     if (strtolower($type) === "pet") {
-        $stmt = $connection->prepare("SELECT pets.petId AS id, pets.name, pets.price, pets.gender, pets.weight, pets.color, pets.petCondition, pets.vaccinated, pets.dewormed, petcategory.category FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId  WHERE pets.petID = ? AND pets.status = 1");
+        $stmt = $connection->prepare("SELECT  pets.name, pets.price, pets.gender, pets.weight, pets.color, pets.petCondition, pets.vaccinated, pets.dewormed, petcategory.category FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId  WHERE pets.petID = ? AND pets.status = 1");
     } else if (strtolower($type) === "product") {
-        $stmt = $connection->prepare("SELECT products.productId AS id, products.name, products.price,products.quantity, products.description, products.brand,  products.weight, products.warrantyPeriod, products.productDimensions, productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1");
+        $stmt = $connection->prepare("SELECT products.name, products.price,products.quantity, products.description, products.brand,  products.weight, products.warrantyPeriod, products.productDimensions, productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1");
     }
 
     $stmt->bind_param("i", $id);

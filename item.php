@@ -11,9 +11,8 @@ if (isset($_GET["category"], $_GET["id"])) {
     $itemInfo = getItemInfo($id, $categoryClean, $connection);
     $itemGalleryArray = getImage($id,  $categoryClean, "Gallery", false, $connection);
     $itemThumbnailArray = getImage($id, $categoryClean, "Thumbnail", false, $connection);
-    $removeId = $itemInfo["itemSubInfo"]['id'];
     $quantity = $itemInfo['itemSubInfo']['quantity'] ?? 1;
-    $others = getCategoryProduct($connection, $categoryClean, $removeId, false, true);
+    $others = getCategoryOther($connection, $categoryClean, $id);
 } else {
     header("Location: index.php");
     exit();
@@ -91,7 +90,7 @@ if (isset($_POST['add-to-cart-btn'])) {
                         <div>
                             <form action="" method="POST">
                                 <div class=" item-quantity-section mb-3">
-                                    <input type="hidden" name="productId" value="<?php echo $itemInfo['itemSubInfo']['id']; ?>">
+                                    <input type="hidden" name="productId" value="<?php echo $id ?>">
                                     <label for="quantity" class="mb-3">Quantity: </label>
                                     <input type="number" class="text-center rounded" name="item_quantity" min="1" max="<?php echo $quantity; ?>" value="1" class="d-block" <?php if (in_array($itemInfo['itemSubInfo']['category'], $petArray)) {
                                                                                                                                                                                 echo 'readonly';
@@ -288,7 +287,7 @@ if (isset($_POST['add-to-cart-btn'])) {
             <h3>Other Products in this Category</h3>
             <div class="glider-contain mt-5">
                 <div class="glider-other-products">
-                    <?php foreach ($others["categoryArray"] as $cat) : ?>
+                    <?php foreach ($others as $cat) : ?>
                         <div>
                             <div class="card-wrapper specific">
                                 <div class="card-main-section">
@@ -307,7 +306,7 @@ if (isset($_POST['add-to-cart-btn'])) {
                                     </div>
                                 </div>
                                 <div class="card-content-section">
-                                    <a href="<?php echo "item.php?category=$others[categoryName]&id=$cat[id]"; ?>" class="text-decoration-none text-dark">
+                                    <a href="<?php echo "item.php?category=$categoryClean&id=$cat[id]"; ?>" class="text-decoration-none text-dark">
                                         <h5 class="text-center mt-2 px-2 text-truncate"><?php echo $cat["name"] ?></h5>
                                     </a>
                                 </div>
