@@ -770,3 +770,60 @@ function rateEligibility($orderItemId, $connection)
     $stmt->close();
     return $length;
 }
+
+
+function getAdminSearch($connection, $type, $q){
+    $adminSearchArray = [];
+    if ($type === "pet") {
+        $sql = "SELECT pets.petId as id , pets.name FROM  pets  WHERE pets.name LIKE ? ;";
+    } else if ($type === "product") {
+        $sql = "SELECT products.productId as id, products.name  FROM products  WHERE products.name LIKE ?;";
+    } else {
+        return false;
+    }
+    //
+    $stmt = $connection->prepare($sql);
+    // if(!$stmt){
+    //   return false;
+    // }
+    $searchKeyword = "%$q%";
+    $stmt->bind_param("s", $searchKeyword);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        array_push($adminSearchArray, $row);
+    }
+    $stmt->close();
+    // $resultArray = [
+    //   "categoryArray" => $categoryArray,
+    //   "categoryDescription" => $categoryDescription,
+    //   "categoryName" => $categoryName
+    // ];
+    return $adminSearchArray;
+}
+
+function getAdminEditItem($connection, $type, $id){
+    if ($type === "pet") {
+        $sql = "SELECT name, price, status, gender, birthDate, weight, color, petCondition, vaccinated, dewormed  FROM  pets  WHERE petid = ? ;";
+    } else if ($type === "product") {
+        $sql = "SELECT name, price, quantity, status, description, brand, weight, warrantyPeriod, productDimensions FROM products  WHERE productid = ?;";
+    } else {
+        return false;
+    }
+    //
+    $stmt = $connection->prepare($sql);
+    // if(!$stmt){
+    //   return false;
+    // }
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $itemArray = $result->fetch_assoc();
+    $stmt->close();
+    // $resultArray = [
+    //   "categoryArray" => $categoryArray,
+    //   "categoryDescription" => $categoryDescription,
+    //   "categoryName" => $categoryName
+    // ];
+    return $itemArray;
+}

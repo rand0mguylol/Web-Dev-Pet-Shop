@@ -94,7 +94,7 @@ if (isset($userid)) {
             <div class="offcanvas-body mb-5">
             <?php if ($_SESSION["user"]["userRole"] === "STAFF"): ?>
                     <div class="col-12 text-center">
-                    <a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">Admin Panel</a>
+                    <a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="admin.php">Admin Panel</a>
                 </div>
                 <?php endif; ?>
                 <div class="col-12 text-center">
