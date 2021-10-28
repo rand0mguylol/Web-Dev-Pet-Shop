@@ -377,6 +377,7 @@ input[type="number"] {
 .other-products-section {
   background-color: #eef3f7;
 }
+
 .to-top {
   background: lightpink;
   position: fixed;
@@ -564,6 +565,7 @@ input[type="number"] {
   padding: 5px;
 }
 
+
 /* .filter-container{
    position: sticky;
    top: 0px;
@@ -605,6 +607,7 @@ input[type="number"] {
     transform: translate3d(2px, 0, 0);
   }
 } */
+
 
 
 .product-container .input-number{
