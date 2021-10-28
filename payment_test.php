@@ -1,8 +1,8 @@
 <?php session_start(); ?>
-<?php require_once "../connection/db.php"; ?>
+<?php require_once "./connection/db.php"; ?>
 <?php $title = "Checkout Page"; ?>
-<?php require_once "../components/header.php"; ?>
-<?php require_once "../components/navbar.php"; ?>
+<?php require_once "./components/header.php"; ?>
+<?php require_once "./components/navbar.php"; ?>
 
 <?php
 $userid = $_SESSION['user']['userID'] ?? null;
@@ -21,53 +21,32 @@ if (isset($_POST['cardPaymentBtn'])) {
     $cvv = $_POST['cvv'];
     $deliveryMethod = $_POST['deliveryMethod'];
     $total = $_POST['total'];
-    $err = validateCreditCard($cardNumber, $type, $expiryMonth, $expiryYear, $cvv);
-    if (!$err) {
-        $orderid = createOrder($userid, $paymentMethod, $type, $deliveryMethod, $total, $connection);
-        if ($orderid) {
-            addOrderItems($cartid, $orderid, $connection);
-            $_SESSION['payment'] = [
-                'orderID' => $orderid,
-                'paymentMethod' => "$paymentMethod - $type",
-                'deliveryMethod' => $deliveryMethod,
-                "total" => $total
-            ];
-        }
-    } else {
-        $_SESSION['payment'] = "-1";
-    }
+    $_SESSION['payment'] = "-1";
 }
 if (isset($_POST['bankingPaymentBtn'])) {
     $paymentMethod = $_POST['paymentMethod'];
     $type = $_POST['bank'];
     $deliveryMethod = $_POST['deliveryMethod'];
     $total = $_POST['total'];
-    $orderid = createOrder($userid, $paymentMethod, $type, $deliveryMethod, $total, $connection);
-    if ($orderid) {
-        addOrderItems($cartid, $orderid, $connection);
-        $_SESSION['payment'] = [
-            'orderID' => $orderid,
-            'paymentMethod' => "$paymentMethod - $type",
-            'deliveryMethod' => $deliveryMethod,
-            "total" => $total
-        ];
-    }
+    $_SESSION['payment'] = "-1";
 }
 ?>
 
-<div class="cart-container container-fluid px-lg-5 my-lg-3 ">
+<div class="cart-container container-fluid p-5 m-3 ">
     <div class="row mx-lg-5 justify-content-around">
         <!-- cart details -->
-        <section class="col-md-7 py-3 px-lg-5 border bg-light rounded-3">
-            <h3 class="m-4">Your Shopping Cart</h3>
-            <!-- product list -->
-            <div class="container">
+        <section class="col-md-7 py-3 px-lg-5 border bg-light rounded-3 d-flex justify-content-end flex-column">
+            <div class="h4 mt-3 mb-4">Your Shopping Cart:</div>
+            <section class="container">
                 <div class="row border-bottom mb-4">
                     <div class="col-1"></div>
-                    <h6 class=" col-6 text-start">Product</h6>
+                    <h6 class=" col-6 text-center">Product</h6>
                     <h6 class=" col-3 text-center">Quantity</h6>
                     <h6 class=" col-2 text-end">Total Price</h6>
                 </div>
+            </section>
+            <!-- product list -->
+            <section class="container overflow-auto">
                 <?php if (!$cartitems) : ?>
                     <div class="row">
                         <h6 class="col no-cart-item">Sadly there is nothing left in your cart... Back to your shopping journey Go Go Go~</h6>
@@ -75,10 +54,10 @@ if (isset($_POST['bankingPaymentBtn'])) {
                 <?php else : ?>
                     <?php foreach ($cartitems as $index => $item) : ?>
                         <!-- Product -->
-                        <form method="POST" action="">
+                        <form method="POST" action="./controller/remove_cart_item.php">
                             <div class="row product-container mb-4 align-items-center">
                                 <div class="col-1 text-center">
-                                    <button type="submit" name="remove-item-from-cart-btn" value="<?php echo $cartitems[$index]['cartItemId']; ?>"><i class="fas fa-times fa-sm"></i></button>
+                                    <button type="submit" name="remove-item-from-cart-btn" value="<?php echo $cartitems[$index]['cartItemId']; ?>"><i class="fas fa-trash-alt fa-lg"></i></button>
                                 </div>
                                 <div class="product col-6 text-start">
                                     <div class="card mb-3 border-0 bg-transparent ">
@@ -116,58 +95,62 @@ if (isset($_POST['bankingPaymentBtn'])) {
                         <!-- End of Product -->
                     <?php endforeach ?>
                 <?php endif ?>
-            </div>
+            </section>
             <!-- End of product list -->
-            <div class="row p-3 py-4 border-top border-bottom ">
-                <div class="col-6">
-                    <div class="row">
-                        <div class="row">
-                            Delivery Option:
+            <section class="container mt-auto">
+                <div class="row">
+                    <div class="row p-3 py-4 border-top border-bottom">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="row">
+                                    Delivery Option:
+                                </div>
+                                <div class="row">
+                                    <select class="form-select" aria-label="delivery" name="delivery" id="deliveryOption">
+                                        <option selected>Select Your Delivery Option</option>
+                                        <option value="J&T">J&T</option>
+                                        <option value="PosLaju">PosLaju</option>
+                                        <option value="NinjaVan">Ninja Van</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row">
-                            <select class="form-select" aria-label="delivery" name="delivery" id="deliveryOption">
-                                <option selected>Select Your Delivery Option</option>
-                                <option value="J&T">J&T</option>
-                                <option value="PosLaju">PosLaju</option>
-                                <option value="NinjaVan">Ninja Van</option>
-                            </select>
+                        <div class="col-6 text-end">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6>Subtotal: </h6>
+                                </div>
+                                <div class="col-6">
+                                    <h6>RM <span id="subtotal"><?php echo number_format($cartSubtotal, 2, '.', ''); ?></span></h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6>Shipping:</h6>
+                                </div>
+                                <div class="col-6">
+                                    <h6><span id="shippingFee">FREE</span></h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row p-4">
+                        <div class="col-6 order-xs-2">
+                            <a href="./index.php" class="btn btn-default"><i class="fas fa-arrow-left pe-2"></i>Continue Shopping</a>
+                        </div>
+                        <div class="col-6 order-xs-1">
+                            <div class="row text-end text-xs-center">
+                                <div class="col-6">
+                                    <h5>Total:</h5>
+                                </div>
+                                <div class="col-6">
+                                    <h5>RM <span id="totalAmount"><?php echo number_format($cartSubtotal, 2, '.', ''); ?></span></h5>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 text-end">
-                    <div class="row">
-                        <div class="col-6">
-                            <h6>Subtotal: </h6>
-                        </div>
-                        <div class="col-6">
-                            <h6>RM <span id="subtotal"><?php echo number_format($cartSubtotal, 2, '.', ''); ?></span></h6>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <h6>Shipping:</h6>
-                        </div>
-                        <div class="col-6">
-                            <h6><span id="shippingFee">FREE</span></h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row p-4">
-                <div class="col-6 order-xs-2">
-                    <a href="../index.php" class="btn btn-default"><i class="fas fa-arrow-left pe-2"></i>Continue Shopping</a>
-                </div>
-                <div class="col-6 order-xs-1">
-                    <div class="row text-end text-xs-center">
-                        <div class="col-6">
-                            <h5>Total:</h5>
-                        </div>
-                        <div class="col-6">
-                            <h5>RM <span id="totalAmount"><?php echo number_format($cartSubtotal, 2, '.', ''); ?></span></h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
         </section>
         <!-- end of cart details -->
         <!-- payment -->
@@ -327,9 +310,9 @@ if (isset($_POST['bankingPaymentBtn'])) {
             </div>
             <div class="modal-footer">
                 <?php if (is_array($_SESSION['payment'])) {
-                    echo "<a href='../index.php' class='btn btn-primary'>Back To Home</a>";
+                    echo "<a href='./index.php' class='btn btn-primary'>Back To Home</a>";
                 } else {
-                    echo "<a href='../index.php' class='btn btn-primary' >Back To Home</a>
+                    echo "<a href='./index.php' class='btn btn-primary' >Back To Home</a>
                     <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Try Again</button>";
                 }; ?>
             </div>
@@ -337,9 +320,9 @@ if (isset($_POST['bankingPaymentBtn'])) {
     </div>
 </div>
 <!-- End of Modal -->
-<?php require_once "../components/footer.php"; ?>
-<?php require_once "../script/general_scripts.php"; ?>
-<script src="../js/payment.js"></script>
+<?php require_once "./components/footer.php"; ?>
+<?php require_once "./script/general_scripts.php"; ?>
+<script src="./js/payment.js"></script>
 <script>
     $(function() {
         <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>
