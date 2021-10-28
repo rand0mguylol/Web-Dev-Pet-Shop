@@ -55,7 +55,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
 }
 ?>
 
-<div class="cart-container container-fluid p-5 m-3 ">
+<div class=" container-fluid p-5 m-3 ">
     <div class="row mx-lg-5 justify-content-around">
         <!-- cart details -->
         <section class="col-md-7 py-3 px-lg-5 border bg-light rounded-3 d-flex justify-content-end flex-column">
@@ -69,7 +69,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                 </div>
             </section>
             <!-- product list -->
-            <section class="container overflow-auto">
+            <section class="cart-container container overflow-auto">
                 <?php if (!$cartitems) : ?>
                     <div class="row">
                         <h6 class="col no-cart-item">Sadly there is nothing left in your cart... Back to your shopping journey Go Go Go~</h6>
