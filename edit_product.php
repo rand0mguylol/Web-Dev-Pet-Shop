@@ -28,7 +28,7 @@ else {
 <?php require_once "./components/navbar.php"; ?>
 <div class="main-wrapper profile mt-3 mb-5">
   <div class="container">
-    <h1>EDIT ITEM</h1>
+    <h1 class = "text-center">EDIT ITEM</h1>
     <?php if ($_GET["type"] === "pet"): ?>
       <form class="row g-3 " id="register-form" action="./controller/register_user.php" method="POST">
         <div class="col-md-12">
