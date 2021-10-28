@@ -51,7 +51,7 @@ if (isset($_SESSION["accountCreationError"])) {
 
             <div class="col-md-12">
                 <label for="inputEmail" class="form-label">Email*</label>
-                <input type="text" class="form-control" id="inputEmail" placeholder="Email Address" name="email" value="<?php echo isset($_POST['email']) && !in_array("email", $errorArray) ? htmlspecialchars($email) : '' ?>" required>
+                <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name="email" value="<?php echo isset($_POST['email']) && !in_array("email", $errorArray) ? htmlspecialchars($email) : '' ?>" required>
                 <?php if (in_array("email", $errorArray)) :  ?>
                     <p class="mt-1 text-danger mb-0">Please enter a valid email</p>
                 <?php endif; ?>
