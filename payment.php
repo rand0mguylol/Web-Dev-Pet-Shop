@@ -177,7 +177,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
         </section>
         <!-- end of cart details -->
         <!-- payment -->
-        <section class="col-md-4 py-2 px-lg-2 border bg-light rounded-3">
+        <section class="col-md-4 py-2 px-lg-2 border bg-light rounded-3  d-flex align-items-center flex-column justify-content-center">
             <div class="row">
                 <h3 class="m-4">Payment Info</h3>
             </div>
