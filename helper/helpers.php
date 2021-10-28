@@ -120,12 +120,11 @@ function validateCreditCard($cardNumber, $cardType, $expiryMonth, $expiryYear, $
             $card = $key;
         }
     }
-    if($card){
+    if(isset($card)){
         if ($card === $cardType) {
             $invalidCardMsg = NULL;
         }
     }
-
     $cardExpiryDate = DateTime::createFromFormat('my', $expiryMonth . $expiryYear);
     $now = new DateTime();
     if ($cardExpiryDate > $now) {
@@ -142,18 +141,19 @@ function validateCreditCard($cardNumber, $cardType, $expiryMonth, $expiryYear, $
         "expiryErr" => $expiredCardMsg,
         "CVVErr" => $InvalidCVVMsg
     ];
+
     foreach ($errMsgArray as $key => $value) {
         if (is_null($value)) {
             unset($errMsgArray[$key]);
         }
     }
+    
     if (!empty($errMsgArray)) {
         return $errMsgArray;
     } else {
         return false;
     }
 }
-
 
 function returnType($category)
 {

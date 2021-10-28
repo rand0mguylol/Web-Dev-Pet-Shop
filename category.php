@@ -3,6 +3,10 @@ session_start();
 require_once "./connection/db.php";
 require_once "./helper/helpers.php";
 
+if (isset($_SESSION['payment']))
+    {unset($_SESSION['payment']);
+}
+
 if (isset($_GET["category"])) {
     $category = sanitizeText($_GET["category"]);
     $categoryHeader = getCategoryInfo($connection, $category);
