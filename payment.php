@@ -67,7 +67,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
             </section>
             <!-- product list -->
             <section class="cart-container container overflow-auto">
-                
+
             </section>
             <!-- End of product list -->
             <section class="container mt-auto">
@@ -228,11 +228,11 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="bank-account">Account Name</label>
-                                    <input type="text" class="form-control" placeholder="" name="bank-account" id="bank-account">
+                                    <input type="text" class="form-control" placeholder="" name="bank-account" id="bank-account" required>
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="bank-password">Password</label>
-                                    <input type="password" class="form-control" placeholder="" name="bank-password" id="bank-password">
+                                    <input type="password" class="form-control" placeholder="" name="bank-password" id="bank-password" required>
                                 </div>
                                 <div class="form-group text-center m-3">
                                     <button class="btn btn-primary payment-btn disabled" type="submit" name="bankingPaymentBtn">Confirm</button>
@@ -297,9 +297,20 @@ if (isset($_POST['bankingPaymentBtn'])) {
 <?php require_once "./script/general_scripts.php"; ?>
 <script src="./js/payment.js"></script>
 <script>
-    function getCartItems(){
+    function getCartItems() {
         $('.cart-container').load('./getCartItems.php');
     }
+
+    function deletePaymentSession() {
+        $.post('./controller/session_killer.php', {
+            destroyPaymentSession: 1
+        });
+    }
+    <?php if (isset($_SESSION['payment'])):?>
+    $(".unset-session").click(
+        deletePaymentSession
+        );
+    <?php endif?>
     $(function() {
         getCartItems();
         <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>

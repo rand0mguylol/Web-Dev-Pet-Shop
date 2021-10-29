@@ -17,6 +17,7 @@
     <form method="POST" action="./controller/update_cart_item.php">
       <div class="row product-container mb-4 align-items-center">
         <input type="hidden" name="product[<?php echo $key; ?>][cartItemId]" value="<?php echo $cartitems[$key]['cartItemId']; ?>">
+        <input type="hidden" name="product[<?php echo $key; ?>][price]" value="<?php echo $cartitems[$key]['price']; ?>">
         <div class="col-1 text-center">
           <button type="submit" name="removeItemBtn" data-field="<?php echo $key;?>"><i class="fas fa-trash-alt fa-lg"></i></button>
         </div>
