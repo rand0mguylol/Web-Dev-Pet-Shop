@@ -775,9 +775,10 @@ function rateEligibility($orderItemId, $connection)
 function getAdminSearch($connection, $type, $q){
     $adminSearchArray = [];
     if ($type === "pet") {
-        $sql = "SELECT pets.petId as id , pets.name FROM  pets  WHERE pets.name LIKE ? ;";
+        $sql = "SELECT DISTINCT pets.petId as id, pets.name FROM pets, petcategory WHERE pets.petCatId = petcategory.petCatId AND (pets.name LIKE ? OR petcategory.category LIKE ?);";
+
     } else if ($type === "product") {
-        $sql = "SELECT products.productId as id, products.name  FROM products  WHERE products.name LIKE ?;";
+        $sql = "SELECT DISTINCT products.productId as id, products.name FROM products, productcategory WHERE products.productCatId = productcategory.productCatId AND (products.name LIKE ? OR productcategory.category LIKE ?);";
     } else {
         return false;
     }
@@ -786,8 +787,10 @@ function getAdminSearch($connection, $type, $q){
     // if(!$stmt){
     //   return false;
     // }
+
     $searchKeyword = "%$q%";
-    $stmt->bind_param("s", $searchKeyword);
+
+    $stmt->bind_param("ss", $searchKeyword, $searchKeyword);
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {

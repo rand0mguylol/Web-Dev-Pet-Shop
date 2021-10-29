@@ -645,6 +645,14 @@ input[type="number"] {
   border: 1px solid #000;
 }
 
+.item-current-info{
+  max-width: 400px;
+}
+
+.edit-item-container{
+  padding: 0 11rem;
+}
+
 @media (max-width: 1399px){
   .view-button{
     display: inline;
