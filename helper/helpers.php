@@ -830,3 +830,52 @@ function getAdminEditItem($connection, $type, $id){
     // ];
     return $itemArray;
 }
+
+
+function validateAdminProductInfo($postArray){
+    $errorArray = [];
+
+    $sanitizeTextArray = [
+    "name" => $postArray["name"],
+    "description" => $postArray["description"],
+    "brand" => $postArray["brand"],
+    "weight" => $postArray["weight"],
+    "warrantyPeriod" => $postArray["warrantyPeriod"],
+    "productDimensions" => $postArray["productDimensions"]
+    ];
+
+    foreach ($sanitizeTextArray as $key => $value){
+    if($key === "description"){
+        $sanitizeTextArray[$key]= str_replace("\n", "[NEWLINE]", $value);
+    }
+    $sanitizeTextArray[$key] = sanitizeText($value);
+
+    if(!$value){
+        array_push($errorArray, $key);
+    }
+
+    if($key === "description"){
+        $sanitizeTextArray[$key]= str_replace("[NEWLINE]", "\n", $value);
+    }
+    }
+
+    $price = filter_var($postArray["price"], FILTER_VALIDATE_FLOAT);
+
+    if(!$price){
+        array_push($errorArray, "price");
+    }else{
+        $price = round($price, 2);
+    }
+
+    $quantity = filter_var($postArray["price"], FILTER_VALIDATE_INT);
+
+    if(!$quantity){
+        array_push($errorArray, "quantity");
+    }
+
+    if($errorArray){
+        return $errorArray;
+    }
+
+    return false;
+}
