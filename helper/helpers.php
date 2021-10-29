@@ -567,7 +567,7 @@ function saveImage($mimeType, $image, $connection, $id, $hasImage)
 
 function createOrder($userid, $paymentMethod, $type = null, $deliveryMethod, $total, $connection)
 {
-    $stmt = $connection->prepare("INSERT INTO orders VALUES('',?,?,?,NULL,?);");
+    $stmt = $connection->prepare("INSERT INTO orders (userId, paymentMethod, deliveryMethod, total)  VALUES(?,?,?,?);");
     $paymentMethod = "$paymentMethod - $type";
     $stmt->bind_param("issi", $userid, $paymentMethod, $deliveryMethod, $total);
     $stmt->execute();
