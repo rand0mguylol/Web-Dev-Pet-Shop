@@ -3,7 +3,6 @@
 <?php $title = "Checkout Page"; ?>
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
-
 <?php
 $userid = $_SESSION['user']['userID'] ?? null;
 if (isset($userid)) {
@@ -31,7 +30,7 @@ if (isset($_POST['cardPaymentBtn'])) {
             ];
         }
     } else {
-        $_SESSION['payment'] = "-1";
+        $_SESSION['payment'] = NULL;
     }
 }
 if (isset($_POST['bankingPaymentBtn'])) {
@@ -250,12 +249,12 @@ if (isset($_POST['bankingPaymentBtn'])) {
 <div class="modal fade" id="paymentReport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header <?php if (is_array($_SESSION['payment'])) {
+            <div class="modal-header <?php if (isset($_SESSION['payment'])) {
                                             echo "bg-success";
                                         } else {
                                             echo "bg-danger";
                                         }; ?>">
-                <h5 class="modal-title" id="exampleModalLongTitle"><?php if (is_array($_SESSION['payment'])) {
+                <h5 class="modal-title" id="exampleModalLongTitle"><?php if (isset($_SESSION['payment'])) {
                                                                         echo "Payment Successful";
                                                                     } else {
                                                                         echo "Error!";
@@ -267,7 +266,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                 <?php endif ?>
             </div>
             <div class="modal-body">
-                <?php if (is_array($_SESSION['payment'])) : ?>
+                <?php if (isset($_SESSION['payment'])) : ?>
                     <div class='container'>
                         <div class='row p-1 border-bottom h5'>Receipt</div>
                         <div class='row p-1'>OrderID : <?php echo $_SESSION['payment']['orderID']; ?></div>
@@ -282,7 +281,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                 <?php endif ?>
             </div>
             <div class="modal-footer">
-                <?php if (is_array($_SESSION['payment'])) {
+                <?php if (isset($_SESSION['payment'])) {
                     echo "<a href='./index.php' class='btn btn-primary unset-session'>Back To Home</a>";
                 } else {
                     echo "<a href='./index.php' class='btn btn-primary unset-session' >Back To Home</a>
@@ -306,17 +305,18 @@ if (isset($_POST['bankingPaymentBtn'])) {
             destroyPaymentSession: 1
         });
     }
-    <?php if (isset($_SESSION['payment'])):?>
-    $(".unset-session").click(
-        deletePaymentSession
-        );
-    <?php endif?>
+
     $(function() {
         getCartItems();
         <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>
             $('#modalBtn').click();
         <?php endif ?>
     })
+    <?php if(isset($_SESSION['payment'])):?>
+        $('.unset-session').click(
+            deletePaymentSession
+            );
+    <?php endif ?>
 </script>
 </body>
 
