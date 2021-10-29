@@ -21,18 +21,41 @@ if (isset($_POST['cardPaymentBtn'])) {
     $cvv = $_POST['cvv'];
     $deliveryMethod = $_POST['deliveryMethod'];
     $total = $_POST['total'];
-    $_SESSION['payment'] = "-1";
+    $err = validateCreditCard($cardNumber, $type, $expiryMonth, $expiryYear, $cvv);
+    if (!$err) {
+        $orderid = createOrder($userid, $paymentMethod, $type, $deliveryMethod, $total, $connection);
+        if ($orderid) {
+            addOrderItems($cartid, $orderid, $connection);
+            $_SESSION['payment'] = [
+                'orderID' => $orderid,
+                'paymentMethod' => "$paymentMethod - $type",
+                'deliveryMethod' => $deliveryMethod,
+                "total" => $total
+            ];
+        }
+    } else {
+        $_SESSION['payment'] = "-1";
+    }
 }
 if (isset($_POST['bankingPaymentBtn'])) {
     $paymentMethod = $_POST['paymentMethod'];
     $type = $_POST['bank'];
     $deliveryMethod = $_POST['deliveryMethod'];
     $total = $_POST['total'];
-    $_SESSION['payment'] = "-1";
+    $orderid = createOrder($userid, $paymentMethod, $type, $deliveryMethod, $total, $connection);
+    if ($orderid) {
+        addOrderItems($cartid, $orderid, $connection);
+        $_SESSION['payment'] = [
+            'orderID' => $orderid,
+            'paymentMethod' => "$paymentMethod - $type",
+            'deliveryMethod' => $deliveryMethod,
+            "total" => $total
+        ];
+    }
 }
 ?>
 
-<div class="cart-container container-fluid p-5 m-3 ">
+<div class=" container-fluid p-5 m-3 ">
     <div class="row mx-lg-5 justify-content-around">
         <!-- cart details -->
         <section class="col-md-7 py-3 px-lg-5 border bg-light rounded-3 d-flex justify-content-end flex-column">
@@ -46,7 +69,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                 </div>
             </section>
             <!-- product list -->
-            <section class="container overflow-auto">
+            <section class="cart-container container overflow-auto">
                 <?php if (!$cartitems) : ?>
                     <div class="row">
                         <h6 class="col no-cart-item">Sadly there is nothing left in your cart... Back to your shopping journey Go Go Go~</h6>
@@ -154,7 +177,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
         </section>
         <!-- end of cart details -->
         <!-- payment -->
-        <section class="col-md-4 py-2 px-lg-2 border bg-light rounded-3">
+        <section class="col-md-4 py-2 px-lg-2 border bg-light rounded-3  d-flex align-items-center flex-column justify-content-center">
             <div class="row">
                 <h3 class="m-4">Payment Info</h3>
             </div>

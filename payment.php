@@ -7,9 +7,6 @@
 <?php
 $userid = $_SESSION['user']['userID'] ?? null;
 if (isset($userid)) {
-    $cartid = getCartId($userid, $connection);
-    $subtotal = getCartTotal($cartid, $connection);
-    $cartitems = getCartItems($cartid, $connection);
     $cartSubtotal = getCartTotal($cartid, $connection);
 }
 if (isset($_POST['cardPaymentBtn'])) {
@@ -70,54 +67,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
             </section>
             <!-- product list -->
             <section class="cart-container container overflow-auto">
-                <?php if (!$cartitems) : ?>
-                    <div class="row">
-                        <h6 class="col no-cart-item">Sadly there is nothing left in your cart... Back to your shopping journey Go Go Go~</h6>
-                    </div>
-                <?php else : ?>
-                    <?php foreach ($cartitems as $index => $item) : ?>
-                        <!-- Product -->
-                        <form method="POST" action="./controller/remove_cart_item.php">
-                            <div class="row product-container mb-4 align-items-center">
-                                <div class="col-1 text-center">
-                                    <button type="submit" name="remove-item-from-cart-btn" value="<?php echo $cartitems[$index]['cartItemId']; ?>"><i class="fas fa-trash-alt fa-lg"></i></button>
-                                </div>
-                                <div class="product col-6 text-start">
-                                    <div class="card mb-3 border-0 bg-transparent ">
-                                        <div class="row no-gutters align-items-center text-center">
-                                            <div class="col-md-4">
-                                                <a href="#">
-                                                    <img src="<?php echo $cartitems[$index]['image']; ?>" alt="<?php echo $cartitems[$index]['name'], ' Image'; ?>" id="productpic" class=" paymentpic img-thumbnail img-responsive">
-                                                </a>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <p class="card-text text-start"><?php echo $cartitems[$index]['name']; ?></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="input-group justify-content-center">
-                                        <button type="submit" class="btn btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
-                                            <i class="fas fa-minus fa-sm"></i>
-                                        </button>
-                                        <input type="hidden" name="product[<?php echo $index; ?>]['id']" value="<?php echo $cartitems[$index]['id']; ?>">
-                                        <input type="number" name="product[<?php echo $index; ?>]['quantity']" class="form-control input-number text-center quantity-input" value="<?php echo $cartitems[$index]['quantity']; ?>" min="1" max="<?php echo $cartitems[$index]['maxQuantity']; ?>">
-                                        <button type="submit" class="btn btn-outline-secondary btn-number" data-type="plus" data-field="quant[1]">
-                                            <i class="fas fa-plus fa-sm"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="col-2 text-end">
-                                    RM <?php echo number_format($cartitems[$index]['subtotal'], 2, '.', ''); ?>
-                                </div>
-                            </div>
-                        </form>
-                        <!-- End of Product -->
-                    <?php endforeach ?>
-                <?php endif ?>
+                
             </section>
             <!-- End of product list -->
             <section class="container mt-auto">
@@ -311,7 +261,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                                                         echo "Error!";
                                                                     }; ?></h5>
                 <?php if ($_SESSION['payment'] === "-1") : ?>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close unset-session" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 <?php endif ?>
@@ -333,10 +283,10 @@ if (isset($_POST['bankingPaymentBtn'])) {
             </div>
             <div class="modal-footer">
                 <?php if (is_array($_SESSION['payment'])) {
-                    echo "<a href='./index.php' class='btn btn-primary'>Back To Home</a>";
+                    echo "<a href='./index.php' class='btn btn-primary unset-session'>Back To Home</a>";
                 } else {
-                    echo "<a href='./index.php' class='btn btn-primary' >Back To Home</a>
-                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Try Again</button>";
+                    echo "<a href='./index.php' class='btn btn-primary unset-session' >Back To Home</a>
+                    <button type='button' class='btn btn-secondary unset-session' data-bs-dismiss='modal'>Try Again</button>";
                 }; ?>
             </div>
         </div>
@@ -347,7 +297,11 @@ if (isset($_POST['bankingPaymentBtn'])) {
 <?php require_once "./script/general_scripts.php"; ?>
 <script src="./js/payment.js"></script>
 <script>
+    function getCartItems(){
+        $('.cart-container').load('./getCartItems.php');
+    }
     $(function() {
+        getCartItems();
         <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>
             $('#modalBtn').click();
         <?php endif ?>

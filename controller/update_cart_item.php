@@ -11,6 +11,6 @@ function removeCartItem($cartItemId,$cartid,$connection){
   exit();
 }
 $cartid = getCartId($_SESSION['user']['userID'],$connection);
-$deleted_cartitem_id = $_POST['remove-item-from-cart-btn'];
-removeCartItem($deleted_cartitem_id,$cartid,$connection);
+$deletedId = $_POST['cartItemId'];
+removeCartItem($deletedId,$cartid,$connection);
 ?>
