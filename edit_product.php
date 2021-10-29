@@ -43,7 +43,7 @@ else {
       </div>
       <div class = "">
       <h2 class = "mb-3">Edit Info</h2>
-        <form class="row g-3 " id="register-form" action="./controller/edit_product_controller.php?type=<?php echo $_GET["type"]?>" method="POST">
+        <form class="row g-3 " id="register-form" action="./controller/edit_product_controller.php?type=<?php echo $_GET["type"]?>&id=<?php echo $_GET["id"];?>" method="POST">
           <?php if ($_GET["type"] === "pet"): ?>
               <div class="col-md-12">
                   <label for="inputFirstName" class="form-label">Name</label>

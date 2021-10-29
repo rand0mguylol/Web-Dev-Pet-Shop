@@ -57,9 +57,31 @@ if (isset($_POST["updateItem"]) && $_GET["type"] === "product"){
     array_push($errorArray, "price");
   }else{
     $price = round($price, 2);
+    array_push($sanitizeTextArray, $price);
   }
 
   $quantity= filter_var($_POST["price"], FILTER_VALIDATE_INT);
+
+  if(!$quantity){
+    array_push($errorArray, "quantity");
+  }else{
+    array_push($sanitizeTextArray, $quantity);
+  }
+
+  if($errorArray){
+    $_SESSION["updateItemError"] = $errorArray;
+  }else{
+    $stmt = $connection -> prepare("UPDATE products SET name= ?  ,price = ?, quantity = ?, status = ?, 
+    description = ? , brand = ? , weight = ?, warrantyPeriod = ?, productDimensions = ? WHERE productId = ?");
+
+    $stmt->bind_param("siiisssssi", $sanitizeTextArray["name"], $sanitizeTextArray["price"], $_POST["status"], $sanitizeTextArray["status"], 
+    $sanitizeTextArray["description"], $sanitizeTextArray["brand"], $sanitizeTextArray["weight"], $sanitizeTextArray["warrantyPeriod"], $sanitizeTextArray["productDimensions"], $id );
+    $stmt->execute();
+    $stmt->close();
+    $_SESSION["updateItemMessage"] = "Item Successfully Updated";
+  }
 }
+
+
 
 
