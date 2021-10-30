@@ -24,9 +24,7 @@ if (isset($_SESSION["user"]["userRole"], $_GET["id"], $_GET["type"]) && $_SESSIO
     $alertMessage= $_SESSION["updateItemMessage"];
     unset($_SESSION["updateItemMessage"]);
   }
-
 }
-
 else {
   header("Location: ./index.php");
   exit();
