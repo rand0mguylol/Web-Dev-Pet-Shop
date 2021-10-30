@@ -4,6 +4,7 @@ $title = "Admin Panel";
 require_once "./helper/helpers.php";
 require_once "./connection/db.php";
 
+
 if (isset($_SESSION["user"]["userRole"], $_GET["id"], $_GET["type"]) && $_SESSION["user"]["userRole"] === "STAFF") {
 
   if (empty($_GET["id"]) || empty($_GET["type"])){
@@ -13,6 +14,16 @@ if (isset($_SESSION["user"]["userRole"], $_GET["id"], $_GET["type"]) && $_SESSIO
 
   $type = sanitizeText($_GET["type"]);
   $itemArray = getAdminEditItem($connection, $type, $_GET["id"]);
+
+  if(isset($_SESSION["updateItemError"])){
+    $errorArray = $_SESSION["updateItemError"];
+    unset($_SESSION["updateItemError"]);
+  }
+
+  if(isset($_SESSION["updateItemMessage"])){
+    $alertMessage= $_SESSION["updateItemMessage"];
+    unset($_SESSION["updateItemMessage"]);
+  }
 
 }
 
@@ -25,6 +36,35 @@ else {
 
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
+
+<?php if (isset($alertMessage)) : ?>
+        <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
+            <strong><?php echo $alertMessage; ?></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+<?php if(isset($errorArray)): ?>
+<div class="modal fade" id="editProductModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Update Failed</h5>
+            <button type="button" class="btn-close closeEditProductModal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <?php foreach($errorArray as $err): ?>
+            <p><?php echo $err;?></p>
+            <?php endforeach; ?>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary closeEditProductModal"  data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <div class="main-wrapper profile mt-3 mb-5">
   <div class="container-fluid edit-item-container">
     <div class = "d-flex justify-content-between mt-5">
@@ -105,7 +145,7 @@ else {
               </div>
               <div class="col-md-12">
                   <label for="inputLastName" class="form-label">Price</label>
-                  <input type="number" class="form-control" id="inputLastName" placeholder="Price" name="price" value = "<?php echo $itemArray["price"];?>">
+                  <input type="number" step = ".01" class="form-control" id="inputLastName" placeholder="Price" name="price" value = "<?php echo $itemArray["price"];?>">
               </div>
               <div class="col-md-12">
                   <label for="inputLastName" class="form-label">Quantity</label>
@@ -113,7 +153,7 @@ else {
               </div>
               <div class="col-md-6">
                   <label for="inputTelephone" class="form-label">Status</label>
-                  <select class="form-select" aria-label="Default select example">
+                  <select class="form-select" aria-label="Default select example" name = "status">
                     <option value = "1" <?php if ($itemArray["status"] === 1)  echo "selected";?> >Available</option>
                     <option value="0" <?php if ($itemArray["status"] === 0)  echo "selected";?> >Not Available</option>
                   </select>
@@ -147,8 +187,8 @@ else {
   </div>
 </div>
 <?php require_once "./script/general_scripts.php"; ?>
-<script src="./js/profile.js"></script>
 <script src="./js/aos.js"></script>
+<script src = "./js/edit_product.js"></script>
 <!-- For Rating System -->
 <script src="./js/rating.js"></script>
 <?php require_once "./components/footer.php"; ?>

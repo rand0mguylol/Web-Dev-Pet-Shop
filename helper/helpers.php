@@ -830,3 +830,174 @@ function getAdminEditItem($connection, $type, $id){
     // ];
     return $itemArray;
 }
+
+function isAssociativeArray($array){
+    if(count(array_filter(array_keys($array), 'is_string')) > 0){
+        return true;
+    }
+    return false;
+}
+
+function adminValidatePet($postArray){
+    $errorArray = [];
+    $sanitizeTextArray = [
+        "name" => $postArray["name"],
+        "weight" => $postArray["weight"],
+        "color" => $postArray["color"],
+        "petCondition" => $postArray["petCondition"]
+    ];
+
+    $validateSelectArray = [
+        "vaccinated" => $postArray["vaccinated"],
+        "dewormed" => $postArray["dewormed"]
+    ];
+
+    foreach ($sanitizeTextArray as $key => $value){
+        $sanitizeProducttArray[$key] = sanitizeText($value);
+
+        if(!$value){
+        array_push($errorArray, "Invalid $key");
+        }
+    }
+
+    foreach ($validateSelectArray as $key => $value){
+
+        echo strtolower($value);
+
+        if(strtolower($value) !== "yes" && strtolower($value) !== "no"){
+        array_push($errorArray, "$key field has invalid value");
+        }
+    }
+
+    $status = $postArray["status"];
+
+    if($status !== "0" && $status !== "1"){
+        array_push($errorArray, "Status field has invalid value");
+    }
+
+    $price = filter_var($postArray["price"], FILTER_VALIDATE_FLOAT);
+
+    if(!$price){
+        array_push($errorArray, "Invalid Price");
+    }else{
+        $price = round($price, 2);
+    }
+
+    $gender = strtolower($postArray["gender"]);
+    echo $gender;
+
+    if (strtolower($gender) !== "male" && strtolower($gender) !== 'female'){
+        array_push($errorArray, "Invalid Gender");
+    }
+
+    $checkBirthDate = explode("-", $postArray["birthDate"]);
+    if(checkdate((int)$checkBirthDate[1], (int)$checkBirthDate[2], (int)$checkBirthDate[0])){
+        $new_date = date("Y-m-d", strtotime($_POST["birthDate"]));
+    }else{
+        array_push($errorArray, "Invalid Birth Date");
+    }
+
+    if($errorArray){
+        return $errorArray;
+    }
+
+    $adminPetArray = [
+        "name" => $sanitizeTextArray["name"],
+        "weight" => $sanitizeTextArray["weight"],
+        "color" => $sanitizeTextArray["color"],
+        "petCondition" => $sanitizeTextArray["petCondition"],
+        "birthDate" => $new_date,
+        "price" => $price,
+        "gender" => $gender,
+        "status" => $status,
+        "vaccinated" => $validateSelectArray["vaccinated"],
+        "dewormed" => $validateSelectArray["dewormed"]
+    ];
+
+    return $adminPetArray;
+}
+
+
+function adminUpdatePet($connection, $petArray, $id){
+    $stmt = $connection -> prepare("UPDATE pets SET name= ?, price = ?,  status = ?, 
+    gender = ? , birthDate = ? , weight = ?, color = ?, petCondition = ?, vaccinated = ?, dewormed = ? WHERE petId = ?");
+
+    $stmt->bind_param("ssisssssssi", $petArray["name"], $petArray["price"], $petArray["status"], $petArray["gender"], $petArray["birthDate"], $petArray["weight"], 
+    $petArray["color"],$petArray["petCondition"], $petArray["vaccinated"], $petArray["dewormed"], $id );
+    $stmt->execute();
+    $stmt->close();
+}
+
+function adminValidateProduct($postArray){
+    $errorArray = [];
+
+    $sanitizeProducttArray = [
+        "name" => $postArray["name"],
+        "description" => $postArray["description"],
+        "brand" => $postArray["brand"],
+        "weight" => $postArray["weight"],
+        "warrantyPeriod" => $postArray["warrantyPeriod"],
+        "productDimensions" => $postArray["productDimensions"]
+    ];
+
+    foreach ($sanitizeProducttArray as $key => $value){
+        if($key === "description"){
+            $sanitizeProducttArray[$key]= str_replace("\n", "[NEWLINE]", $value);
+        }
+            $sanitizeProducttArray[$key] = sanitizeText($value);
+
+        if(!$value){
+            array_push($errorArray,"Invalid ". strtolower($key));
+        }
+
+        if($key === "description"){
+            $sanitizeProducttArray[$key]= str_replace("[NEWLINE]", "\n", $value);
+        }
+    }
+
+    $price = filter_var($postArray["price"], FILTER_VALIDATE_FLOAT);
+
+    if(!$price){
+        array_push($errorArray, "Invalid Price");
+    }else{
+        $price = round($price, 2);
+    }
+
+    $quantity= filter_var($postArray["quantity"], FILTER_VALIDATE_INT);
+
+    if(!$quantity){
+        array_push($errorArray, "Invalid Quantity");
+    }
+
+    if($_POST["status"] !== "1" && $_POST["status"] !== "0"){
+        array_push($errorArray, "Invalid value in status field");
+    }
+
+    if($errorArray){
+        return $errorArray;
+    }
+
+    $adminProductArray = [
+        "name" => $sanitizeProducttArray ["name"],
+        "description" => $sanitizeProducttArray ["description"],
+        "brand" => $sanitizeProducttArray ["brand"],
+        "weight" => $sanitizeProducttArray ["weight"],
+        "warrantyPeriod" => $sanitizeProducttArray ["warrantyPeriod"],
+        "productDimensions" => $sanitizeProducttArray ["productDimensions"],
+        "price" => $price,
+        "quantity" => $quantity,
+        "status" => $_POST["status"]
+    ];
+
+    return $adminProductArray;
+}
+
+function adminUpdateProduct($connection, $id, $productArray){
+    $stmt = $connection -> prepare("UPDATE products SET name= ?  ,price = ?, quantity = ?, status = ?, 
+    description = ? , brand = ? , weight = ?, warrantyPeriod = ?, productDimensions = ? WHERE productId = ?");
+
+    $stmt->bind_param("ssiisssssi", $productArray["name"], $productArray["price"], $productArray["quantity"], $productArray['status'], 
+    $productArray["description"], $productArray["brand"], $productArray["weight"], $productArray["warrantyPeriod"], $productArray["productDimensions"], $id );
+    $stmt->execute();
+    $stmt->close();
+}
