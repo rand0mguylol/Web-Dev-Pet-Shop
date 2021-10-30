@@ -181,7 +181,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                     <input type="number" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" name="cardNumber" id="cardNumber" required>
                                 </div>
                                 <div class="form-group m-3">
-                                    <label>Expiration Date</label>
+                                    <label>Card Expiry Date</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" placeholder="MM" name="expiryMonth" required>
                                         <input type="number" class="form-control" placeholder="YY" name="expiryYear" required>
