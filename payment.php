@@ -174,22 +174,22 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="holderName">Card Holder Name (As stated on card)</label>
-                                    <input type="text" class="form-control" name="holderName" id="holderName" pattern="[a-zA-Z0-9\s]+{5,}">
+                                    <input type="text" class="form-control" name="holderName" id="holderName" pattern="[a-zA-Z0-9\s]+{5,}" required>
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="cardNumber">Card Number</label>
-                                    <input type="number" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" name="cardNumber" id="cardNumber">
+                                    <input type="number" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" name="cardNumber" id="cardNumber" required>
                                 </div>
                                 <div class="form-group m-3">
                                     <label>Expiration Date</label>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" placeholder="MM" name="expiryMonth">
-                                        <input type="number" class="form-control" placeholder="YY" name="expiryYear">
+                                        <input type="number" class="form-control" placeholder="MM" name="expiryMonth" required>
+                                        <input type="number" class="form-control" placeholder="YY" name="expiryYear" required>
                                     </div>
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="cvv">CVV</label>
-                                    <input type="number" class="form-control" name="cvv" id="cvv">
+                                    <input type="number" class="form-control" name="cvv" id="cvv" required>
                                 </div>
                                 <div class="form-group text-center m-3">
                                     <button class="btn btn-primary payment-btn disabled" type="submit" name="cardPaymentBtn">Confirm</button>
