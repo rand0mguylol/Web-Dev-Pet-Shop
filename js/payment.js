@@ -11,11 +11,17 @@ $('.quantity-changer').click(function(e) {
     var price = parseFloat($("input[name='" + targetData + "[price]']").val());
     var QuantityInput = $("input[name='" + targetData + "[quantity]']");
     var oldQuantity = parseInt(QuantityInput.val());
+    var subtotal = parseFloat($("#subtotal").text());
+    var itemSubtotal = parseFloat($("#itemSubtotal[data-field='" + targetData + "']").val());
     if (!isNaN(oldQuantity)) {
         if (operation == 'minus') {
             if (oldQuantity > QuantityInput.attr('min')) {
                 QuantityInput.val(oldQuantity - 1).change();
                 $("button[data-field ='" + targetData + "'][data-type ='plus']").attr('disabled', false);
+                var newSubtotal = subtotal - price;
+                $("#totalAmount").text(newSubtotal.toFixed(2));
+                $("#subtotal").text(newSubtotal.toFixed(2));
+                $("#itemSubtotal[data-field='" + targetData + "']").val(itemSubtotal - price);
             }
             if (parseInt(QuantityInput.val()) == QuantityInput.attr('min')) {
                 $("button[data-field ='" + targetData + "'][data-type ='minus']").attr('disabled', true);
@@ -24,6 +30,10 @@ $('.quantity-changer').click(function(e) {
             if (oldQuantity < QuantityInput.attr('max')) {
                 QuantityInput.val(oldQuantity + 1).change();
                 $("button[data-field ='" + targetData + "'][data-type ='minus']").attr('disabled', false);
+                var newSubtotal = subtotal + price;
+                $("#totalAmount").text(newSubtotal.toFixed(2));
+                $("#subtotal").text(newSubtotal.toFixed(2));
+                $("#itemSubtotal[data-field='" + targetData + "']").val(itemSubtotal + price);
             }
             if (parseInt(QuantityInput.val()) == QuantityInput.attr('max')) {
                 $("button[data-field ='" + targetData + "'][data-type ='plus']").attr('disabled', true);

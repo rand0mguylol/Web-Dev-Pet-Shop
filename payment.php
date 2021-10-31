@@ -112,7 +112,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                     </div>
                                 </div>
                                 <div class="col-2 text-end">
-                                    RM <?php echo number_format($cartitems[$key]['subtotal'], 2, '.', ''); ?>
+                                    RM <span id="itemSubtotal" data-field="<?php echo $key; ?>"><?php echo number_format($cartitems[$key]['subtotal'], 2, '.', ''); ?></span>
                                 </div>
                             </div>
                         </form>
