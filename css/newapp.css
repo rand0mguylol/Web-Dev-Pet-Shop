@@ -653,6 +653,11 @@ input[type="number"] {
   padding: 0 11rem;
 }
 
+.admin-search-container{
+  padding-left: 8rem;
+  padding-right: 8rem;
+}
+
 @media (max-width: 1399px){
   .view-button{
     display: inline;
@@ -677,6 +682,8 @@ input[type="number"] {
   .thumbnail {
     justify-content: start;
   }
+
+ 
 
   /* .product-section .grid{
     grid-template-columns: repeat( 3, minmax(220px, 1fr)) ;;
