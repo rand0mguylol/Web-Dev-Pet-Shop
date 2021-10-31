@@ -225,7 +225,6 @@ if (isset($userid)) {
 
                 <!-- Submit Button -->
                 <div class="col-12 text-center submitButtonContainer">
-
                     <input type="hidden" name="reviewItemId" class="reviewItemInput" value="">
                     <button type="submit" class="btn btn-warning offcanvas-submit" id="submit_review" name="submit">Submit</button>
                 </div>

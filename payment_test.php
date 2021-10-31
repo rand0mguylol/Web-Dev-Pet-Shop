@@ -3,7 +3,6 @@
 <?php $title = "Checkout Page"; ?>
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
-
 <?php
 $userid = $_SESSION['user']['userID'] ?? null;
 if (isset($userid)) {
@@ -34,7 +33,7 @@ if (isset($_POST['cardPaymentBtn'])) {
             ];
         }
     } else {
-        $_SESSION['payment'] = "-1";
+        $_SESSION['payment'] = NULL;
     }
 }
 if (isset($_POST['bankingPaymentBtn'])) {
@@ -75,24 +74,26 @@ if (isset($_POST['bankingPaymentBtn'])) {
                         <h6 class="col no-cart-item">Sadly there is nothing left in your cart... Back to your shopping journey Go Go Go~</h6>
                     </div>
                 <?php else : ?>
-                    <?php foreach ($cartitems as $index => $item) : ?>
+                    <?php foreach ($cartitems as $key => $value) : ?>
                         <!-- Product -->
-                        <form method="POST" action="./controller/remove_cart_item.php">
+                        <form method="POST" action="./controller/update_cart_item.php" name="<?php echo $key; ?>">
                             <div class="row product-container mb-4 align-items-center">
+                                <input type="hidden" name="<?php echo $key; ?>[cartItemId]" value="<?php echo $cartitems[$key]['cartItemId']; ?>">
+                                <input type="hidden" name="<?php echo $key; ?>[price]" value="<?php echo $cartitems[$key]['price']; ?>">
                                 <div class="col-1 text-center">
-                                    <button type="submit" name="remove-item-from-cart-btn" value="<?php echo $cartitems[$index]['cartItemId']; ?>"><i class="fas fa-trash-alt fa-lg"></i></button>
+                                    <button type="submit" name="removeItemBtn"><i class="fas fa-trash-alt fa-lg"></i></button>
                                 </div>
                                 <div class="product col-6 text-start">
                                     <div class="card mb-3 border-0 bg-transparent ">
                                         <div class="row no-gutters align-items-center text-center">
                                             <div class="col-md-4">
                                                 <a href="#">
-                                                    <img src="<?php echo $cartitems[$index]['image']; ?>" alt="<?php echo $cartitems[$index]['name'], ' Image'; ?>" id="productpic" class=" paymentpic img-thumbnail img-responsive">
+                                                    <img src="<?php echo $cartitems[$key]['image']; ?>" alt="<?php echo $cartitems[$key]['name'], ' Image'; ?>" id="productpic" class=" paymentpic img-thumbnail img-responsive">
                                                 </a>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="card-body">
-                                                    <p class="card-text text-start"><?php echo $cartitems[$index]['name']; ?></p>
+                                                    <p class="card-text text-start"><?php echo $cartitems[$key]['name']; ?></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -100,18 +101,18 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                 </div>
                                 <div class="col-3">
                                     <div class="input-group justify-content-center">
-                                        <button type="submit" class="btn btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" data-type="minus" data-field="<?php echo $key; ?>">
                                             <i class="fas fa-minus fa-sm"></i>
                                         </button>
-                                        <input type="hidden" name="product[<?php echo $index; ?>]['id']" value="<?php echo $cartitems[$index]['id']; ?>">
-                                        <input type="number" name="product[<?php echo $index; ?>]['quantity']" class="form-control input-number text-center quantity-input" value="<?php echo $cartitems[$index]['quantity']; ?>" min="1" max="<?php echo $cartitems[$index]['maxQuantity']; ?>">
-                                        <button type="submit" class="btn btn-outline-secondary btn-number" data-type="plus" data-field="quant[1]">
+                                        <input type="number" name="<?php echo $key; ?>[quantity]" class="form-control input-number text-center quantity-input" value="<?php echo $cartitems[$key]['quantity']; ?>" min="1" max="<?php echo $cartitems[$key]['maxQuantity']; ?>">
+                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" data-type="plus" data-field="<?php echo $key; ?>">
                                             <i class="fas fa-plus fa-sm"></i>
                                         </button>
+                                        <button type="submit" class="d-none" name="quantityUpdateBtn" data-field="<?php echo $key; ?>"> </button>
                                     </div>
                                 </div>
                                 <div class="col-2 text-end">
-                                    RM <?php echo number_format($cartitems[$index]['subtotal'], 2, '.', ''); ?>
+                                    RM <?php echo number_format($cartitems[$key]['subtotal'], 2, '.', ''); ?>
                                 </div>
                             </div>
                         </form>
@@ -225,22 +226,22 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="holderName">Card Holder Name (As stated on card)</label>
-                                    <input type="text" class="form-control" name="holderName" id="holderName" pattern="[a-zA-Z0-9\s]+{5,}">
+                                    <input type="text" class="form-control" name="holderName" id="holderName" pattern="([A-z0-9À-ž\s]){2,}" required>
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="cardNumber">Card Number</label>
-                                    <input type="number" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" name="cardNumber" id="cardNumber">
+                                    <input type="number" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" name="cardNumber" id="cardNumber" required>
                                 </div>
                                 <div class="form-group m-3">
-                                    <label>Expiration Date</label>
+                                    <label>Card Expiry Date</label>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" placeholder="MM" name="expiryMonth">
-                                        <input type="number" class="form-control" placeholder="YY" name="expiryYear">
+                                        <input type="number" class="form-control" placeholder="MM" name="expiryMonth" required>
+                                        <input type="number" class="form-control" placeholder="YY" name="expiryYear" required>
                                     </div>
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="cvv">CVV</label>
-                                    <input type="number" class="form-control" name="cvv" id="cvv">
+                                    <input type="number" class="form-control" name="cvv" id="cvv" required>
                                 </div>
                                 <div class="form-group text-center m-3">
                                     <button class="btn btn-primary payment-btn disabled" type="submit" name="cardPaymentBtn">Confirm</button>
@@ -278,11 +279,11 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="bank-account">Account Name</label>
-                                    <input type="text" class="form-control" placeholder="" name="bank-account" id="bank-account">
+                                    <input type="text" class="form-control" placeholder="" name="bank-account" id="bank-account" required>
                                 </div>
                                 <div class="form-group m-3">
                                     <label for="bank-password">Password</label>
-                                    <input type="password" class="form-control" placeholder="" name="bank-password" id="bank-password">
+                                    <input type="password" class="form-control" placeholder="" name="bank-password" id="bank-password" required>
                                 </div>
                                 <div class="form-group text-center m-3">
                                     <button class="btn btn-primary payment-btn disabled" type="submit" name="bankingPaymentBtn">Confirm</button>
@@ -294,30 +295,30 @@ if (isset($_POST['bankingPaymentBtn'])) {
         <!-- end of payment -->
     </div>
 </div>
-<button type="button" class="btn btn-primary d-none" id="modalBtn" data-bs-toggle="modal" data-bs-target="#paymentReport">
+<button type="button" class="btn btn-primary d-none" id="paymentModalBtn" data-bs-toggle="modal" data-bs-target="#paymentReport">
 </button>
-<!-- Modal -->
+<!-- Payment Modal -->
 <div class="modal fade" id="paymentReport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header <?php if (is_array($_SESSION['payment'])) {
+            <div class="modal-header <?php if (isset($_SESSION['payment'])) {
                                             echo "bg-success";
                                         } else {
                                             echo "bg-danger";
                                         }; ?>">
-                <h5 class="modal-title" id="exampleModalLongTitle"><?php if (is_array($_SESSION['payment'])) {
+                <h5 class="modal-title" id="exampleModalLongTitle"><?php if (isset($_SESSION['payment'])) {
                                                                         echo "Payment Successful";
                                                                     } else {
                                                                         echo "Error!";
                                                                     }; ?></h5>
                 <?php if ($_SESSION['payment'] === "-1") : ?>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close unset-session" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 <?php endif ?>
             </div>
             <div class="modal-body">
-                <?php if (is_array($_SESSION['payment'])) : ?>
+                <?php if (isset($_SESSION['payment'])) : ?>
                     <div class='container'>
                         <div class='row p-1 border-bottom h5'>Receipt</div>
                         <div class='row p-1'>OrderID : <?php echo $_SESSION['payment']['orderID']; ?></div>
@@ -332,11 +333,11 @@ if (isset($_POST['bankingPaymentBtn'])) {
                 <?php endif ?>
             </div>
             <div class="modal-footer">
-                <?php if (is_array($_SESSION['payment'])) {
-                    echo "<a href='./index.php' class='btn btn-primary'>Back To Home</a>";
+                <?php if (isset($_SESSION['payment'])) {
+                    echo "<a href='./index.php' class='btn btn-primary unset-session'>Back To Home</a>";
                 } else {
-                    echo "<a href='./index.php' class='btn btn-primary' >Back To Home</a>
-                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Try Again</button>";
+                    echo "<a href='./index.php' class='btn btn-primary unset-session' >Back To Home</a>
+                    <button type='button' class='btn btn-secondary unset-session' data-bs-dismiss='modal'>Try Again</button>";
                 }; ?>
             </div>
         </div>
@@ -345,12 +346,94 @@ if (isset($_POST['bankingPaymentBtn'])) {
 <!-- End of Modal -->
 <?php require_once "./components/footer.php"; ?>
 <?php require_once "./script/general_scripts.php"; ?>
+<?php require_once "./js/aos.js"; ?>
 <script src="./js/payment.js"></script>
 <script>
-    $(function() {
-        <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>
-            $('#modalBtn').click();
-        <?php endif ?>
+    function deletePaymentSession() {
+        $.post('./controller/session_killer.php', {
+            destroyPaymentSession: 1
+        });
+    }
+
+    function updateQuantity(data) {
+        $("#updateModalBtn").click();
+    }
+    <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>
+        $('#paymentModalBtn').click();
+    <?php endif ?>
+    <?php if (isset($_SESSION['payment'])) : ?>
+        $('.unset-session').click(
+            deletePaymentSession
+        );
+    <?php endif ?>
+    $('.quantity-changer').click(function(e) {
+        e.preventDefault();
+        var targetData = $(this).attr('data-field');
+        var operation = $(this).attr('data-type');
+        var price = parseFloat($("input[name='" + targetData + "[price]']").val());
+        var QuantityInput = $("input[name='" + targetData + "[quantity]']");
+        var oldQuantity = parseInt(QuantityInput.val());
+        if (!isNaN(oldQuantity)) {
+            if (operation == 'minus') {
+                if (oldQuantity > QuantityInput.attr('min')) {
+                    QuantityInput.val(oldQuantity - 1).change();
+                    $("button[data-field ='" + targetData + "'][data-type ='plus']").attr('disabled', false);
+                    var subtotal = parseFloat($("#subtotal").text());
+                    var newSubtotal = subtotal - price;
+                    $("#totalAmount").text(newSubtotal.toFixed(2));
+                    $("#subtotal").text(newSubtotal.toFixed(2));
+                }
+                if (parseInt(QuantityInput.val()) == QuantityInput.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+            } else if (operation == 'plus') {
+                if (oldQuantity < QuantityInput.attr('max')) {
+                    QuantityInput.val(oldQuantity + 1).change();
+                    $("button[data-field ='" + targetData + "'][data-type ='minus']").attr('disabled', false);
+                    var subtotal = parseFloat($("#subtotal").text());
+                    var newSubtotal = subtotal + price;
+                    $("#totalAmount").text(newSubtotal.toFixed(2));
+                    $("#subtotal").text(newSubtotal.toFixed(2));
+                }
+                if (parseInt(QuantityInput.val()) == QuantityInput.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+            }
+            var updateBtn = $("button[name='quantityUpdateBtn'][data-field ='" + targetData + "']");
+            updateBtn.click();
+        } else {
+            QuantityInput.val(1);
+        }
+    })
+
+    $('.quantity-input').focus(function() {
+        $(this).attr('oldQuantity', $(this).val());
+    });
+
+    $('.quantity-input').change(function() {
+        var minQuantity = parseInt($(this).attr('min'));
+        var maxQuantity = parseInt($(this).attr('max'));
+        var currentQuantity = parseInt($(this).val());
+        var name = $(this).attr('name');
+        var field = name.split('[quantity]')[0];
+        if (currentQuantity > minQuantity) {
+            $(".btn-number[data-type='minus'][data-field='" + field + "']").removeAttr('disabled')
+        } else {
+            $(this).val(min);
+        }
+        if (currentQuantity < maxQuantity) {
+            $(".btn-number[data-type='plus'][data-field='" + field + "']").removeAttr('disabled')
+        } else {
+            $(this).val(maxQuantity);
+        }
+        var updateBtn = $("button[name='quantityUpdateBtn'][data-field ='" + field + "']");
+        updateBtn.click();
+    });
+    $('.quantity-input').keydown(function(e){
+        if(e.keyCode == 13){
+            var updateBtn = $("button[name='quantityUpdateBtn'][data-field ='" + field + "']");
+            updateBtn.click();
+        }
     })
 </script>
 </body>
