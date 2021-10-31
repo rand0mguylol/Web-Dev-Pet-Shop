@@ -101,11 +101,11 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                 </div>
                                 <div class="col-3">
                                     <div class="input-group justify-content-center">
-                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" <?php if($cartitems[$key]['quantity'] === 1){ echo 'disabled= disabled';} ?> data-type="minus" data-field="<?php echo $key; ?>">
+                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" <?php if($cartitems[$key]['quantity'] === 1 || $cartitems[$key]['category'] === "pet"){ echo 'disabled= disabled';} ?> data-type="minus" data-field="<?php echo $key; ?>">
                                             <i class="fas fa-minus fa-sm"></i>
                                         </button>
-                                        <input type="number" name="<?php echo $key; ?>[quantity]" class="form-control input-number text-center quantity-input" value="<?php echo $cartitems[$key]['quantity']; ?>" min="1" max="<?php echo $cartitems[$key]['maxQuantity']; ?>">
-                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" <?php if($cartitems[$key]['quantity'] === $cartitems[$key]['maxQuantity']){ echo 'disabled= disabled';} ?>  data-type="plus" data-field="<?php echo $key; ?>">
+                                        <input type="number" name="<?php echo $key; ?>[quantity]" class="form-control input-number text-center quantity-input" value="<?php echo $cartitems[$key]['quantity']; ?>" <?php if($cartitems[$key]['category'] === "pet"){ echo 'disabled= disabled';} ?> min="1" max="<?php echo $cartitems[$key]['maxQuantity']; ?>">
+                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" <?php if($cartitems[$key]['quantity'] === $cartitems[$key]['maxQuantity'] || $cartitems[$key]['category'] === "pet"){ echo 'disabled= disabled';} ?>  data-type="plus" data-field="<?php echo $key; ?>">
                                             <i class="fas fa-plus fa-sm"></i>
                                         </button>
                                         <button type="submit" class="d-none" name="quantityUpdateBtn" data-field="<?php echo $key; ?>"> </button>
