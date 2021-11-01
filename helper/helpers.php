@@ -778,7 +778,7 @@ function getAdminSearch($connection, $type, $q){
         $sql = "SELECT DISTINCT pets.petId as id, pets.name, petcategory.category, petimage.imagePath FROM pets, petcategory, petimage WHERE pets.petCatId = petcategory.petCatId AND pets.petId = petimage.petId AND petimage.imageType = 'Card' AND (pets.name LIKE ? OR petcategory.category LIKE ?);";
 
     } else if ($type === "product") {
-        $sql = "SELECT DISTINCT products.productId as id, products.name, productcategory.category, productimage.imagePath  FROM products, productcategory productimage WHERE products.productCatId = productcategory.productCatId AND products.productId = productimage.productId AND productimage.imageType = 'Card' AND (products.name LIKE ? OR productcategory.category LIKE ?);";
+        $sql = "SELECT DISTINCT products.productId as id, products.name, productcategory.category, productimage.imagePath  FROM products, productcategory, productimage WHERE products.productCatId = productcategory.productCatId AND products.productId = productimage.productId AND productimage.imageType = 'Card' AND (products.name LIKE ? OR productcategory.category LIKE ?);";
     } else {
         return false;
     }

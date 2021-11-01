@@ -52,9 +52,10 @@ if(isset($_SESSION["alertMessage"])){
   <div class = "w-75 mx-auto">
     <form action="./controller/delete_gallery_image_controller.php?id=<?php echo $_GET["id"];?>" class = "row g-3 justify-content-center" method="POST">
       <input type="hidden" name = "type" value = "<?php echo $_GET["type"];?>">
-      <select class="form-select d-inline-block w-50" aria-label="Default select example" name = "imageid" >
+      <input type="hidden" name = "imagePath" value ="" id = "imagePathInput">
+      <select class="form-select d-inline-block w-50" aria-label="Default select example" name = "imageid" id = "imageSelect"  onchange="getImagePath(this)">
         <?php foreach ($galleryArray as $gallery): ?>
-        <option value="<?php echo $gallery["id"];?>"><?php echo $gallery["imageName"];?></option>
+        <option value="<?php echo $gallery["id"];?>" data-imagepath = "<?php echo $gallery["imagePath"];?>"><?php echo $gallery["imageName"];?></option>
         <?php endforeach; ?>
       </select>
       <button class = "btn btn-info w-25 ms-3" type = "submit" name = "deleteGalleryImage">Delete Gallery Image</button>
@@ -75,6 +76,28 @@ if(isset($_SESSION["alertMessage"])){
 
 <?php require_once "./script/general_scripts.php"; ?>
 <script src="./js/aos.js"></script>
+<script>
+  const imagePathInput = document.querySelector("#imagePathInput")
+  const imageSelect = document.querySelector("#imageSelect")
+
+
+  // imageSelect.addEventListener("change", function(){
+  //   // imagePathInput.value = this,dataset.imagePath
+  // })
+  function getImagePath(select){
+    let selectedIndex = select.selectedIndex
+    imagePathInput.value = select[selectedIndex].dataset.imagepath
+  }
+
+  window.addEventListener("load", function(){
+    getImagePath(imageSelect)
+  })
+
+
+ 
+
+
+</script>
 <!-- For Rating System -->
 <script src="./js/rating.js"></script>
 <?php require_once "./components/footer.php"; ?>

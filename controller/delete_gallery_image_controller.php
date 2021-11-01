@@ -22,6 +22,8 @@ $stmt->bind_param("i", $_POST["imageid"]);
 $stmt->execute();
 $stmt->close();
 
+unlink("." . $_POST["imagePath"]);
+
 
 $_SESSION["alertMessage"] = "Image Deleted";
 header("Location: ../delete_gallery.php?id=" . $_GET["id"] . "&type=" . $_POST["type"]);
