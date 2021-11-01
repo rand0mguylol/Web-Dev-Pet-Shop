@@ -549,11 +549,11 @@ function saveImage($mimeType, $image, $connection, $id, $hasImage)
             break;
         case "image/jpg":
             $userPic = $userDir . "/user_" . $_SESSION["user"]["userID"] . "_pic" . ".jpg";
-            file_put_contents("$userPic", $image);
+            file_put_contents($userPic, $image);
             break;
         case "image/jpeg":
             $userPic = $userDir . "/user_" . $_SESSION["user"]["userID"] . "_pic" . ".jpeg";
-            file_put_contents("$userPic", $image);
+            file_put_contents($userPic, $image);
             break;
     }
 
@@ -775,10 +775,10 @@ function rateEligibility($orderItemId, $connection)
 function getAdminSearch($connection, $type, $q){
     $adminSearchArray = [];
     if ($type === "pet") {
-        $sql = "SELECT DISTINCT pets.petId as id, pets.name FROM pets, petcategory WHERE pets.petCatId = petcategory.petCatId AND (pets.name LIKE ? OR petcategory.category LIKE ?);";
+        $sql = "SELECT DISTINCT pets.petId as id, pets.name, petcategory.category, petimage.imagePath FROM pets, petcategory, petimage WHERE pets.petCatId = petcategory.petCatId AND pets.petId = petimage.petId AND petimage.imageType = 'Card' AND (pets.name LIKE ? OR petcategory.category LIKE ?);";
 
     } else if ($type === "product") {
-        $sql = "SELECT DISTINCT products.productId as id, products.name FROM products, productcategory WHERE products.productCatId = productcategory.productCatId AND (products.name LIKE ? OR productcategory.category LIKE ?);";
+        $sql = "SELECT DISTINCT products.productId as id, products.name, productcategory.category, productimage.imagePath  FROM products, productcategory productimage WHERE products.productCatId = productcategory.productCatId AND products.productId = productimage.productId AND productimage.imageType = 'Card' AND (products.name LIKE ? OR productcategory.category LIKE ?);";
     } else {
         return false;
     }
@@ -838,13 +838,14 @@ function isAssociativeArray($array){
     return false;
 }
 
-function adminValidatePet($postArray){
+function adminValidatePet($postArray, $checkCategory = false){
     $errorArray = [];
+    $category = "";
     $sanitizeTextArray = [
-        "name" => $postArray["name"],
-        "weight" => $postArray["weight"],
-        "color" => $postArray["color"],
-        "petCondition" => $postArray["petCondition"]
+        "name" => ucfirst($postArray["name"]),
+        "weight" => strtolower($postArray["weight"]),
+        "color" => ucfirst($postArray["color"]),
+        "petCondition" => ucfirst($postArray["petCondition"])
     ];
 
     $validateSelectArray = [
@@ -862,16 +863,14 @@ function adminValidatePet($postArray){
 
     foreach ($validateSelectArray as $key => $value){
 
-        echo strtolower($value);
-
         if(strtolower($value) !== "yes" && strtolower($value) !== "no"){
         array_push($errorArray, "$key field has invalid value");
         }
     }
 
-    $status = $postArray["status"];
+    $status = filter_var($postArray["status"], FILTER_VALIDATE_INT, array("options" => array("min_range"=>0, "max_range"=>1)));
 
-    if($status !== "0" && $status !== "1"){
+    if(!$status){
         array_push($errorArray, "Status field has invalid value");
     }
 
@@ -883,8 +882,7 @@ function adminValidatePet($postArray){
         $price = round($price, 2);
     }
 
-    $gender = strtolower($postArray["gender"]);
-    echo $gender;
+    $gender = ucfirst($postArray["gender"]);
 
     if (strtolower($gender) !== "male" && strtolower($gender) !== 'female'){
         array_push($errorArray, "Invalid Gender");
@@ -895,6 +893,15 @@ function adminValidatePet($postArray){
         $new_date = date("Y-m-d", strtotime($_POST["birthDate"]));
     }else{
         array_push($errorArray, "Invalid Birth Date");
+    }
+
+    if($checkCategory){
+
+        $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range"=>1, "max_range"=>3)));
+        
+        if(!$category){
+            array_push($errorArray, "Invalid value in category field");
+        }
     }
 
     if($errorArray){
@@ -911,7 +918,8 @@ function adminValidatePet($postArray){
         "gender" => $gender,
         "status" => $status,
         "vaccinated" => $validateSelectArray["vaccinated"],
-        "dewormed" => $validateSelectArray["dewormed"]
+        "dewormed" => $validateSelectArray["dewormed"],
+        "category" => $category
     ];
 
     return $adminPetArray;
@@ -928,15 +936,15 @@ function adminUpdatePet($connection, $petArray, $id){
     $stmt->close();
 }
 
-function adminValidateProduct($postArray){
+function adminValidateProduct($postArray, $checkCategory){
     $errorArray = [];
 
     $sanitizeProducttArray = [
         "name" => $postArray["name"],
         "description" => $postArray["description"],
         "brand" => $postArray["brand"],
-        "weight" => $postArray["weight"],
-        "warrantyPeriod" => $postArray["warrantyPeriod"],
+        "weight" => strtolower($postArray["weight"]),
+        "warrantyPeriod" => strtolower($postArray["warrantyPeriod"]),
         "productDimensions" => $postArray["productDimensions"]
     ];
 
@@ -969,8 +977,19 @@ function adminValidateProduct($postArray){
         array_push($errorArray, "Invalid Quantity");
     }
 
-    if($_POST["status"] !== "1" && $_POST["status"] !== "0"){
+    $status = filter_var($postArray["status"], FILTER_VALIDATE_INT, array("options" => array("min_range"=>0, "max_range"=>1)));
+
+    if(!$status){
         array_push($errorArray, "Invalid value in status field");
+    }
+
+    if($checkCategory){
+
+        $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range"=>1, "max_range"=>7)));
+        
+        if(!$category){
+            array_push($errorArray, "Invalid value in category field");
+        }
     }
 
     if($errorArray){
@@ -986,7 +1005,8 @@ function adminValidateProduct($postArray){
         "productDimensions" => $sanitizeProducttArray ["productDimensions"],
         "price" => $price,
         "quantity" => $quantity,
-        "status" => $_POST["status"]
+        "status" => $status,
+        "category" => $category
     ];
 
     return $adminProductArray;
@@ -998,6 +1018,190 @@ function adminUpdateProduct($connection, $id, $productArray){
 
     $stmt->bind_param("ssiisssssi", $productArray["name"], $productArray["price"], $productArray["quantity"], $productArray['status'], 
     $productArray["description"], $productArray["brand"], $productArray["weight"], $productArray["warrantyPeriod"], $productArray["productDimensions"], $id );
+    $stmt->execute();
+    $stmt->close();
+}
+
+function adminAddPet($connection, $petArray){
+    $stmt = $connection -> prepare( "INSERT INTO pets(name, price, status, gender, birthDate, weight, color, petCondition, vaccinated, dewormed, petCatId)  
+                                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+    $stmt->bind_param("ssisssssssi", $petArray["name"], $petArray["price"], $petArray["status"], $petArray['gender'], 
+    $petArray["birthDate"], $petArray["weight"], $petArray["color"], $petArray["petCondition"], $petArray["vaccinated"], $petArray["dewormed"], $petArray["category"]);
+    $stmt->execute();
+    $stmt->close();
+}
+
+function adminAddProduct($connection, $productArray){
+    $stmt = $connection -> prepare( "INSERT INTO products(name, price, quantity, status, description, brand, weight, warrantyPeriod, productDimensions, productCatId)  
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+    $stmt->bind_param("ssiisssssi", $productArray["name"], $productArray["price"], $productArray["quantity"], $productArray['status'], 
+    $productArray["description"], $productArray["brand"], $productArray["weight"], $productArray["warrantyPeriod"], $productArray["productDimensions"], $productArray["category"] );
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Doesnt Exist
+function addNewItemCardImage($mimeType, $image, $connection, $id, $category, $name, $type)
+{
+    $category = str_replace(" ", "_", $category);
+    $name = str_replace(" ", "_", $name);
+    $cardImageDir = "../Images/$category/$name/Card";
+    if (!is_dir($cardImageDir)) {
+        mkdir($cardImageDir, 0777, true);
+    }
+
+    $name .=  "_Card_319_409";
+
+    switch ($mimeType) {
+        case "image/png":
+            $cardPic = $cardImageDir .  "/$name" . ".png";
+            file_put_contents($cardPic, $image);
+            break;
+        case "image/jpg":
+            $cardPic= $cardImageDir . "/$name" . ".jpg";
+            file_put_contents($cardPic, $image);
+            break;
+        case "image/jpeg":
+            $cardPic= $cardImageDir .  "/$name" . ".jpeg";
+            file_put_contents($cardPic, $image);
+            break;
+    }
+
+    $saveToDbImage = substr($cardPic, 1);
+
+    if($type === "pet"){
+        $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Card');");
+        $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+    }elseif($type === "product"){
+        $stmt = $connection->prepare("INSERT INTO productimage(productid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Card');");
+        $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+    }
+
+    $stmt->execute();
+    $stmt->close();
+}
+
+
+function overwriteItemCardImage($mimeType, $image, $connection, $id,  $name, $currentImagePath, $type)
+{
+    
+    $currentDirName = "." . dirname($currentImagePath) . "/";
+    $files = glob("$currentDirName" . "*"); // get all file names
+    foreach ($files as $file) { // iterate files
+        if (is_file($file)) {
+            unlink($file); // delete file
+        }
+    }
+    $name = str_replace(" ", "_", $name);
+
+    switch ($mimeType) {
+        case "image/png":
+            $cardPic = $currentDirName .  $name . "_Card_319_409" . ".png";
+            file_put_contents($cardPic, $image);
+            break;
+        case "image/jpg":
+            $cardPic= $currentDirName  . $name . "_Card_319_409" . ".jpg";
+            file_put_contents($cardPic, $image);
+            break;
+        case "image/jpeg":
+            $cardPic= $currentDirName  .  $name . "_Card_319_409" . ".jpeg";
+            file_put_contents($cardPic, $image);
+            break;
+    }
+
+    $saveToDbImage = substr($cardPic, 1);
+
+
+    if($type === "pet"){
+        $stmt = $connection->prepare("UPDATE petimage SET imagePath = ? WHERE petid = ? AND imageType = 'Card';");
+        $stmt->bind_param("si", $saveToDbImage, $id);
+    }elseif($type === "product"){
+        $stmt = $connection->prepare("UPDATE productimage SET imagePath = ? WHERE productid = ? AND imageType = 'Card';");
+        $stmt->bind_param("si", $saveToDbImage, $id);
+    }
+
+    $stmt->execute();
+    $stmt->close();
+}
+
+function addNewItemGalleryImage($mimeType, $image, $connection, $id, $category, $name, $type)
+{
+    $category = str_replace(" ", "_", $category);
+    $name = str_replace(" ", "_", $name);
+    $cardImageDir = "../Images/$category/$name/Gallery";
+    if (!is_dir($cardImageDir)) {
+        mkdir($cardImageDir, 0777, true);
+    }
+
+    $name .=  "_Gallery_550_550";
+
+    switch ($mimeType) {
+        case "image/png":
+            $cardPic = $cardImageDir .  "/$name" . ".png";
+            file_put_contents($cardPic, $image);
+            break;
+        case "image/jpg":
+            $cardPic= $cardImageDir . "/$name" . ".jpg";
+            file_put_contents($cardPic, $image);
+            break;
+        case "image/jpeg":
+            $cardPic= $cardImageDir .  "/$name" . ".jpeg";
+            file_put_contents($cardPic, $image);
+            break;
+    }
+
+    $saveToDbImage = substr($cardPic, 1);
+
+    if($type === "pet"){
+        $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
+        $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+    }elseif($type === "product"){
+        $stmt = $connection->prepare("INSERT INTO productimage(productid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
+        $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+    }
+
+    $stmt->execute();
+    $stmt->close();
+}
+
+function overwriteItemGalleryImage($mimeType, $image, $connection, $id,  $name, $currentImagePath, $type, $index)
+{
+    
+    $currentDirName = "." . dirname($currentImagePath) . "/";
+    // $files = glob("$currentDirName" . "*"); // get all file names
+    // foreach ($files as $file) { // iterate files
+    //     if (is_file($file)) {
+    //         unlink($file); // delete file
+    //     }
+    // }
+    $name = str_replace(" ", "_", $name) . "_$index" . "_Gallery_550_550";
+
+    switch ($mimeType) {
+        case "image/png":
+            $cardPic = $currentDirName .  $name  . ".png";
+            file_put_contents($cardPic, $image);
+            break;
+        case "image/jpg":
+            $cardPic= $currentDirName  . $name  . ".jpg";
+            file_put_contents($cardPic, $image);
+            break;
+        case "image/jpeg":
+            $cardPic= $currentDirName  .  $name  . ".jpeg";
+            file_put_contents($cardPic, $image);
+            break;
+    }
+
+    $saveToDbImage = substr($cardPic, 1);
+
+
+    if($type === "pet"){
+        $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
+        $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+    }elseif($type === "product"){
+        $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
+        $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+    }
+
     $stmt->execute();
     $stmt->close();
 }

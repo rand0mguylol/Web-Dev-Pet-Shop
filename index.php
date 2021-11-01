@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php session_start(); 
+
+$string = "./Images/Hamster/Syrian/Gallery/Syrian_1_Gallery_550_550.jpg";
+
+echo dirname($string);
+
+?>
 <?php $title = "PetterTogether - Home Page";?>
 <?php require_once "./components/header.php"; ?>
 <?php unset($_SESSION['payment']); ?>

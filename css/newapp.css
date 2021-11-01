@@ -645,6 +645,12 @@ input[type="number"] {
   border: 1px solid #000;
 }
 
+.box-card{
+  width: 600px;
+  height: 770px;
+  border: 1px solid #000;
+}
+
 .item-current-info{
   max-width: 400px;
 }
@@ -656,6 +662,17 @@ input[type="number"] {
 .admin-search-container{
   padding-left: 8rem;
   padding-right: 8rem;
+}
+
+
+/* .delete-gallery-container{
+  max-width: 45%;
+} */
+
+.delete-image-name > p{
+  white-space: nowrap;
+  /* overflow: hidden; */
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 1399px){

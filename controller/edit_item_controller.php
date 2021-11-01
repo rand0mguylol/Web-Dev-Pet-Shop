@@ -13,7 +13,7 @@ if (isset($_POST["updateItem"]) && $_GET["type"] === "pet"){
   }else{
     $_SESSION["updateItemError"] = $result;
   }
-  header("Location: ../edit_product.php?type=$_GET[type]&id=$_GET[id]");
+  header("Location: ../edit_item.php?type=$_GET[type]&id=$_GET[id]");
   exit();
 }
 
@@ -28,7 +28,7 @@ if (isset($_POST["updateItem"]) && $_GET["type"] === "product"){
   }else{
     $_SESSION["updateItemError"] = $result;
   }
-  header("Location: ../edit_product.php?type=$_GET[type]&id=$_GET[id]");
+  header("Location: ../edit_item.php?type=$_GET[type]&id=$_GET[id]");
   exit();
 }
 

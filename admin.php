@@ -12,6 +12,14 @@ if (isset($_SESSION["user"]["userRole"]) && $_SESSION["user"]["userRole"] === "S
         $adminSearchArray = getAdminSearch($connection, $_GET["itemType"], $q);   
     } 
 
+    if(isset($_SESSION["alertMessage"])){
+      $alertMessage = $_SESSION["alertMessage"];
+      unset($_SESSION["alertMessage"]);
+    }
+
+    // echo "<pre>";
+    // var_dump($adminSearchArray);
+    // echo "</pre>";
 }
 
 else {
@@ -23,6 +31,62 @@ else {
 
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
+
+<?php if (isset($alertMessage)) : ?>
+    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
+        <strong><?php echo $alertMessage; ?></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
+<!-- Modal for delete card -->
+<div class="modal fade" id="deleteCardModal"  tabindex="-1" aria-labelledby="deleteCardModelLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Card Image</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class = "text-center">
+                <img src="" alt="" class = "img-fluid shadow" id ="deleteCardImg" onerror="cardError(this)">
+              </div>
+            <p id = "deleteCardModalBody" class = "text-center mt-5"></p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+            <form action="./controller/delete_card_image_contoller.php" method="POST">
+              <input type="hidden" name = "type" value = "" id = "deleteCardTypeInput">
+              <input type="hidden" name = "id" id = "deleteCardIDInput" value = "">
+              <button type="submit" class="btn btn-danger"  name = "deleteCardImage">Yes, delete it</button>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal for Item -->
+<div class="modal fade" id="deleteItemModal"  tabindex="-1" aria-labelledby="deleteItemModelLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete Item</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <p id = "deleteCardModalBody"></p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+            <form action="./controller/delete_card_image_contoller.php" method="POST">
+              <input type="hidden" name = "type" value = "" id = "deleteCardTypeInput">
+              <input type="hidden" name = "id" id = "deleteCardIDInput" value = "">
+              <button type="submit" class="btn btn-danger"  name = "deleteCardImage">Yes, delete it</button>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="container-fluid  admin-search-container mt-5">
@@ -49,8 +113,8 @@ else {
   </div>
 
   <div class ="my-5 text-center">
-      <a href="" class = "btn btn-primary me-5">Add Pet</a>
-      <a href="" class = "btn btn-info">Add Product</a>
+      <a href="./add_pet.php" class = "btn btn-primary me-5">Add Pet</a>
+      <a href="./add_product.php" class = "btn btn-info">Add Product</a>
   </div>
 
   <div>
@@ -60,17 +124,19 @@ else {
           <table class="table table-striped">
               <thead>
               <tr>
-                  <th scope="col" colspan="5"><?php echo ucfirst( $_GET["itemType"]); ?></th>
+                  <th scope="col" colspan="7"><?php echo ucfirst( $_GET["itemType"]); ?></th>
               </tr>
               </thead>
               <tbody>
               <?php foreach ($adminSearchArray as $item) : ?>
               <tr>
                   <td><?php echo $item["name"]?></td>
-                  <td><a href="./edit_product.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>" class = "text-decoration-none">Edit</a></td>
-                  <td>Delete</td>
-                  <td>Add Image</td>
-                  <td>Delete Image</td>
+                  <td><a href="./edit_item.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>" class = "text-decoration-none">Edit</a></td>
+                  <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="" data-type = "<?php echo $_GET["itemType"];?>" data-id = "<?php echo $item["id"];?>" data-name = "<?php echo $item["name"];?>">Delete</button></td>
+                  <td><a href="./add_card_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&category=<?php echo $item["category"];?>&name=<?php echo $item["name"];?>" class = "text-decoration-none">Add Card Image</a></td>
+                  <td><a href="./add_gallery_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&category=<?php echo $item["category"];?>&name=<?php echo $item["name"];?>" class = "text-decoration-none">Add Gallery Image</a></td>
+                  <td><button type="button" class="btn btn-primary deleteCardModalBtn" data-bs-toggle="modal" data-bs-target="#deleteCardModal" data-type = "<?php echo $_GET["itemType"];?>" data-id = "<?php echo $item["id"];?>" data-name = "<?php echo $item["name"];?>" data-image = "<?php echo $item["imagePath"];?>">Delete Card Image</button></td>
+                  <td><a href="./delete_gallery.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>" class="btn btn-success">Delete Gallery Image</a></td>
               </tr>
               <?php endforeach; ?>
               </tbody>
@@ -83,6 +149,27 @@ else {
 <script>
     const searchButton = document.querySelector(".q")
     console.dir(searchButton)
+
+    const deleteCardModalBtn = document.querySelectorAll(".deleteCardModalBtn")
+    const deleteCardIDInput = document.querySelector("#deleteCardIDInput")
+    const deleteCardTypeInput = document.querySelector("#deleteCardTypeInput")
+    const deleteCardModalBody = document.querySelector("#deleteCardModalBody")
+    const deleteCardImg = document.querySelector("#deleteCardImg")
+
+    for(const btn of deleteCardModalBtn){
+      btn.addEventListener("click", function(){
+        deleteCardTypeInput.value = this.dataset.type
+        deleteCardIDInput.value = this.dataset.id
+        deleteCardModalBody.innerHTML = this.dataset.name
+        deleteCardImg.src = this.dataset.image
+      })
+    }
+
+    function cardError(img){
+      img.alt = "No Image"
+    }
+
+
 </script>
 <!-- For Rating System -->
 <script src="./js/rating.js"></script>
