@@ -58,6 +58,7 @@ else {
             <form action="./controller/delete_card_image_contoller.php" method="POST">
               <input type="hidden" name = "type" value = "" id = "deleteCardTypeInput">
               <input type="hidden" name = "id" id = "deleteCardIDInput" value = "">
+              <input type="hidden" name = "imagePath" id = "deleteCardImagePath">
               <button type="submit" class="btn btn-danger"  name = "deleteCardImage">Yes, delete it</button>
             </form>
             </div>
@@ -135,8 +136,8 @@ else {
                   <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="" data-type = "<?php echo $_GET["itemType"];?>" data-id = "<?php echo $item["id"];?>" data-name = "<?php echo $item["name"];?>">Delete</button></td>
                   <td><a href="./add_card_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&category=<?php echo $item["category"];?>&name=<?php echo $item["name"];?>" class = "text-decoration-none">Add Card Image</a></td>
                   <td><a href="./add_gallery_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&category=<?php echo $item["category"];?>&name=<?php echo $item["name"];?>" class = "text-decoration-none">Add Gallery Image</a></td>
-                  <td><button type="button" class="btn btn-primary deleteCardModalBtn" data-bs-toggle="modal" data-bs-target="#deleteCardModal" data-type = "<?php echo $_GET["itemType"];?>" data-id = "<?php echo $item["id"];?>" data-name = "<?php echo $item["name"];?>" data-image = "<?php echo $item["imagePath"];?>">Delete Card Image</button></td>
-                  <td><a href="./delete_gallery.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>" class="btn btn-success">Delete Gallery Image</a></td>
+                  <td><a href="./delete_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&imageType=Card" class="btn btn-info">Delete Card Image</a></td>
+                  <td><a href="./delete_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&imageType=Gallery" class="btn btn-success">Delete Gallery Image</a></td>
               </tr>
               <?php endforeach; ?>
               </tbody>
@@ -150,24 +151,24 @@ else {
     const searchButton = document.querySelector(".q")
     console.dir(searchButton)
 
-    const deleteCardModalBtn = document.querySelectorAll(".deleteCardModalBtn")
-    const deleteCardIDInput = document.querySelector("#deleteCardIDInput")
-    const deleteCardTypeInput = document.querySelector("#deleteCardTypeInput")
-    const deleteCardModalBody = document.querySelector("#deleteCardModalBody")
-    const deleteCardImg = document.querySelector("#deleteCardImg")
+    // const deleteCardModalBtn = document.querySelectorAll(".deleteCardModalBtn")
+    // const deleteCardIDInput = document.querySelector("#deleteCardIDInput")
+    // const deleteCardTypeInput = document.querySelector("#deleteCardTypeInput")
+    // const deleteCardModalBody = document.querySelector("#deleteCardModalBody")
+    // const deleteCardImg = document.querySelector("#deleteCardImg")
 
-    for(const btn of deleteCardModalBtn){
-      btn.addEventListener("click", function(){
-        deleteCardTypeInput.value = this.dataset.type
-        deleteCardIDInput.value = this.dataset.id
-        deleteCardModalBody.innerHTML = this.dataset.name
-        deleteCardImg.src = this.dataset.image
-      })
-    }
+    // for(const btn of deleteCardModalBtn){
+    //   btn.addEventListener("click", function(){
+    //     deleteCardTypeInput.value = this.dataset.type
+    //     deleteCardIDInput.value = this.dataset.id
+    //     deleteCardModalBody.innerHTML = this.dataset.name
+    //     deleteCardImg.src = this.dataset.image
+    //   })
+    // }
 
-    function cardError(img){
-      img.alt = "No Image"
-    }
+    // function cardError(img){
+    //   img.alt = "No Image"
+    // }
 
 
 </script>

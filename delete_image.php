@@ -9,28 +9,25 @@ if (!isset($_SESSION["user"]["userRole"], $_GET["type"], $_GET["id"]) || $_SESSI
   header("Location: ../index.php");
   exit();
 }
-$galleryArray = [];
+$imageArray = [];
 if($_GET["type"] === "pet"){
-  $stmt = $connection -> prepare("SELECT petimage.petImageId as id, petimage.imageName, petimage.imagePath FROM petimage WHERE petimage.petid = ? AND petimage.imageType = 'Gallery';");
+  $stmt = $connection -> prepare("SELECT petimage.petImageId as imageid, petimage.imageName, petimage.imagePath FROM petimage WHERE petimage.petid = ? AND petimage.imageType = ?;");
 }elseif($_GET["type"] === "product"){
-  $stmt = $connection -> prepare("SELECT productimage.productImageId as id, productimage.imageName, productimage.imagePath FROM productimage WHERE productid = ? AND imageType = 'Gallery';");
+  $stmt = $connection -> prepare("SELECT productimage.productImageId as imageid, productimage.imageName, productimage.imagePath FROM productimage WHERE productid = ? AND imageType = ?;");
 }
 
-$stmt->bind_param("i", $_GET["id"]);
+$imageType = ucfirst(sanitizeText($_GET["imageType"]));
+$type = sanitizeText($_GET["type"]);
+
+$stmt->bind_param("is", $_GET["id"], $imageType);
 $stmt->execute();
 $result = $stmt->get_result();
-// echo "<pre>";
-// var_dump($result);
-// echo "</pre>";
 
-// if(!$result){
-//   $_SESSION["alertMessage"] = "There are no images to be deleted";
-//   header("Location: ../admin.php");
-//   exit();
-// }
 while($row= $result->fetch_assoc()){
-  array_push($galleryArray, $row);
+  array_push($imageArray , $row);
 }
+
+
 
 if(isset($_SESSION["alertMessage"])){
   $alertMessage = $_SESSION["alertMessage"];
@@ -50,25 +47,30 @@ if(isset($_SESSION["alertMessage"])){
 
 <div class="container my-5">
   <div class = "w-75 mx-auto">
-    <form action="./controller/delete_gallery_image_controller.php?id=<?php echo $_GET["id"];?>" class = "row g-3 justify-content-center" method="POST">
-      <input type="hidden" name = "type" value = "<?php echo $_GET["type"];?>">
+    <form action="./controller/delete_image_controller.php?id=<?php echo $_GET["id"];?>" class = "row g-3 justify-content-center" method="POST">
+    <input type="hidden" name = "imageType" value = "<?php echo $imageType;?>">
+      <input type="hidden" name = "type" value = "<?php echo $type;?>">
       <input type="hidden" name = "imagePath" value ="" id = "imagePathInput">
       <select class="form-select d-inline-block w-50" aria-label="Default select example" name = "imageid" id = "imageSelect"  onchange="getImagePath(this)">
-        <?php foreach ($galleryArray as $gallery): ?>
-        <option value="<?php echo $gallery["id"];?>" data-imagepath = "<?php echo $gallery["imagePath"];?>"><?php echo $gallery["imageName"];?></option>
+        <?php foreach ($imageArray  as $image): ?>
+        <option value="<?php echo $image["imageid"];?>" data-imagepath = "<?php echo $image["imagePath"];?>"><?php echo $image["imageName"];?></option>
         <?php endforeach; ?>
       </select>
-      <button class = "btn btn-info w-25 ms-3" type = "submit" name = "deleteGalleryImage">Delete Gallery Image</button>
+      <button class = "btn btn-info w-25 ms-3" type = "submit" name = "deleteImage">Delete <?php echo $imageType;?> Image</button>
     </form>
   </div>
 
   <div class = "row row-cols-3 flex-wrap my-5">
-    <?php foreach ($galleryArray as $gallery): ?>
+    <?php foreach ($imageArray  as $image): ?>
     <div class = "col text-center">
       <div>
-        <img src="<?php echo $gallery["imagePath"];?>" alt="" class = "img-fluid shadow" style ="width: 300px; height: 300px;">
+      <?php if(strtolower($imageType) === "gallery"):?>
+        <img src="<?php echo $image["imagePath"];?>" alt="" class = "img-fluid shadow" style ="width: 300px; height: 300px;">
+        <?php else: ?>
+          <img src="<?php echo $image["imagePath"];?>" alt="" class = "img-fluid shadow" style ="width: 319px; height: 409px;">
+          <?php endif; ?>
       </div>
-        <p class = "mt-5 text-center test"><?php echo $gallery["imageName"];?></p>
+        <p class = "mt-5 text-center test"><?php echo $image["imageName"];?></p>
     </div>
     <?php endforeach; ?>
   </div>
@@ -92,10 +94,6 @@ if(isset($_SESSION["alertMessage"])){
   window.addEventListener("load", function(){
     getImagePath(imageSelect)
   })
-
-
- 
-
 
 </script>
 <!-- For Rating System -->

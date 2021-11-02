@@ -43,7 +43,7 @@ $checkIdExistArray = [];
     $currentImagePath = $checkIdExistArray[0]["imagePath"];
     $_SESSION["uploadImageMessage"] = "Image Added";
     $index = count($checkIdExistArray) + 1;
-    overwriteItemGalleryImage($imageMime, $image, $connection, $_GET["id"], $_GET["name"], $currentImagePath, $_GET["type"], $index);  
+    insertItemGalleryImage($imageMime, $image, $connection, $_GET["id"], $_GET["name"], $currentImagePath, $_GET["type"], $index);  
   }
 
   header("Location: ../add_gallery_image.php?id=$_GET[id]&category=$_GET[category]&type=$_GET[type]&name=$_GET[name]");
