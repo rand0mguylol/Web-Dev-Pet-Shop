@@ -233,15 +233,14 @@ function getCategoryOther($connection, $category, $removeID)
     $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
     //
     if (in_array($category, $petArray)) {
-        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card' AND pets.petId != ? LIMIT 6";
+        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath, petcategory.category FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card' AND pets.petId != ? LIMIT 6";
     } else if (in_array($category, $productArray)) {
-        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.productId != ? LIMIT 6";
+        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath, productcategory.category FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.productId != ? LIMIT 6";
     } else {
         return false;
     }
 
     $stmt = $connection->prepare($sql);
-
     $stmt->bind_param("si", $category, $removeID);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -652,20 +651,6 @@ function addOrderItems($cartid, $orderid, $connection)
     }
     $stmt->close();
 }
-
-// function updateReviewID($reviewId, $connection){
-//     $stmt = $connection->prepare("SELECT reviewId FROM review WHERE = $reviewId WHERE OrderItemId = ?;");
-//     $result = $stmt->get_result();
-//     $row = $result->fetch_assoc();
-
-//     $stmt = $connection->prepare("UPDATE orderitem SET reviewId = $reviewId WHERE OrderItemId = ?;");
-//     $stmt->bind_param("i", $reviewId);
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-
-//     $row = $result->fetch_assoc();
-//     $stmt->close();;
-// }
 
 function getOrderId($userid, $connection)
 {
@@ -1231,4 +1216,103 @@ function addNewItemGalleryImage($mimeType, $image, $connection, $id, $dirName, $
 
     $stmt->execute();
     $stmt->close();
+}
+function getTotalProductReviews($productId, $category, $connection)
+{   
+    $type = returnType($category);
+    if (strtolower($type) === "product") {
+        $stmt = $connection -> prepare("SELECT review.reviewId FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
+        WHERE orderitem.productId = ?");
+        $stmt -> bind_param("i", $productId);
+        $stmt -> execute();
+        $result = $stmt-> get_result();
+        $totalReviews = mysqli_num_rows($result);
+        $stmt -> close();
+        return $totalReviews;
+    }
+}
+
+function getProductReviews($productId, $category, $connection)
+{
+    $type = returnType($category);
+    if (strtolower($type) === "product") {
+        $productReviewsArray = [];
+        $stmt = $connection -> prepare("SELECT user.firstName, user.lastName, review.rating, review.feedback, review.createdAt
+        FROM user INNER JOIN review ON user.userId = review.userId INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
+        WHERE orderitem.productId = ? ORDER BY review.createdAt DESC LIMIT 3");
+        $stmt -> bind_param("i", $productId);
+        $stmt -> execute();
+        $result = $stmt -> get_result();
+        while($row = $result -> fetch_assoc()){
+            $productReview = [];
+            $firstName = $row["firstName"];
+            $lastName = $row["lastName"];
+            $rating = $row["rating"];
+            $feedback = $row["feedback"];
+            $createdAt = $row["createdAt"];
+            $productReview = [
+                "firstName" => $firstName,
+                "lastName" => $lastName,
+                "rating" => $rating,
+                "feedback" => $feedback,
+                "createdAt" => $createdAt,
+            ];
+            array_push($productReviewsArray, $productReview);
+        }       
+        $stmt -> close();
+        return $productReviewsArray;
+    }
+}
+
+function getEachRatingTotal($productId, $category, $connection){
+    $type = returnType($category);
+    if (strtolower($type) === "product") {
+        $eachRatingTotalArray = [];
+        $stmt = $connection -> prepare("SELECT review.rating FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
+        WHERE orderitem.productId = ?");
+        $stmt -> bind_param("i", $productId);
+        $stmt -> execute();
+        $result = $stmt -> get_result();
+        $totalOneStar = 0;
+        $totalTwoStar = 0;
+        $totalThreeStar = 0;
+        $totalFourStar = 0;
+        $totalFiveStar = 0;
+        while($row = $result -> fetch_assoc()){
+            $rating = $row["rating"];
+            if ($rating == 1){
+                $totalOneStar++;
+            } elseif ($rating == 2){
+                $totalTwoStar++;
+            } elseif ($rating == 3){
+                $totalThreeStar++;
+            } elseif ($rating == 4){
+                $totalFourStar++;
+            } else {
+                $totalFiveStar++;
+            }
+        }
+        $eachTotalRating = [
+                "totalOneStar" => $totalOneStar,
+                "totalTwoStar" => $totalTwoStar,
+                "totalThreeStar" => $totalThreeStar,
+                "totalFourStar" => $totalFourStar,
+                "totalFiveStar" => $totalFiveStar,
+            ];
+        $stmt -> close();
+        return $eachTotalRating;
+    }
+}
+
+function getAvgRating($productId, $connection)
+{
+    $stmt = $connection -> prepare("SELECT AVG(review.rating) as AverageRating FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
+    WHERE orderitem.productId = ?");
+    $stmt -> bind_param("i", $productId);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+    $row = $result -> fetch_assoc();
+    $avgRating = $row['AverageRating'];
+    $stmt -> close();
+    return $avgRating;
 }
