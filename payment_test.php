@@ -101,18 +101,18 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                 </div>
                                 <div class="col-3">
                                     <div class="input-group justify-content-center">
-                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" <?php if($cartitems[$key]['quantity'] === 1 || $cartitems[$key]['category'] === "pet"){ echo 'disabled= disabled';} ?> data-type="minus" data-field="<?php echo $key; ?>">
+                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" data-type="minus" data-field="<?php echo $key; ?>">
                                             <i class="fas fa-minus fa-sm"></i>
                                         </button>
-                                        <input type="number" name="<?php echo $key; ?>[quantity]" class="form-control input-number text-center quantity-input" value="<?php echo $cartitems[$key]['quantity']; ?>" <?php if($cartitems[$key]['category'] === "pet"){ echo 'disabled= disabled';} ?> min="1" max="<?php echo $cartitems[$key]['maxQuantity']; ?>">
-                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" <?php if($cartitems[$key]['quantity'] === $cartitems[$key]['maxQuantity'] || $cartitems[$key]['category'] === "pet"){ echo 'disabled= disabled';} ?>  data-type="plus" data-field="<?php echo $key; ?>">
+                                        <input type="number" name="<?php echo $key; ?>[quantity]" class="form-control input-number text-center quantity-input" value="<?php echo $cartitems[$key]['quantity']; ?>" min="1" max="<?php echo $cartitems[$key]['maxQuantity']; ?>">
+                                        <button type="button" class="btn btn-outline-secondary btn-number quantity-changer" data-type="plus" data-field="<?php echo $key; ?>">
                                             <i class="fas fa-plus fa-sm"></i>
                                         </button>
                                         <button type="submit" class="d-none" name="quantityUpdateBtn" data-field="<?php echo $key; ?>"> </button>
                                     </div>
                                 </div>
                                 <div class="col-2 text-end">
-                                    RM <span id="itemSubtotal" data-field="<?php echo $key; ?>"><?php echo number_format($cartitems[$key]['subtotal'], 2, '.', ''); ?></span>
+                                    RM <?php echo number_format($cartitems[$key]['subtotal'], 2, '.', ''); ?>
                                 </div>
                             </div>
                         </form>
@@ -349,6 +349,15 @@ if (isset($_POST['bankingPaymentBtn'])) {
 <?php require_once "./js/aos.js"; ?>
 <script src="./js/payment.js"></script>
 <script>
+    function deletePaymentSession() {
+        $.post('./controller/session_killer.php', {
+            destroyPaymentSession: 1
+        });
+    }
+
+    function updateQuantity(data) {
+        $("#updateModalBtn").click();
+    }
     <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>
         $('#paymentModalBtn').click();
     <?php endif ?>
@@ -357,6 +366,75 @@ if (isset($_POST['bankingPaymentBtn'])) {
             deletePaymentSession
         );
     <?php endif ?>
+    $('.quantity-changer').click(function(e) {
+        e.preventDefault();
+        var targetData = $(this).attr('data-field');
+        var operation = $(this).attr('data-type');
+        var price = parseFloat($("input[name='" + targetData + "[price]']").val());
+        var QuantityInput = $("input[name='" + targetData + "[quantity]']");
+        var oldQuantity = parseInt(QuantityInput.val());
+        if (!isNaN(oldQuantity)) {
+            if (operation == 'minus') {
+                if (oldQuantity > QuantityInput.attr('min')) {
+                    QuantityInput.val(oldQuantity - 1).change();
+                    $("button[data-field ='" + targetData + "'][data-type ='plus']").attr('disabled', false);
+                    var subtotal = parseFloat($("#subtotal").text());
+                    var newSubtotal = subtotal - price;
+                    $("#totalAmount").text(newSubtotal.toFixed(2));
+                    $("#subtotal").text(newSubtotal.toFixed(2));
+                }
+                if (parseInt(QuantityInput.val()) == QuantityInput.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+            } else if (operation == 'plus') {
+                if (oldQuantity < QuantityInput.attr('max')) {
+                    QuantityInput.val(oldQuantity + 1).change();
+                    $("button[data-field ='" + targetData + "'][data-type ='minus']").attr('disabled', false);
+                    var subtotal = parseFloat($("#subtotal").text());
+                    var newSubtotal = subtotal + price;
+                    $("#totalAmount").text(newSubtotal.toFixed(2));
+                    $("#subtotal").text(newSubtotal.toFixed(2));
+                }
+                if (parseInt(QuantityInput.val()) == QuantityInput.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+            }
+            var updateBtn = $("button[name='quantityUpdateBtn'][data-field ='" + targetData + "']");
+            updateBtn.click();
+        } else {
+            QuantityInput.val(1);
+        }
+    })
+
+    $('.quantity-input').focus(function() {
+        $(this).attr('oldQuantity', $(this).val());
+    });
+
+    $('.quantity-input').change(function() {
+        var minQuantity = parseInt($(this).attr('min'));
+        var maxQuantity = parseInt($(this).attr('max'));
+        var currentQuantity = parseInt($(this).val());
+        var name = $(this).attr('name');
+        var field = name.split('[quantity]')[0];
+        if (currentQuantity > minQuantity) {
+            $(".btn-number[data-type='minus'][data-field='" + field + "']").removeAttr('disabled')
+        } else {
+            $(this).val(min);
+        }
+        if (currentQuantity < maxQuantity) {
+            $(".btn-number[data-type='plus'][data-field='" + field + "']").removeAttr('disabled')
+        } else {
+            $(this).val(maxQuantity);
+        }
+        var updateBtn = $("button[name='quantityUpdateBtn'][data-field ='" + field + "']");
+        updateBtn.click();
+    });
+    $('.quantity-input').keydown(function(e){
+        if(e.keyCode == 13){
+            var updateBtn = $("button[name='quantityUpdateBtn'][data-field ='" + field + "']");
+            updateBtn.click();
+        }
+    })
 </script>
 </body>
 

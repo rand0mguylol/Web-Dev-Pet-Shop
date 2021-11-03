@@ -1,7 +1,6 @@
 <?php session_start(); ?>
 <?php $title = "PetterTogether - Home Page";?>
 <?php require_once "./components/header.php"; ?>
-<?php unset($_SESSION['payment']); ?>
 <!-- Main Section - Navbar & Hero Section -->
 <section class="main-section">
     <div class="background-filter">
