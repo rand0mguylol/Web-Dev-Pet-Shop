@@ -199,9 +199,9 @@ function getCategoryProduct($connection, $category, $searchKeyword = "")
     $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
     //
     if (in_array($category, $petArray)) {
-        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card'  AND pets.name LIKE ? ;";
+        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card'  AND status = 1 AND pets.name LIKE ? ;";
     } else if (in_array($category, $productArray)) {
-        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND products.name LIKE ?;";
+        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND status = 1 AND products.name LIKE ?;";
     } else {
         return false;
     }
@@ -775,10 +775,10 @@ function rateEligibility($orderItemId, $connection)
 function getAdminSearch($connection, $type, $q){
     $adminSearchArray = [];
     if ($type === "pet") {
-        $sql = "SELECT DISTINCT pets.petId as id, pets.name, petcategory.category FROM pets, petcategory WHERE pets.petCatId = petcategory.petCatId   AND (pets.name LIKE ? OR petcategory.category LIKE ?);";
+        $sql = "SELECT DISTINCT pets.petId as id, pets.name, pets.status, petcategory.category FROM pets, petcategory WHERE pets.petCatId = petcategory.petCatId   AND (pets.name LIKE ? OR petcategory.category LIKE ?);";
 
     } else if ($type === "product") {
-        $sql = "SELECT DISTINCT products.productId as id, products.name, productcategory.category FROM products, productcategory WHERE products.productCatId = productcategory.productCatId  AND (products.name LIKE ? OR productcategory.category LIKE ?);";
+        $sql = "SELECT DISTINCT products.productId as id, products.name, products.status, productcategory.category FROM products, productcategory WHERE products.productCatId = productcategory.productCatId  AND (products.name LIKE ? OR productcategory.category LIKE ?);";
     } else {
         return false;
     }
