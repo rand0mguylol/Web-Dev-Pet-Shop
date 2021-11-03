@@ -28,29 +28,29 @@ if(isset($_SESSION["uploadImageMessage"])){
 <?php endif; ?>
 
 <div class="container my-5 px-5">
-  <h1 class = "text-center mt-5">Add Card Image</h1>
-  <h2 class = "text-center my-3"><?php echo $name; ?></h2>
-  <p class = "text-center lead">If the item has an existing card image, it will be overwritten</p>
+    <h1 class = "text-center mt-5">Add Gallery Image</h1>
+    <h2 class = "text-center my-3"><?php echo $name; ?></h2>
+    <!-- <p class = "text-center lead">If the item has an existing card image, it will be overwritten</p> -->
 
-  <div class="outer-crop-wrapper text-center">
-      <div class="box mx-auto">
-          <img src="" alt="" id="cropBox" style="display: block; max-width: 100%;">
-      </div>
-      <small class="imageExtensionMessage">Only jpg, png and jpeg are accepted</small>
-  </div>
+    <div class="outer-crop-wrapper text-center">
+        <div class="box mx-auto">
+            <img src="" alt="" id="cropBox" style="display: block; max-width: 100%;">
+        </div>
+        <small class="imageExtensionMessage">Only jpg, png and jpeg are accepted</small>
+    </div>
 
-  <div class="mt-5 text-center">
-      <form action="./controller/add_gallery_image_controller.php?id=<?php echo $_GET["id"];?>&category=<?php echo $_GET["category"];?>&type=<?php echo $_GET["type"];?>&name=<?php echo $_GET["name"];?>" class="imageForm" method="POST">
-          <input type="hidden" name="addGalleryImage" value="">
-          <input type="file" class="fileInput" accept="image/png, image/jpg, image/jpeg">
-          <button type="reset" class="btn btn-dark fileInputResetBtn">Reset</button>
-          <button class="hidden uploadPicBtn btn" type="button">Upload</button>
-      </form>
+    <div class="mt-5 text-center">
+        <form action="./controller/add_gallery_image_controller.php?id=<?php echo $_GET["id"];?>&category=<?php echo $_GET["category"];?>&type=<?php echo $_GET["type"];?>&name=<?php echo $_GET["name"];?>" class="imageForm" method="POST">
+            <input type="hidden" name="addGalleryImage" value="">
+            <input type="file" class="fileInput" accept="image/png, image/jpg, image/jpeg">
+            <button type="reset" class="btn btn-dark fileInputResetBtn">Reset</button>
+            <button class="hidden uploadPicBtn btn" type="button">Upload</button>
+        </form>
 
-      <!-- <form action="./controller/change_Profile_Pic.php" class="" method="POST">
-          <button class="hidden btn btn-danger removePicBtn" type="submit" name="removeProfilePic">Remove Current Pic</button>
-      </form> -->
-  </div>
+        <!-- <form action="./controller/change_Profile_Pic.php" class="" method="POST">
+            <button class="hidden btn btn-danger removePicBtn" type="submit" name="removeProfilePic">Remove Current Pic</button>
+        </form> -->
+    </div>
 </div>
 
 

@@ -1124,28 +1124,97 @@ function overwriteItemCardImage($mimeType, $image, $connection, $id,  $name, $cu
     $stmt->close();
 }
 
-function addNewItemGalleryImage($mimeType, $image, $connection, $id, $category, $name, $type)
+// function addNewItemGalleryImage($mimeType, $image, $connection, $id, $category, $name, $type)
+// {
+//     $category = str_replace(" ", "_", $category);
+//     $name = str_replace(" ", "_", $name);
+//     $cardImageDir = "../Images/$category/$name/Gallery";
+//     if (!is_dir($cardImageDir)) {
+//         mkdir($cardImageDir, 0777, true);
+//     }
+
+//     $name .=  "_Gallery_550_550";
+
+//     switch ($mimeType) {
+//         case "image/png":
+//             $cardPic = $cardImageDir .  "/$name" . ".png";
+//             file_put_contents($cardPic, $image);
+//             break;
+//         case "image/jpg":
+//             $cardPic= $cardImageDir . "/$name" . ".jpg";
+//             file_put_contents($cardPic, $image);
+//             break;
+//         case "image/jpeg":
+//             $cardPic= $cardImageDir .  "/$name" . ".jpeg";
+//             file_put_contents($cardPic, $image);
+//             break;
+//     }
+
+//     $saveToDbImage = substr($cardPic, 1);
+
+//     if($type === "pet"){
+//         $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
+//         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+//     }elseif($type === "product"){
+//         $stmt = $connection->prepare("INSERT INTO productimage(productid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
+//         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+//     }
+
+//     $stmt->execute();
+//     $stmt->close();
+// }
+
+// function insertItemGalleryImage($mimeType, $image, $connection, $id,  $name, $currentImagePath, $type, $index)
+// {
+    
+//     $currentDirName = "." . dirname($currentImagePath) . "/";
+
+//     $name = str_replace(" ", "_", $name) . "_$index" . "_Gallery_550_550";
+
+//     switch ($mimeType) {
+//         case "image/png":
+//             $cardPic = $currentDirName .  $name  . ".png";
+//             file_put_contents($cardPic, $image);
+//             break;
+//         case "image/jpg":
+//             $cardPic= $currentDirName  . $name  . ".jpg";
+//             file_put_contents($cardPic, $image);
+//             break;
+//         case "image/jpeg":
+//             $cardPic= $currentDirName  .  $name  . ".jpeg";
+//             file_put_contents($cardPic, $image);
+//             break;
+//     }
+
+//     $saveToDbImage = substr($cardPic, 1);
+
+
+//     if($type === "pet"){
+//         $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
+//         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+//     }elseif($type === "product"){
+//         $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
+//         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
+//     }
+
+//     $stmt->execute();
+//     $stmt->close();
+// }
+
+
+function addNewItemGalleryImage($mimeType, $image, $connection, $id, $dirName, $name, $type)
 {
-    $category = str_replace(" ", "_", $category);
-    $name = str_replace(" ", "_", $name);
-    $cardImageDir = "../Images/$category/$name/Gallery";
-    if (!is_dir($cardImageDir)) {
-        mkdir($cardImageDir, 0777, true);
-    }
-
-    $name .=  "_Gallery_550_550";
-
     switch ($mimeType) {
         case "image/png":
-            $cardPic = $cardImageDir .  "/$name" . ".png";
+            $cardPic = $dirName .  "$name" . ".png";
             file_put_contents($cardPic, $image);
             break;
         case "image/jpg":
-            $cardPic= $cardImageDir . "/$name" . ".jpg";
+            $cardPic= $dirName . "$name" . ".jpg";
             file_put_contents($cardPic, $image);
             break;
         case "image/jpeg":
-            $cardPic= $cardImageDir .  "/$name" . ".jpeg";
+            $cardPic= $dirName .  "$name" . ".jpeg";
             file_put_contents($cardPic, $image);
             break;
     }
@@ -1157,48 +1226,6 @@ function addNewItemGalleryImage($mimeType, $image, $connection, $id, $category, 
         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
     }elseif($type === "product"){
         $stmt = $connection->prepare("INSERT INTO productimage(productid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
-        $stmt->bind_param("iss", $id, $name, $saveToDbImage);
-    }
-
-    $stmt->execute();
-    $stmt->close();
-}
-
-function insertItemGalleryImage($mimeType, $image, $connection, $id,  $name, $currentImagePath, $type, $index)
-{
-    
-    $currentDirName = "." . dirname($currentImagePath) . "/";
-    // $files = glob("$currentDirName" . "*"); // get all file names
-    // foreach ($files as $file) { // iterate files
-    //     if (is_file($file)) {
-    //         unlink($file); // delete file
-    //     }
-    // }
-    $name = str_replace(" ", "_", $name) . "_$index" . "_Gallery_550_550";
-
-    switch ($mimeType) {
-        case "image/png":
-            $cardPic = $currentDirName .  $name  . ".png";
-            file_put_contents($cardPic, $image);
-            break;
-        case "image/jpg":
-            $cardPic= $currentDirName  . $name  . ".jpg";
-            file_put_contents($cardPic, $image);
-            break;
-        case "image/jpeg":
-            $cardPic= $currentDirName  .  $name  . ".jpeg";
-            file_put_contents($cardPic, $image);
-            break;
-    }
-
-    $saveToDbImage = substr($cardPic, 1);
-
-
-    if($type === "pet"){
-        $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
-        $stmt->bind_param("iss", $id, $name, $saveToDbImage);
-    }elseif($type === "product"){
-        $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
     }
 

@@ -39,33 +39,6 @@ else {
     </div>
 <?php endif; ?>
 
-<!-- Modal for delete card -->
-<div class="modal fade" id="deleteCardModal"  tabindex="-1" aria-labelledby="deleteCardModelLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete Card Image</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class = "text-center">
-                <img src="" alt="" class = "img-fluid shadow" id ="deleteCardImg" onerror="cardError(this)">
-              </div>
-            <p id = "deleteCardModalBody" class = "text-center mt-5"></p>
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
-            <form action="./controller/delete_card_image_contoller.php" method="POST">
-              <input type="hidden" name = "type" value = "" id = "deleteCardTypeInput">
-              <input type="hidden" name = "id" id = "deleteCardIDInput" value = "">
-              <input type="hidden" name = "imagePath" id = "deleteCardImagePath">
-              <button type="submit" class="btn btn-danger"  name = "deleteCardImage">Yes, delete it</button>
-            </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Delete Modal for Item -->
 <div class="modal fade" id="deleteItemModal"  tabindex="-1" aria-labelledby="deleteItemModelLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -165,11 +138,6 @@ else {
     //     deleteCardImg.src = this.dataset.image
     //   })
     // }
-
-    // function cardError(img){
-    //   img.alt = "No Image"
-    // }
-
 
 </script>
 <!-- For Rating System -->

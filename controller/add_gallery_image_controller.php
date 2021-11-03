@@ -35,16 +35,28 @@ $checkIdExistArray = [];
       $_SESSION["uploadImageMessage"] = "Invalid Image Type";
   }
 
+  $index = count($checkIdExistArray) + 1;
+
+
   if (count($checkIdExistArray) === 0) {
-    //
-    $_SESSION["uploadImageMessage"] = "Image Added";
-    addNewItemGalleryImage($imageMime, $image, $connection, $_GET["id"], $_GET["category"], $_GET["name"], $_GET["type"]);
+    //  $category = str_replace(" ", "_", $category);
+    $category = str_replace(" ", "_", $_GET["category"]);
+    $name = str_replace(" ", "_", $_GET["name"]);
+    $dirName = "../Images/$category/$name/Gallery/";
+    if (!is_dir($dirName )) {
+        mkdir($dirName , 0777, true);
+    }
+
+    $name .=  "_Gallery_550_550";
+
+    addNewItemGalleryImage($imageMime, $image, $connection, $_GET["id"], $dirName, $name, $_GET["type"]);
   }else{
     $currentImagePath = $checkIdExistArray[0]["imagePath"];
-    $_SESSION["uploadImageMessage"] = "Image Added";
-    $index = count($checkIdExistArray) + 1;
-    insertItemGalleryImage($imageMime, $image, $connection, $_GET["id"], $_GET["name"], $currentImagePath, $_GET["type"], $index);  
+    $dirName = "." . dirname($currentImagePath) . "/";
+    $name = str_replace(" ", "_", $_GET["name"]) . "_$index" . "_Gallery_550_550";
+    addNewItemGalleryImage($imageMime, $image, $connection, $_GET["id"], $dirName, $name, $_GET["type"]);  
   }
 
+  $_SESSION["uploadImageMessage"] = "Image Added";
   header("Location: ../add_gallery_image.php?id=$_GET[id]&category=$_GET[category]&type=$_GET[type]&name=$_GET[name]");
   exit();

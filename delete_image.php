@@ -56,23 +56,28 @@ if(isset($_SESSION["alertMessage"])){
         <option value="<?php echo $image["imageid"];?>" data-imagepath = "<?php echo $image["imagePath"];?>"><?php echo $image["imageName"];?></option>
         <?php endforeach; ?>
       </select>
-      <button class = "btn btn-info w-25 ms-3" type = "submit" name = "deleteImage">Delete <?php echo $imageType;?> Image</button>
+      <button class = "btn btn-info w-25 ms-3" type = "submit" name = "deleteImage"  <?php  if (empty($imageArray))  echo "disabled"?>>Delete <?php echo $imageType;?> Image</button>
     </form>
   </div>
 
   <div class = "row row-cols-3 flex-wrap my-5">
+    <?php if (empty($imageArray)): ?>
+    <p class = 'col-12 text-center lead'>This item has no images</p>
+    <?php else: ?>
     <?php foreach ($imageArray  as $image): ?>
     <div class = "col text-center">
       <div>
       <?php if(strtolower($imageType) === "gallery"):?>
-        <img src="<?php echo $image["imagePath"];?>" alt="" class = "img-fluid shadow" style ="width: 300px; height: 300px;">
+        <img src="<?php echo $image["imagePath"];?>" alt="" class = "img-fluid shadow image-show" style ="width: 300px; height: 300px;"  onerror="this.alt='Image Not Found'">
         <?php else: ?>
-          <img src="<?php echo $image["imagePath"];?>" alt="" class = "img-fluid shadow" style ="width: 319px; height: 409px;">
+          <img src="<?php echo $image["imagePath"];?>" alt="" class = "img-fluid shadow image-show" style ="width: 319px; height: 409px;" onerror="this.alt='Image Not Found'">
           <?php endif; ?>
       </div>
         <p class = "mt-5 text-center test"><?php echo $image["imageName"];?></p>
     </div>
     <?php endforeach; ?>
+    <?php endif; ?>
+
   </div>
 </div>
 
@@ -81,6 +86,7 @@ if(isset($_SESSION["alertMessage"])){
 <script>
   const imagePathInput = document.querySelector("#imagePathInput")
   const imageSelect = document.querySelector("#imageSelect")
+
 
 
   // imageSelect.addEventListener("change", function(){
@@ -95,6 +101,7 @@ if(isset($_SESSION["alertMessage"])){
     getImagePath(imageSelect)
   })
 
+ 
 </script>
 <!-- For Rating System -->
 <script src="./js/rating.js"></script>
