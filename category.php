@@ -203,7 +203,7 @@ if(isset($_GET["clearFilter"])){
                                 if (in_array($categoryName, $productArray)):
                                 {
                                 $avgRating = getAvgRating($cat["id"], $connection);
-                                $totalReviews = getTotalProductReviews($cat["id"], $cat["category"], $connection);
+                                $totalReviews = getTotalProductReviews($cat["id"], $categoryName, $connection);
                                 }
                                 ?>
                                 <div class="stars">

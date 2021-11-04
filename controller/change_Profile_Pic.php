@@ -5,8 +5,8 @@ session_start();
 if (isset($_SESSION["user"]["userID"], $_POST["uploadPic"])) {
     //
     $hasImage = $_SESSION["user"]["userPicture"] === "" ? false : true;
-    require_once "../function/helpers.php";
-    require_once "../function/db.php";
+    require_once "../helper/helpers.php";
+    require_once "../connection/db.php";
     //
     $dataURI = $_POST["newProfilePic"];
     $image = file_get_contents($dataURI);
@@ -14,19 +14,19 @@ if (isset($_SESSION["user"]["userID"], $_POST["uploadPic"])) {
     $imageMime = validateImage($image);
     //
     if (!$imageMime) {
-        $_SESSION["uploadImageMessage"] = "Invalid Image Type";
+        $_SESSION["alertMessage"][] = "Invalid Image Type";
         header("Location: ../profile.php");
         exit();
     }
     //
-    $_SESSION["uploadImageMessage"] = "Image Updated";
+    $_SESSION["alertMessage"][] = "Image Updated";
     saveImage($imageMime, $image, $connection, $_SESSION["user"]["userID"], $hasImage);
     header("Location: ../profile.php");
     exit();
 }
 //
 if (isset($_SESSION["user"]["userID"], $_POST["removeProfilePic"])) {
-    require_once "../function/db.php";
+    require_once "../connection/db.php";
     $defaultPic = "./svg/profile-pic-default.svg";
     $stmt = $connection->prepare("UPDATE user SET imagePath = ? WHERE userId = ?");
     $stmt->bind_param("si", $defaultPic, $_SESSION["user"]["userID"]);
@@ -40,7 +40,7 @@ if (isset($_SESSION["user"]["userID"], $_POST["removeProfilePic"])) {
             unlink($file); // delete file
         }
     }
-    $_SESSION["uploadImageMessage"] = "Image Updated";
+    $_SESSION["alertMessage"][] = "Image Updated";
     header("Location: ../profile.php");
     exit();
 }

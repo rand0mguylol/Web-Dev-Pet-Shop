@@ -11,9 +11,9 @@ if (!isset($_SESSION["user"]["userRole"], $_GET["name"], $_GET["type"], $_GET["i
 
 $name = $_GET["name"];
 
-if(isset($_SESSION["uploadImageMessage"])){
-  $alertMessage = $_SESSION["uploadImageMessage"];
-  unset($_SESSION["uploadImageMessage"]);
+if(isset($_SESSION["alertMessage"])){
+  $alertMessage = $_SESSION["alertMessage"];
+  unset($_SESSION["alertMessage"]);
 }
 ?>
 

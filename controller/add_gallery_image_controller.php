@@ -32,7 +32,7 @@ $checkIdExistArray = [];
   $imageMime = validateImage($image);
   //
   if (!$imageMime) {
-      $_SESSION["uploadImageMessage"] = "Invalid Image Type";
+      $_SESSION["alertMessage"][] = "Invalid Image Type";
   }
 
   $index = count($checkIdExistArray) + 1;
@@ -57,6 +57,6 @@ $checkIdExistArray = [];
     addNewItemGalleryImage($imageMime, $image, $connection, $_GET["id"], $dirName, $name, $_GET["type"]);  
   }
 
-  $_SESSION["uploadImageMessage"] = "Image Added";
+  $_SESSION["alertMessage"][] = "Image Added";
   header("Location: ../add_gallery_image.php?id=$_GET[id]&category=$_GET[category]&type=$_GET[type]&name=$_GET[name]");
   exit();

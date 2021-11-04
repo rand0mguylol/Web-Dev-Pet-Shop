@@ -191,6 +191,16 @@ if (isset($userid)) {
     </div>
 <?php endif; ?>
 
+<?php if (isset($alertMessage)) : ?>
+    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
+        <?php foreach($alertMessage as $alert): ?>
+        <strong><?php echo $alert; ?></strong>
+        <br>
+        <?php endforeach; ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
 <!-- Review Offcanvas -->
 <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="reviewCanvas" aria-labelledby="reviewCanvasLabel">
 

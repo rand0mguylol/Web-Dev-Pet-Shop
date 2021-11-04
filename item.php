@@ -31,15 +31,20 @@ if (isset($_POST['add-to-cart-btn'])) {
     $itemQuantity = (int) $_POST['item_quantity'];
     $itemPrice = $itemInfo['itemMainInfo']['price'];
     $subtotal = $itemQuantity * $itemPrice;
-    $userid = $_SESSION['user']['userID'];
-    $cartid = getCartId($userid, $connection);
-    if (!$cartid) {
-        $cartid = createCart($userid, $connection);
+    $userid = isset($_SESSION['user']['userID']) ?? "";
+    if(!$userid){
+        $alertMessage[] = "Please log in or register to add to cart";
+    }else{
+        $cartid = getCartId($userid, $connection);
+        if (!$cartid) {
+            $cartid = createCart($userid, $connection);
+        }
+        $validation = validateCartItem($cartid, $itemID, $itemQuantity, $categoryClean, $connection);
+        if (!$validation) {
+            $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $subtotal, $connection);
+        }
     }
-    $validation = validateCartItem($cartid, $itemID, $itemQuantity, $categoryClean, $connection);
-    if (!$validation) {
-        $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $subtotal, $connection);
-    }
+   
 }
 ?>
 <?php $title = $itemInfo['itemMainInfo']['name'];?>
@@ -134,7 +139,7 @@ if (isset($_POST['add-to-cart-btn'])) {
                                 </div>
                             </form>
                             <?php
-                            if (isset($_POST['add-to-cart-btn'])) {
+                            if (isset($_POST['add-to-cart-btn'], $_SESSION["user"])) {
                                 if ($validation) {
                                     if ($validation === "maxed") {
                                         echo "<div class='alert alert-warning' role='alert'>

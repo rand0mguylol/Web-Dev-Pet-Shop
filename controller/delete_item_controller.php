@@ -22,6 +22,6 @@ if($_POST["type"] === "pet"){
 $stmt->bind_param("i", $id);
 $stmt->execute();
 
-$_SESSION["alertMessage"] = "Item Removed";
+$_SESSION["alertMessage"][] = "Item Removed";
 header("Location: ../admin.php");
 exit();

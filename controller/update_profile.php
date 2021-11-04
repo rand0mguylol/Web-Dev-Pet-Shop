@@ -1,8 +1,8 @@
 <?php session_start();
 
 if (isset($_POST["saveProfile"], $_SESSION["user"]["userID"])) {
-    require_once "../function/db.php";
-    require_once "../function/helpers.php";
+    require_once "../connection/db.php";
+    require_once "../helper/helpers.php";
     //
     $profileErrorArray = [];
     $firstName = sanitizeText($_POST["firstName"]);
@@ -36,9 +36,9 @@ if (isset($_POST["saveProfile"], $_SESSION["user"]["userID"])) {
             "postcode" => $postcode
         );
         updateProfile($newInfo, $connection, $_SESSION["user"]["userID"]);
-        $_SESSION["profileUpdateMessage"] = "Info Saved";
+        $_SESSION["alertMessage"][] = "Info Saved";
     } else {
-        $_SESSION["profileUpdateMessage"] = "Invalid Details";
+        $_SESSION["alertMessage"][] = "Invalid Details";
         $_SESSION["profileUpdateError"] = $profileErrorArray;
     }
     //

@@ -4,8 +4,8 @@ session_start();
 
 if (isset($_POST["signup"])) {
     //Import db & helpers
-    require_once "../function/db.php";
-    require_once "../function/helpers.php";
+    require_once "../connection/db.php";
+    require_once "../helper/helpers.php";
     //
     $errorArray = [];
     $firstName = sanitizeText($_POST["firstName"]);

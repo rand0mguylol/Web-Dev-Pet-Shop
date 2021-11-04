@@ -1,4 +1,8 @@
 <?php session_start();
+
+// echo "<pre>";
+// var_dump($_SESSION);
+// echo "</pre>";
 require_once "./connection/db.php";
 require_once "./helper/helpers.php";
 
@@ -14,25 +18,30 @@ if (!isset($_SESSION["user"]["userID"])) {
     exit();
 }
 
-if (isset($_SESSION["passwordChangeMsg"])) {
-    $profileUpdateMsg = $_SESSION["passwordChangeMsg"];
-    unset($_SESSION["passwordChangeMsg"]);
-}
+// if (isset($_SESSION["passwordChangeMsg"])) {
+//     $profileUpdateMsg = $_SESSION["passwordChangeMsg"];
+//     unset($_SESSION["passwordChangeMsg"]);
+// }
 
-if (isset($_SESSION["profileUpdateMessage"])) {
-    $profileUpdateMsg = $_SESSION["profileUpdateMessage"];
-    unset($_SESSION["profileUpdateMessage"]);
-}
+// if (isset($_SESSION["profileUpdateMessage"])) {
+//     $profileUpdateMsg = $_SESSION["profileUpdateMessage"];
+//     unset($_SESSION["profileUpdateMessage"]);
+// }
 
 if (isset($_SESSION["profileUpdateError"])) {
     $profileErrorArray = $_SESSION["profileUpdateError"];
     unset($_SESSION["profileUpdateError"]);
 }
 
-if (isset($_SESSION["uploadImageMessage"])) {
-    $profileUpdateMsg = $_SESSION["uploadImageMessage"];
-    unset($_SESSION["uploadImageMessage"]);
-}
+// if (isset($_SESSION["uploadImageMessage"])) {
+//     $profileUpdateMsg = $_SESSION["uploadImageMessage"];
+//     unset($_SESSION["uploadImageMessage"]);
+// }
+
+if(isset($_SESSION["alertMessage"])){
+    $alertMessage = $_SESSION["alertMessage"];
+    unset($_SESSION["alertMessage"]);
+  }
 
 // Order History
 $userid = $_SESSION['user']['userID'] ?? null;
@@ -51,6 +60,7 @@ if (isset($_POST["submit"])) {
         $rating++;
     } else {
         array_push($errorArray, "ratingErr");
+        $alertMessage[] = "Please select a rating";
         // $rateError = "Select a rating";
     }
 
@@ -58,6 +68,7 @@ if (isset($_POST["submit"])) {
         $feedback = sanitizeText($_POST["feedback"]);
     } else {
         array_push($errorArray, "feedbackErr");
+        $alertMessage[] = "Feedback must not be over 50 characters long"; 
         // $feedbackError = "Feedback must not be over 50 characters long";
     }
 

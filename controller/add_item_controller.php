@@ -22,6 +22,6 @@ if($_POST["type"] === "pet"){
 $stmt->bind_param("i", $id);
 $stmt->execute();
 
-$_SESSION["alertMessage"] = "Item Added";
+$_SESSION["alertMessage"][] = "Item Added";
 header("Location: ../admin.php");
 exit();

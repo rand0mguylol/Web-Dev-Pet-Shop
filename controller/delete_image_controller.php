@@ -34,6 +34,6 @@ unlink("." . $_POST["imagePath"]);
 //   rmdir($dir);
 // }
 
-$_SESSION["alertMessage"] = "Image Deleted";
+$_SESSION["alertMessage"][] = "Image Deleted";
 header("Location: ../delete_image.php?id=" . $_GET["id"] . "&type=" . $_POST["type"] . "&imageType=". $imageType);
 exit();

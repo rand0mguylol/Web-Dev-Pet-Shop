@@ -26,16 +26,16 @@ if($_GET["type"] === "pet"){
   $imageMime = validateImage($image);
   //
   if (!$imageMime) {
-      $_SESSION["uploadImageMessage"] = "Invalid Image Type";
+      $_SESSION["alertMessage"][] = "Invalid Image Type";
   }
 
   if (!$checkIdExist) {
     //
-    $_SESSION["uploadImageMessage"] = "Image Updated";
+    $_SESSION["alertMessage"][] = "Image Updated";
     addNewItemCardImage($imageMime, $image, $connection, $_GET["id"], $_GET["category"], $_GET["name"], $_GET["type"]);
   }else{
     $currentImagePath = $checkIdExist["imagePath"];
-    $_SESSION["uploadImageMessage"] = "Image Updated";
+    $_SESSION["alertMessage"][] = "Image Updated";
     overwriteItemCardImage($imageMime, $image, $connection, $_GET["id"], $_GET["name"], $currentImagePath, $_GET["type"]);  
   }
 
