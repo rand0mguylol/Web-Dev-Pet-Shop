@@ -324,7 +324,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                         <div class='row p-1'>OrderID : <?php echo $_SESSION['payment']['orderID']; ?></div>
                         <div class='row p-1'>Payment Method : <?php echo $_SESSION['payment']['paymentMethod']; ?></div>
                         <div class='row p-1'>Delivery Method : <?php echo $_SESSION['payment']['deliveryMethod']; ?></div>
-                        <div class='row p-1'>Total Paid : <?php echo $_SESSION['payment']['total']; ?></div>
+                        <div class='row p-1'>Total Paid : RM<?php echo $_SESSION['payment']['total']; ?></div>
                     </div>
                 <?php else : ?>
                     <?php foreach ($err as $msg) : ?>
