@@ -99,9 +99,6 @@ const image = document.querySelector("#cropBox")
         }
     })
 
-    // resetImageBtn.addEventListener("click", function(){
-    // })
-
     function getImageURL(input) {
         const reader = new FileReader()
         reader.addEventListener("load", function(e) {

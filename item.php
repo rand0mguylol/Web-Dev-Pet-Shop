@@ -2,6 +2,7 @@
 session_start();
 require_once "./connection/db.php";
 require_once "./helper/helpers.php";
+
 $petArray  = ["Dog", "Cat", "Hamster"];
 if (isset($_GET["category"], $_GET["id"])) {
     $category = sanitizeText($_GET["category"]);

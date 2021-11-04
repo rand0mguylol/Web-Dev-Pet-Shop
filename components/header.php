@@ -71,7 +71,9 @@ if (isset($userid)) {
                                 <small>Please do not leave the field blank.</small>
                             <?php endif; ?>
                         </div>
-                        <div class="col-12 text-center"><button type="submit" class="btn btn-primary offcanvas-sign-in" name="signin">Sign in</button></div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary offcanvas-sign-in" name="signin">Sign in</button>
+                        </div>
                     </form>
                     <div class="account-links d-flex justify-content-around mt-5">
                         <a href="" class="text-decoration-none"><small>Forgot Password?</small></a>
@@ -92,122 +94,150 @@ if (isset($userid)) {
                     <?php echo $_SESSION['user']['firstName'] . " " . $_SESSION['user']['lastName']; ?> </h2>
             </div>
             <div class="offcanvas-body mb-5">
-                <div class="col-12 text-center"><a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">View Account</a></div>
+            <?php if ($_SESSION["user"]["userRole"] === "STAFF"): ?>
+                    <div class="col-12 text-center">
+                    <a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="admin.php">Admin Panel</a>
+                </div>
+                <?php endif; ?>
+                <div class="col-12 text-center">
+                    <a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">View Account</a>
+                </div>
                 <form action="<?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method="POST">
                     <div class="col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name="logout">Log Out</button></div>
                 </form>
+               
             </div>
         </div>
     <?php endif; ?>
 
     <!-- Cart offcanvas -->
     <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="cartCanvas" aria-labelledby="cartCanvasLabel">
-        <div class="offcanvas-header flex-column">
+        <div class="offcanvas-header flex-column overflow-auto">
             <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             <?php if (!isset($cartitems)) : ?>
                 <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">
                     Cart is empty.
                 </h2>
             <?php else : ?>
-                <div class="text-start">
-                    <h3>Cart items:</h3>
-                </div>
-                <?php foreach ($cartitems as $item) : ?>
-                    <div class="card mb-3">
-                        <div class="row no-gutters">
-                            <div class="col-md-4">
-                                <img src="<?php echo $item['image']; ?>" class="card-img" alt="<?php echo $item['name'] . ' Image'; ?>">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title text-muted <?php if (strlen($item['name']) > 20) {
-                                                                            echo "h6";
-                                                                        } ?>"><?php echo $item['name']; ?></h5>
-                                    <p class="card-text m-0">
-                                        Quantity :<?php echo $item['quantity']; ?>
-                                    </p>
-                                    <p class="card-text m-0">
-                                        Total : RM<?php echo number_format((float)$item['subtotal'], 2, '.', ''); ?>
-                                    </p>
+                <section class=" offcanvas-title mt-3 text-start border-bottom">
+                    <h3> Your Cart items:</h3>
+                </section>
+                <section class="offcanvas-body mb-5 text-center">
+                    <div class="overflow-y">
+                        <?php foreach ($cartitems as $item) : ?>
+                            <div class="card mb-3">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-md-4">
+                                        <img src="<?php echo $item['image']; ?>" class="card-img text-center" alt="<?php echo $item['name'] . ' Image'; ?>">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body d-flex flex-column">
+                                            <section>
+                                                <h5 class="card-title text-start text-muted <?php if (strlen($item['name']) > 20) {
+                                                                                                echo "h6";
+                                                                                            } ?>"><?php echo $item['name']; ?></h5>
+                                            </section>
+                                            <section class="row card-text text-start m-0">
+                                                <div class="col-5 p-0">
+                                                    Quantity
+                                                </div>
+                                                <div class="col-2 p-0 text-center">
+                                                    :
+                                                </div>
+                                                <div class="col-5 p-0">
+                                                    <?php echo $item['quantity']; ?>
+                                                </div>
+                                            </section>
+                                            <section class="row card-text text-start m-0">
+                                                <div class="col-5 p-0 ">
+                                                    Total
+                                                </div>
+                                                <div class="col-2 p-0 text-center">
+                                                    :
+                                                </div>
+                                                <div class="col-5 p-0">
+                                                    RM<?php echo number_format((float)$item['subtotal'], 2, '.', ''); ?>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php endforeach ?>
                     </div>
-                <?php endforeach ?>
-                <a href="./payment.php" class="btn btn-outline-dark" href="./payment.php">Pay >></a>
-            <?php endif ?>
-        </div>
-        <div class="offcanvas-body mb-5">
-            <div>
-            </div>
+                </section>
+                <div>
+                    <a href="./payment.php" class="btn btn-outline-dark" href="./payment.php">Pay >></a>
+                </div>
         </div>
     </div>
+<?php endif ?>
+</div>
+</div>
+<!-- End of Offcanvas -->
+<!-- Alert for pages. AOS CSS and JS required -->
+<!-- The variable depends on the page -->
+<?php if (isset($loginMessage)) : ?>
+    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
+        <strong><?php echo $loginMessage; ?></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <!-- End of Offcanvas -->
-    <!-- Alert for pages. AOS CSS and JS required -->
-    <!-- The variable depends on the page -->
-    <?php if (isset($loginMessage)) : ?>
-        <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
-            <strong><?php echo $loginMessage; ?></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    <?php endif; ?>
+<?php endif; ?>
 
-    <?php if (isset($profileUpdateMsg)) : ?>
-        <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
-            <strong><?php echo $profileUpdateMsg; ?></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    <?php endif; ?>
+<?php if (isset($profileUpdateMsg)) : ?>
+    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
+        <strong><?php echo $profileUpdateMsg; ?></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
 
-    <!-- Review Offcanvas -->
-    <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="reviewCanvas" aria-labelledby="reviewCanvasLabel">
+<!-- Review Offcanvas -->
+<div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="reviewCanvas" aria-labelledby="reviewCanvasLabel">
 
-        <!-- Title & X Button -->
-        <div class="offcanvas-header flex-column">
-            <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">REVIEW PRODUCT</h2>
-        </div>
-        <div class="offcanvas-body mb-5">
-            <div>
-                <!-- Form -->
-                <form action="" class="row g-3 row-cols-1" method="POST">
-                    <!-- Star Rating -->
-                    <div class="card-rating-section d-inline-block text-center">
-                        <p>Rating: </p>
-                        <i class="fa fa-star fa-2x" data-index-num="0"></i>
-                        <i class="fa fa-star fa-2x" data-index-num="1"></i>
-                        <i class="fa fa-star fa-2x" data-index-num="2"></i>
-                        <i class="fa fa-star fa-2x" data-index-num="3"></i>
-                        <i class="fa fa-star fa-2x" data-index-num="4"></i>
-                    </div>
-                    <input type="hidden" id="rating" name="rating" value="-1">
-                    <?php if (isset($_POST["submit"]) && in_array("ratingErr", $errorArray)) :  ?>
-                        <p class="mt-1 text-danger mb-0 text-center">Please select a rating</p>
-                    <?php else : ?>
-                        <p class="mt-1 mb-0"></p>
-                    <?php endif; ?>
+    <!-- Title & X Button -->
+    <div class="offcanvas-header flex-column">
+        <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <h2 class="offcanvas-title mt-3" id="offcanvasExampleLabel">REVIEW PRODUCT</h2>
+    </div>
+    <div class="offcanvas-body mb-5">
+        <div>
+            <!-- Form -->
+            <form action="" class="row g-3 row-cols-1" method="POST">
+                <!-- Star Rating -->
+                <div class="card-rating-section d-inline-block text-center">
+                    <p>Rating: </p>
+                    <i class="fa fa-star fa-2x" data-index-num="0"></i>
+                    <i class="fa fa-star fa-2x" data-index-num="1"></i>
+                    <i class="fa fa-star fa-2x" data-index-num="2"></i>
+                    <i class="fa fa-star fa-2x" data-index-num="3"></i>
+                    <i class="fa fa-star fa-2x" data-index-num="4"></i>
+                </div>
+                <input type="hidden" id="rating" name="rating" value="-1">
+                <?php if (isset($_POST["submit"]) && in_array("ratingErr", $errorArray)) :  ?>
+                    <p class="mt-1 text-danger mb-0 text-center">Please select a rating</p>
+                <?php else : ?>
+                    <p class="mt-1 mb-0"></p>
+                <?php endif; ?>
 
 
-                    <!-- Feedback Textarea -->
-                    <div class="col">
-                        <label for="feedback" class="form-label">Feedback:</label>
-                        <textarea class="form-control" resize="none" id="feedback" name="feedback" rows="5" placeholder="Share your experience with the product and help others make better purchases!"></textarea>
-                    </div>
-                    <?php if (isset($_POST["submit"]) && in_array("feedbackErr", $errorArray)) :  ?>
-                        <p class="mt-1 text-danger mb-0 text-center">Feedback must not be over 50 characters long</p>
-                    <?php else : ?>
-                        <p class="mt-1 mb-0"></p>
-                    <?php endif; ?>
+                <!-- Feedback Textarea -->
+                <div class="col">
+                    <label for="feedback" class="form-label">Feedback:</label>
+                    <textarea class="form-control" resize="none" id="feedback" name="feedback" rows="5" placeholder="Share your experience with the product and help others make better purchases!"></textarea>
+                </div>
+                <?php if (isset($_POST["submit"]) && in_array("feedbackErr", $errorArray)) :  ?>
+                    <p class="mt-1 text-danger mb-0 text-center">Feedback must not be over 50 characters long</p>
+                <?php else : ?>
+                    <p class="mt-1 mb-0"></p>
+                <?php endif; ?>
 
-                    <!-- Submit Button -->
-                    <div class="col-12 text-center submitButtonContainer">
-
-                        <input type="hidden" name="reviewItemId" class="reviewItemInput" value="">
-                        <button type="submit" class="btn btn-warning offcanvas-submit" id="submit_review" name="submit">Submit</button>
-                    </div>
-                </form>
-            </div>
+                <!-- Submit Button -->
+                <div class="col-12 text-center submitButtonContainer">
+                    <input type="hidden" name="reviewItemId" class="reviewItemInput" value="">
+                    <button type="submit" class="btn btn-warning offcanvas-submit" id="submit_review" name="submit">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
-    <!-- End of Offcanvas -->
+</div>
+<!-- End of Offcanvas -->

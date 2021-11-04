@@ -1,6 +1,11 @@
 <?php session_start();
 require_once "./connection/db.php";
 require_once "./helper/helpers.php";
+
+if (isset($_SESSION['payment']))
+    {unset($_SESSION['payment']);
+}
+
 $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
 
 // Return to index if not login
