@@ -177,7 +177,7 @@ if (isset($_GET["category"])) {
                             <div class="stars">
                                 <?php 
                                 $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
-                                if (in_array($cat["category"], $productArray)):
+                                if (in_array($categoryName, $productArray)):
                                 {
                                 $avgRating = getAvgRating($cat["id"], $connection);
                                 $totalReviews = getTotalProductReviews($cat["id"], $cat["category"], $connection);

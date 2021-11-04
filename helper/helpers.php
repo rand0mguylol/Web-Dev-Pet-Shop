@@ -856,7 +856,7 @@ function getAvgRating($productId, $connection)
     $avgRating = $row['AverageRating'];
     $stmt -> close();
     return $avgRating;
-=======
+}
 
 function getAdminSearch($connection, $type, $q){
     $adminSearchArray = [];
