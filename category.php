@@ -4,6 +4,8 @@ require_once "./connection/db.php";
 require_once "./helper/helpers.php";
 
 if (isset($_GET["category"])) {
+    $q = "";
+    $sortBy = "";
     $category = sanitizeText($_GET["category"]);
     $categoryHeader = getCategoryInfo($connection, $category);
     $categoryName = $categoryHeader["category"];
@@ -13,14 +15,28 @@ if (isset($_GET["category"])) {
         exit();
     }
     //
-    if (isset($_GET["q"]) && $_GET["q"] !== "") {
+    if (isset($_GET["q"])) {
         $q = sanitizeText($_GET["q"]);
-        $categoryArray = getCategoryProduct($connection, $category, $q);
-    } else {
-        $categoryArray = getCategoryProduct($connection, $category);
+    }
+
+
+    $categoryArray = getCategoryProduct($connection, $category, $q);
+
+
+    if(isset($_GET["filter"], $_GET["sortBy"])){
+        $sortBy = $_GET["sortBy"];
+        unset($_GET["sortBy"]);
+        $categoryArray = getCategoryProduct($connection, $category, $q, $sortBy);
     }
 } else {
     header("Location: ./index.php");
+    exit();
+}
+
+if(isset($_GET["clearFilter"])){
+    unset($_GET["clearFilter"]);
+    unset($_GET["sortBy"]);
+    header("Location: ./category.php?category=$category");
     exit();
 }
 ?>
