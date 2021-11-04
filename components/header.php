@@ -8,9 +8,9 @@ $folder = $_SERVER["REQUEST_URI"];
 $path = dirname($folder);
 $currentPage = $path !== "\\" ? basename($folder) : "";
 //
-$loginMessage = isset($_SESSION["loginMessage"]) ? $_SESSION["loginMessage"] : null;
+$alertMessage = isset($_SESSION["alertMessage"]) ? $_SESSION["alertMessage"] : null;
 $loginErrorArray = isset($_SESSION["loginErrorArray"]) ? $_SESSION["loginErrorArray"] : [];
-unset($_SESSION["loginMessage"]);
+unset($_SESSION["alertMessage"]);
 unset($_SESSION["loginErrorArray"]);
 //
 $userid = $_SESSION['user']['userID'] ?? null;
@@ -177,7 +177,7 @@ if (isset($userid)) {
 <!-- End of Offcanvas -->
 <!-- Alert for pages. AOS CSS and JS required -->
 <!-- The variable depends on the page -->
-<?php if (isset($loginMessage)) : ?>
+<!-- <?php if (isset($loginMessage)) : ?>
     <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
         <strong><?php echo $loginMessage; ?></strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -189,7 +189,7 @@ if (isset($userid)) {
         <strong><?php echo $profileUpdateMsg; ?></strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-<?php endif; ?>
+<?php endif; ?> -->
 
 <?php if (isset($alertMessage)) : ?>
     <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">

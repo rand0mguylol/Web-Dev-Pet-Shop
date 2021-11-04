@@ -47,6 +47,16 @@ input[type="number"] {
   -moz-appearance: textfield !important;
 }
 
+.register-container{
+  width: 70%;
+  margin:0 auto;
+  border: 1px solid rgb(233, 229, 229);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  padding-bottom: 5rem;
+}
+
 .main-wrapper.specific,
 .main-wrapper.general {
   background-color: #f3f3f3;
@@ -684,7 +694,7 @@ input[type="number"] {
   white-space: nowrap;
   /* overflow: hidden; */
   text-overflow: ellipsis;
-
+}
 .cart-container{
   height: 480px;
 }

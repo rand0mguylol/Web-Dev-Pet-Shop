@@ -46,13 +46,13 @@ if (isset($_POST["signin"]) && isset($_GET["page"])) {
                 "postcode" => $row["postcode"],
                 "userRole" => $row["userRole"]
             );
-            $_SESSION["loginMessage"] = "Login Successful";
+            $_SESSION["alertMessage"][] = "Login Successful";
         } else {
-            $_SESSION["loginMessage"] = "Incorrect Login Details";
+            $_SESSION["alertMessage"][] = "Incorrect Login Details";
         }
     } else {
         $_SESSION["loginErrorArray"] = $loginErrorArray;
-        $_SESSION["loginMessage"] = "Invalid Detials";
+        $_SESSION["alertMessage"][] = "Invalid Detials";
     }
     header("Location: ../$lastPage");
     exit();

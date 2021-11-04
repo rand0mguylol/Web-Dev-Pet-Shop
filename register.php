@@ -8,23 +8,9 @@ if (isset($_SESSION["accountCreationError"])) {
 ?>
 
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-    <link rel="stylesheet" href="./newapp.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <title>Registration</title>
-</head>
-
-<body>
-    <div class="container my-5 ">
+<?php require_once "./components/header.php"; ?>
+<?php require_once "./components/navbar.php"; ?>
+    <div class="container my-5 rounded-3 px-5 py-5 bg-none border shadow ">
         <h1 class="mb-5 text-center">REGISTER AN ACCOUNT</h1>
         <form class="row g-3 " id="register-form" action="./controller/register_user.php" method="POST">
 
@@ -63,7 +49,7 @@ if (isset($_SESSION["accountCreationError"])) {
             <div class="col-md-12">
                 <label for="inputPassword" class="form-label">Password*</label>
                 <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="password" required>
-                <small class="mt-1" <?php if (in_array("password", $errorArray)) :  ?> style="color:red" <?php endif; ?>>Length must be between 8 to 16 characters, including one digit, one uppercase, one lowecase character and may contain the following !@#$%& </small>
+                <div class = "<?php if (in_array("password", $errorArray))  echo "bg-danger ps-3 rounded mt-3";?>"><small class="fs-6  fst-italic fw-lighter <?php if (in_array("password", $errorArray))  echo "text-white";?>" >Length must be between 8 to 16 characters, including one digit, one uppercase, one lowecase character and may contain the following !@#$%& </small></div>
             </div>
 
             <div class="col-md-12">
@@ -78,7 +64,9 @@ if (isset($_SESSION["accountCreationError"])) {
             </div>
         </form>
     </div>
+    <?php require_once "./components/footer.php"; ?>
     <?php require_once "./script/general_scripts.php"; ?>
+    <script src = "./js/aos.js"></script>
     <script src="./js/register.js"></script>
 </body>
 
