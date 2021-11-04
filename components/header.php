@@ -77,7 +77,7 @@ if (isset($userid)) {
                     </form>
                     <div class="account-links d-flex justify-content-around mt-5">
                         <a href="" class="text-decoration-none"><small>Forgot Password?</small></a>
-                        <a href="" class="text-decoration-none"><small>Create Account</small></a>
+                        <a href="./register.php" class="text-decoration-none"><small>Create Account</small></a>
                     </div>
                 </div>
             </div>
