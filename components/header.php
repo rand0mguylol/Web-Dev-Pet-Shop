@@ -177,14 +177,14 @@ if (isset($userid)) {
 <!-- End of Offcanvas -->
 <!-- Alert for pages. AOS CSS and JS required -->
 <!-- The variable depends on the page -->
-<!-- <?php if (isset($loginMessage)) : ?>
+<?php if (isset($loginMessage)) : ?>
     <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
         <strong><?php echo $loginMessage; ?></strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <?php endif; ?>
 
-<?php if (isset($profileUpdateMsg)) : ?>
+<!--  <?php if (isset($profileUpdateMsg)) : ?>
     <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
         <strong><?php echo $profileUpdateMsg; ?></strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

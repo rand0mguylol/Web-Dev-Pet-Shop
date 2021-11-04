@@ -38,10 +38,10 @@ if (isset($_SESSION["profileUpdateError"])) {
 //     unset($_SESSION["uploadImageMessage"]);
 // }
 
-if(isset($_SESSION["alertMessage"])){
-    $alertMessage = $_SESSION["alertMessage"];
-    unset($_SESSION["alertMessage"]);
-  }
+// if(isset($_SESSION["alertMessage"])){
+//     $alertMessage = $_SESSION["alertMessage"];
+//     unset($_SESSION["alertMessage"]);
+//   }
 
 // Order History
 $userid = $_SESSION['user']['userID'] ?? null;
@@ -60,7 +60,7 @@ if (isset($_POST["submit"])) {
         $rating++;
     } else {
         array_push($errorArray, "ratingErr");
-        $alertMessage[] = "Please select a rating";
+        $_SESSION["alertMessage"][]= "Please select a rating";
         // $rateError = "Select a rating";
     }
 
@@ -68,7 +68,7 @@ if (isset($_POST["submit"])) {
         $feedback = sanitizeText($_POST["feedback"]);
     } else {
         array_push($errorArray, "feedbackErr");
-        $alertMessage[] = "Feedback must not be over 50 characters long"; 
+        $_SESSION["alertMessage"][] = "Feedback must not be over 50 characters long"; 
         // $feedbackError = "Feedback must not be over 50 characters long";
     }
 
