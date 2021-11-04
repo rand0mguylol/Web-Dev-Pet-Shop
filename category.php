@@ -19,15 +19,12 @@ if (isset($_GET["category"])) {
         $q = sanitizeText($_GET["q"]);
     }
 
-
-    $categoryArray = getCategoryProduct($connection, $category, $q);
-
-
-    if(isset($_GET["filter"], $_GET["sortBy"])){
+    if(isset($_GET["sortBy"])){
         $sortBy = $_GET["sortBy"];
-        unset($_GET["sortBy"]);
-        $categoryArray = getCategoryProduct($connection, $category, $q, $sortBy);
     }
+
+    $categoryArray = getCategoryProduct($connection, $category, $q, $sortBy);
+
 } else {
     header("Location: ./index.php");
     exit();
@@ -81,22 +78,9 @@ if(isset($_GET["clearFilter"])){
                         Lowest Price
                     </label>
                 </div>
-                <legend>Rating</legend>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortBy" id="ratingHighest">
-                    <label class="form-check-label" for="ratingHighest">
-                        Highest Rating
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortBy" id="ratingLowest">
-                    <label class="form-check-label" for="ratingLowest">
-                        Lowest Rating
-                    </label>
-                </div>
             </fieldset>
             <button type="submit" class="mt-5 w-100 clear-filter-button" name = "clearFilter">CLEAR FILTERS</button>
-            <button type="submit" class="mt-5 w-100 clear-filter-button" name = "filter">SUBMIT FILTERS</button>
+            <button type="submit" class="mt-2 w-100 submit-filter-button">SUBMIT FILTERS</button>
         </form>
     </div>
 </div>
@@ -142,7 +126,7 @@ if(isset($_GET["clearFilter"])){
                         placeholder="Search for Products" name="q" value="<?php if (isset($q)) echo $q ?>">
                         <input type="hidden" value="<?php echo $sortBy; ?>" name="sortBy">
                     <input type="hidden" value="<?php echo $category; ?>" name="category">
-                    <button class="btn search text-end" name="search"><img src="./svg/search (1).svg" alt=""></button>
+                    <button class="btn search text-end"><img src="./svg/search (1).svg" alt=""></button>
                 </form>
             </div>
             <div class="filter-container">
@@ -233,12 +217,6 @@ if(isset($_GET["clearFilter"])){
                                     <?php endif; ?>
                                 </div>
                                 <?php endif; ?>
-                                <!-- <img src="./svg/star-fill.svg" alt="">
-                                <img src="./svg/star-fill.svg" alt="">
-                                <img src="./svg/star-fill.svg" alt="">
-                                <img src="./svg/star-fill-white.svg" alt="">
-                                <img src="./svg/star-fill-white.svg" alt="">
-                                <small class=" align-bottom">1 out of 5</small> -->
                             </div>
                         </div>
                         <div class="card-price-section text-center">

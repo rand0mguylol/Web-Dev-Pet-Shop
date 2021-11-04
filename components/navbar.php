@@ -48,9 +48,6 @@
                             </div><!-- end col-3 -->
                         </div><!-- end row -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="#">About Us</a>
                 </li>
             </ul>

@@ -10,6 +10,11 @@ if (isset($_GET["category"], $_GET["id"])) {
     $id = filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT);
     $id = (int) $id;
     $itemInfo = getItemInfo($id, $categoryClean, $connection);
+
+    if(!$itemInfo){
+        header("Location: index.php");
+        exit();
+    } 
     $itemGalleryArray = getImage($id,  $categoryClean, "Gallery", false, $connection);
     $itemThumbnailArray = getImage($id, $categoryClean, "Thumbnail", false, $connection);
     $quantity = $itemInfo['itemSubInfo']['quantity'] ?? 1;

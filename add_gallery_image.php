@@ -30,8 +30,6 @@ if(isset($_SESSION["alertMessage"])){
 <div class="container my-5 px-5">
     <h1 class = "text-center mt-5">Add Gallery Image</h1>
     <h2 class = "text-center my-3"><?php echo $name; ?></h2>
-    <!-- <p class = "text-center lead">If the item has an existing card image, it will be overwritten</p> -->
-
     <div class="outer-crop-wrapper text-center">
         <div class="box mx-auto">
             <img src="" alt="" id="cropBox" style="display: block; max-width: 100%;">
@@ -46,10 +44,6 @@ if(isset($_SESSION["alertMessage"])){
             <button type="reset" class="btn btn-dark fileInputResetBtn">Reset</button>
             <button class="hidden uploadPicBtn btn" type="button">Upload</button>
         </form>
-
-        <!-- <form action="./controller/change_Profile_Pic.php" class="" method="POST">
-            <button class="hidden btn btn-danger removePicBtn" type="submit" name="removeProfilePic">Remove Current Pic</button>
-        </form> -->
     </div>
 </div>
 
@@ -62,25 +56,9 @@ if(isset($_SESSION["alertMessage"])){
 const fileInput = document.querySelector(".fileInput")
 const uploadPicBtn = document.querySelector(".uploadPicBtn")
 const resetImageBtn = document.querySelector(".fileInputResetBtn")
-// const removePicBtn = document.querySelector(".removePicBtn")
 const imageForm = document.querySelector(".imageForm")
 const outerCropWrapper = document.querySelector(".outer-crop-wrapper")
-// const userProfilePicture = document.querySelector(".userProfilePicture")
 
-// console.dir(
-//     userProfilePicture
-// )
-
-// console.log(typeof(userProfilePicture.src))
-
-// if (userProfilePicture.src !== userProfilePicture.baseURI && userProfilePicture.src.includes(
-//         "/svg/profile-pic-default.svg") === false) {
-//     removePicBtn.classList.remove("hidden")
-// }
-
-// imageForm.addEventListener("submit", function(e){
-//   e.preventDefault()
-// })
 
 const imageCrop = new Cropper(image, {
     aspectRatio: 1,

@@ -75,8 +75,7 @@ if (isset($userid)) {
                             <button type="submit" class="btn btn-primary offcanvas-sign-in" name="signin">Sign in</button>
                         </div>
                     </form>
-                    <div class="account-links d-flex justify-content-around mt-5">
-                        <a href="" class="text-decoration-none"><small>Forgot Password?</small></a>
+                    <div class="account-links d-flex justify-content-center mt-5">
                         <a href="./register.php" class="text-decoration-none"><small>Create Account</small></a>
                     </div>
                 </div>

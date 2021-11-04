@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php session_start(); 
+
+require_once "./connection/db.php";
+?>
 <?php $title = "PetterTogether - Home Page";?>
 <?php require_once "./components/header.php"; ?>
 <!-- Main Section - Navbar & Hero Section -->
@@ -9,7 +12,7 @@
             <div class="row">
                 <div class="col-12 col-xl-6">
                     <h1 class="lead-header">Defining<span>Relationships</span></h1>
-                    <p class="lead-paragraph lead mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, molestias quas? Soluta voluptatibus inventore veniam omnis ipsa eum ad et!</p>
+                    <p class="lead-paragraph lead mt-3">Expand the family today with the world's leading pet store, PetterTogether! Regardless of whether your companion is a dog, cat or hamster. they will all be a purrfect addition to the family!</p>
                 </div>
             </div>
         </div>
@@ -25,8 +28,8 @@
             <div class="row justify-content-center justify-content-lg-between align-items-center" data-aos="fade-right" data-aos-delay="100">
                 <div class="col-12 col-lg-7 animal-showcase-text">
                     <h3>Men's Best Friend</h3>
-                    <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus in recusandae sed impedit, voluptatum tempore magnam laudantium vero quos. Cum!</p>
-                    <a href="#" class="btn btn-danger mt-3">Browse Now</a>
+                    <p class="lead">Man's best friend will be by your side whether you're having a good day or down in the dumps. Their playfulness and affection will surely cheer you up. </p>
+                    <a href="./category.php?category=Dog" class="btn btn-danger mt-3">Browse Now</a>
                 </div>
                 <div class="col-12 col-lg-4 animal-showcase-img">
                     <img src="./images/home/home_dog_square_300_300.jpg" alt="" class="img-fluid shadow rounded-circle ">
@@ -35,8 +38,8 @@
             <div class="row justify-content-center justify-content-lg-between align-items-center" data-aos="fade-right" data-aos-delay="100">
                 <div class="col-12 col-lg-7 animal-showcase-text">
                     <h3>Purrfect Pawtner</h3>
-                    <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus in recusandae sed impedit, voluptatum tempore magnam laudantium vero quos. Cum!</p>
-                    <a href="#" class="btn btn-danger mt-3">Browse Now</a>
+                    <p class="lead">These felines are for those who want a more elegant and sophisticated companion to join their family. Their affection will help make every day a brighter one for you.</p>
+                    <a href="./category.php?category=Cat" class="btn btn-danger mt-3">Browse Now</a>
                 </div>
                 <div class="col-12 col-lg-4 animal-showcase-img">
                     <img src="./images/home/home_cat_square_300_300.jpg" alt="" class="img-fluid shadow rounded-circle ">
@@ -45,8 +48,8 @@
             <div class="row justify-content-center justify-content-lg-between align-items-center" data-aos="fade-right" data-aos-delay="100">
                 <div class="col-12 col-lg-7 animal-showcase-text">
                     <h3>Ball of Fur</h3>
-                    <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus in recusandae sed impedit, voluptatum tempore magnam laudantium vero quos. Cum!</p>
-                    <a href="#" class="btn btn-danger mt-3">Browse Now</a>
+                    <p class="lead">These little furballs are literal balls of joy when raised by owners in a loving environment. You'll find it fun to watch and take care of them.</p>
+                    <a href="./category.php?category=Hamster" class="btn btn-danger mt-3">Browse Now</a>
                 </div>
                 <div class="col-12 col-lg-4 animal-showcase-img">
                     <img src="./images/home/home_hamster_square_300_300.jpg" alt="" class="img-fluid shadow rounded-circle ">
@@ -65,7 +68,7 @@
             <div class="col-12 col-xl-3 col-md-6 recommendation-indi card-outer">
                 <div class="card-wrapper" data-aos="fade-up" data-aos-delay="100">
                     <div class="card-main-section">
-                        <img src="./images/card/card_pomeranian_320_410.jpg" alt="" class="img-fluid">
+                        <img src="./Images/Dog_Food/CESAR_Dog_Food_Beef_x6_Wet_Food/Card/CESAR_Dog_Food_Beef_x6_Wet_Food_1_Card_319_409.jpg" alt="" class="img-fluid">
                         <div class="card-main-section-icon">
                             <button class="btn card-icon-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -81,38 +84,54 @@
                     </div>
 
                     <div class="card-content-section">
-                        <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                        <a href="item.php?category=Dog Food&id=2" class="text-decoration-none text-dark">
+                            <h5 class="text-center mt-2 px-2 text-truncate">CESAR Dog Food Beef x6 Dog Tray Dog Wet Food</h5>
+                        </a>
                     </div>
 
                     <div class="card-rating-section text-center">
                         <div class="stars">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <small class=" align-bottom">5 out of 5</small>
+                            <?php 
+                            $avgRating = getAvgRating(2, $connection);
+                            $totalReviews = getTotalProductReviews(2, "Dog Food", $connection);
+                            ?>
+                            <div class="stars">
+                                <?php 
+                                if ($totalReviews == 0){
+                                    echo ("<small class='align-bottom'>No ratings</small>");  
+                                }
+                                if ($totalReviews != 0):
+                                ?>
+                                <?php
+                                    $limit = floor($avgRating);
+                                    $remainder = fmod($avgRating, $limit);
+                                    for($i = 0; $i < $limit; $i++) {
+                                        echo ("<img src='./svg/star-fill.svg' alt='Yellow Star'>");
+                                    }
+                                    if ($remainder >= 0.5){
+                                        echo ("<img src='./svg/star-half.svg' alt='Half Star'>");
+                                    } elseif ($remainder != 0){
+                                        echo ("<img src='./svg/star-fill-white.svg' alt='Gray Star'>");
+                                    }
+                                    if($avgRating < 4.5){                 
+                                        for($i = 0; $i < 5 - ceil($avgRating); $i++){
+                                            echo ("<img src='./svg/star-fill-white.svg' alt='Gray Star'>");
+                                        }
+                                    }
+                                ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="card-price-section text-center">
-                        <span>MYR 1000.00</span>
+                        <span>RM 20.50</span>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-3 col-md-6 recommendation-indi card-outer">
                 <div class="card-wrapper" data-aos="fade-up" data-aos-delay="200">
                     <div class="card-main-section">
-                        <img src="./images/card/card_pomeranian_320_410.jpg" alt="" class="img-fluid">
+                        <img src="./Images/Cat_Food/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg/Card/IAMS_Cat_Dry_Food_Adult_Care_Chicken_3kg_1_Card_319_409.jpg" alt="" class="img-fluid">
                         <div class="card-main-section-icon">
                             <button class="btn card-icon-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -128,38 +147,54 @@
                     </div>
 
                     <div class="card-content-section">
-                        <h5 class="text-center mt-2 px-2">Pomeranian Fox Face</h5>
+                        <a href="item.php?category=Cat Food&id=25" class="text-decoration-none text-dark">
+                            <h5 class="text-center mt-2 px-2 text-truncate">IAMS Cat Dry Food Adult Indoor Weight & Hairball Care Chicken 3kg Cat Food</h5>
+                        </a>
                     </div>
 
                     <div class="card-rating-section text-center">
                         <div class="stars">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <small class=" align-bottom">5 out of 5</small>
+                            <?php 
+                            $avgRating = getAvgRating(25, $connection);
+                            $totalReviews = getTotalProductReviews(25, "Cat Food", $connection);
+                            ?>
+                            <div class="stars">
+                                <?php 
+                                if ($totalReviews == 0){
+                                    echo ("<small class='align-bottom'>No ratings</small>");  
+                                }
+                                if ($totalReviews != 0):
+                                ?>
+                                <?php
+                                    $limit = floor($avgRating);
+                                    $remainder = fmod($avgRating, $limit);
+                                    for($i = 0; $i < $limit; $i++) {
+                                        echo ("<img src='./svg/star-fill.svg' alt='Yellow Star'>");
+                                    }
+                                    if ($remainder >= 0.5){
+                                        echo ("<img src='./svg/star-half.svg' alt='Half Star'>");
+                                    } elseif ($remainder != 0){
+                                        echo ("<img src='./svg/star-fill-white.svg' alt='Gray Star'>");
+                                    }
+                                    if($avgRating < 4.5){                 
+                                        for($i = 0; $i < 5 - ceil($avgRating); $i++){
+                                            echo ("<img src='./svg/star-fill-white.svg' alt='Gray Star'>");
+                                        }
+                                    }
+                                ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="card-price-section text-center">
-                        <span>MYR 1000.00</span>
+                        <span>RM 72.90</span>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-xl-3 col-md-12 recommendation-indi card-outer">
                 <div class="card-wrapper" data-aos="fade-up" data-aos-delay="300">
                     <div class="card-main-section">
-                        <img src="./images/card/card_pomeranian_320_410.jpg" alt="" class="img-fluid">
+                        <img src="./Images/Dog_Accessories/Reflective Rope Pet Dog Leash/Card/Leash_Nylon_1_Card_319_409.jpg" alt="" class="img-fluid">
                         <div class="card-main-section-icon">
                             <button class="btn card-icon-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
@@ -175,31 +210,47 @@
                     </div>
 
                     <div class="card-content-section">
-                        <h5 class="text-center mt-2 px-2 text-truncate">Pomeranian Fox Face</h5>
+                        <a href="item.php?category=Dog Accessories&id=17" class="text-decoration-none text-dark">
+                            <h5 class="text-center mt-2 px-2 text-truncate">Reflective Rope Pet Dog Leash Nylon Traction Rope Running Strap Belt Glow Lead</h5>
+                        </a>
                     </div>
 
                     <div class="card-rating-section text-center">
-                        <div class="stars">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                            </svg>
-                            <small class=" align-bottom">5 out of 5</small>
+                    <div class="stars">
+                            <?php 
+                            $avgRating = getAvgRating(17, $connection);
+                            $totalReviews = getTotalProductReviews(17, "Dog Accessories", $connection);
+                            ?>
+                            <div class="stars">
+                                <?php 
+                                if ($totalReviews == 0){
+                                    echo ("<small class='align-bottom'>No ratings</small>");  
+                                }
+                                if ($totalReviews != 0):
+                                ?>
+                                <?php
+                                    $limit = floor($avgRating);
+                                    $remainder = fmod($avgRating, $limit);
+                                    for($i = 0; $i < $limit; $i++) {
+                                        echo ("<img src='./svg/star-fill.svg' alt='Yellow Star'>");
+                                    }
+                                    if ($remainder >= 0.5){
+                                        echo ("<img src='./svg/star-half.svg' alt='Half Star'>");
+                                    } elseif ($remainder != 0){
+                                        echo ("<img src='./svg/star-fill-white.svg' alt='Gray Star'>");
+                                    }
+                                    if($avgRating < 4.5){                 
+                                        for($i = 0; $i < 5 - ceil($avgRating); $i++){
+                                            echo ("<img src='./svg/star-fill-white.svg' alt='Gray Star'>");
+                                        }
+                                    }
+                                ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="card-price-section text-center">
-                        <span>MYR 1000.00</span>
+                        <span>MYR 31.90</span>
                     </div>
                 </div>
             </div>
@@ -216,7 +267,7 @@
                     </svg></div>
                 <div class="our-trust-text">
                     <h5 class="mb-3">24/7 Service</h5>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, excepturi!</p>
+                    <p>Do not hesitate to contact us if you have any inquries!</p>
                 </div>
             </div>
             <div class="col-12 col-md-4 text-center our-trust-indi">
@@ -225,7 +276,7 @@
                     </svg></div>
                 <div class="our-trust-text">
                     <h5 class="mb-3">Affordable Pricing</h5>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, excepturi!</p>
+                    <p>Owning a pet isn't cheap. Let us ease your burden with our affordable products</p>
                 </div>
             </div>
             <div class="col-12 col-md-4 text-center our-trust-indi">
@@ -234,7 +285,7 @@
                     </svg></div>
                 <div class="our-trust-text">
                     <h5 class="mb-3">Certified Branding</h5>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus, excepturi!</p>
+                    <p>Your pets deserve the best!</p>
                 </div>
             </div>
         </div>

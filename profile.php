@@ -18,30 +18,10 @@ if (!isset($_SESSION["user"]["userID"])) {
     exit();
 }
 
-// if (isset($_SESSION["passwordChangeMsg"])) {
-//     $profileUpdateMsg = $_SESSION["passwordChangeMsg"];
-//     unset($_SESSION["passwordChangeMsg"]);
-// }
-
-// if (isset($_SESSION["profileUpdateMessage"])) {
-//     $profileUpdateMsg = $_SESSION["profileUpdateMessage"];
-//     unset($_SESSION["profileUpdateMessage"]);
-// }
-
 if (isset($_SESSION["profileUpdateError"])) {
     $profileErrorArray = $_SESSION["profileUpdateError"];
     unset($_SESSION["profileUpdateError"]);
 }
-
-// if (isset($_SESSION["uploadImageMessage"])) {
-//     $profileUpdateMsg = $_SESSION["uploadImageMessage"];
-//     unset($_SESSION["uploadImageMessage"]);
-// }
-
-// if(isset($_SESSION["alertMessage"])){
-//     $alertMessage = $_SESSION["alertMessage"];
-//     unset($_SESSION["alertMessage"]);
-//   }
 
 // Order History
 $userid = $_SESSION['user']['userID'] ?? null;
@@ -95,12 +75,6 @@ if (isset($_POST["submit"])) {
 
     <?php require_once "./components/navbar.php"; ?>
 
-    <!-- 
-  <div class="container mt-5">
-    <p class = "lead"><?php if (isset($profileUpdateMsg)) echo $profileUpdateMsg; ?></p>
-  </div> -->
-
-
     <div class="container border border-dark profile-container my-5  d-flex align-items-stretch">
         <div class="row align-items-stretch">
             <div class="col-3 px-0  pb-5 nav-tab-container d-flex flex-column justify-content-center">
@@ -109,7 +83,8 @@ if (isset($_POST["submit"])) {
                         <img src="<?php echo  $_SESSION["user"]["userPicture"] ?>" alt=""
                             class="img-fluid shadow rounded-circle userProfilePicture">
                     </div>
-                    <div class="nav nav-tabs profile-tab flex-column" id="nav-tab" role="tablist">
+                    <!-- Buttons to select tab -->
+                    <div class="nav nav-tabs profile-tab flex-column" id="nav-tab" role="tablist"> 
                         <button class=" nav-link active" id="nav-profile-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
                             aria-selected="true">Profile</button>
@@ -224,8 +199,8 @@ if (isset($_POST["submit"])) {
                     <!--  End of privacy tab-->
 
 
-                     <!-- Order History Tab -->
-                     <div class="tab-pane fade"  id="nav-order" role="tabpanel"
+                    <!-- Order History Tab -->
+                    <div class="tab-pane fade"  id="nav-order" role="tabpanel"
                         aria-labelledby="nav-order-tab">
                         <div class="container">
                             <!-- Container for each Order -->
