@@ -36,7 +36,12 @@ if (isset($_GET["category"])) {
 if(isset($_GET["clearFilter"])){
     unset($_GET["clearFilter"]);
     unset($_GET["sortBy"]);
-    header("Location: ./category.php?category=$category");
+    if(!empty($q)){
+        header("Location: ./category.php?category=$category&q=$q");
+    }else{
+        header("Location: ./category.php?category=$category");
+
+    }
     exit();
 }
 ?>
@@ -60,38 +65,38 @@ if(isset($_GET["clearFilter"])){
     </div>
     <div class="offcanvas-body">
         <form action="" class="filter-form">
+        <input type="hidden" value="<?php echo $category; ?>" name="category">
+            <input type="hidden" value="<?php echo $q; ?>" name="q">
             <fieldset class="mb-3">
                 <legend>Sort By</legend>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortBy" id="sortHighestPrice">
+                    <input class="form-check-input" type="radio" name="sortBy" id="sortHighestPrice" value = "priceHigh" <?php if (strtolower($sortBy) === "pricehigh") echo "checked"?>>
                     <label class="form-check-label" for="sortHighestPrice">
                         Highest Price
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortBy" id="sortLowestPrice">
+                    <input class="form-check-input" type="radio" name="sortBy" id="sortLowestPrice" value = "priceLow" <?php if (strtolower($sortBy) === "pricelow") echo "checked"?>>
                     <label class="form-check-label" for="sortLowestPrice">
                         Lowest Price
                     </label>
                 </div>
-            </fieldset>
-            <fieldset>
                 <legend>Rating</legend>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ratingBy" id="ratingHighest">
+                    <input class="form-check-input" type="radio" name="sortBy" id="ratingHighest">
                     <label class="form-check-label" for="ratingHighest">
                         Highest Rating
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ratingBy" id="ratingLowest">
+                    <input class="form-check-input" type="radio" name="sortBy" id="ratingLowest">
                     <label class="form-check-label" for="ratingLowest">
                         Lowest Rating
                     </label>
                 </div>
             </fieldset>
-            <button type="reset" class="mt-5 w-100 clear-filter-button">CLEAR FILTERS</button>
-            <button type="submit" class="mt-5 w-100 clear-filter-button" name = "filter">CLEAR FILTERS</button>
+            <button type="submit" class="mt-5 w-100 clear-filter-button" name = "clearFilter">CLEAR FILTERS</button>
+            <button type="submit" class="mt-5 w-100 clear-filter-button" name = "filter">SUBMIT FILTERS</button>
         </form>
     </div>
 </div>
@@ -135,6 +140,7 @@ if(isset($_GET["clearFilter"])){
                 <form action="" class="search-form d-flex d-inline justify-content-between" method="GET">
                     <input type="text" class="form-control search-bar d-inline" id="inputFirstName"
                         placeholder="Search for Products" name="q" value="<?php if (isset($q)) echo $q ?>">
+                        <input type="hidden" value="<?php echo $sortBy; ?>" name="sortBy">
                     <input type="hidden" value="<?php echo $category; ?>" name="category">
                     <button class="btn search text-end" name="search"><img src="./svg/search (1).svg" alt=""></button>
                 </form>

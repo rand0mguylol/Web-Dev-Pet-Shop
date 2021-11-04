@@ -192,25 +192,35 @@ function getCategoryInfo($connection, $category)
     return $categoryHeader;
 }
 
-function getCategoryProduct($connection, $category, $searchKeyword = "")
+function getCategoryProduct($connection, $category, $searchKeyword = "", $filter = false)
 {
     $categoryArray = [];
     $petArray  = ["Dog", "Cat", "Hamster"];
     $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
     //
     if (in_array($category, $petArray)) {
-        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card'  AND status = 1 AND pets.name LIKE ? ;";
+        $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card'  AND status = 1 AND pets.name LIKE ?;";
     } else if (in_array($category, $productArray)) {
         $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND status = 1 AND products.name LIKE ?;";
-
     } else {
         return false;
     }
     //
+    switch ($filter){
+
+        case "priceHigh":
+            $sql = substr_replace($sql, " ORDER BY price DESC;", -1, -1);
+            break;
+
+        case "priceLow":
+            $sql = substr_replace($sql, " ORDER BY price ASC;", -1, -1);
+            break;
+    }
+
     $stmt = $connection->prepare($sql);
-    // if(!$stmt){
-    //   return false;
-    // }
+
+  
+
     $searchKeyword = "%$searchKeyword%";
     $stmt->bind_param("ss", $category, $searchKeyword);
     $stmt->execute();
@@ -219,11 +229,10 @@ function getCategoryProduct($connection, $category, $searchKeyword = "")
         array_push($categoryArray, $row);
     }
     $stmt->close();
-    // $resultArray = [
-    //   "categoryArray" => $categoryArray,
-    //   "categoryDescription" => $categoryDescription,
-    //   "categoryName" => $categoryName
-    // ];
+
+    if (in_array($category, $productArray)){
+
+    }
     return $categoryArray;
 }
 
