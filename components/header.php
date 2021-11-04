@@ -105,7 +105,7 @@ if (isset($userid)) {
                 <form action="<?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method="POST">
                     <div class="col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name="logout">Log Out</button></div>
                 </form>
-               
+            
             </div>
         </div>
     <?php endif; ?>
