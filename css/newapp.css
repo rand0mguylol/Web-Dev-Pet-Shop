@@ -377,6 +377,7 @@ input[type="number"] {
 .other-products-section {
   background-color: #eef3f7;
 }
+
 .to-top {
   background: lightpink;
   position: fixed;
@@ -564,6 +565,7 @@ input[type="number"] {
   padding: 5px;
 }
 
+
 /* .filter-container{
    position: sticky;
    top: 0px;
@@ -607,6 +609,7 @@ input[type="number"] {
 } */
 
 
+
 .product-container .input-number{
   flex: none;
 }
@@ -645,6 +648,7 @@ input[type="number"] {
   border: 1px solid #000;
 }
 
+
 .box-card{
   width: 600px;
   height: 770px;
@@ -673,6 +677,9 @@ input[type="number"] {
   white-space: nowrap;
   /* overflow: hidden; */
   text-overflow: ellipsis;
+
+.cart-container{
+  height: 480px;
 }
 
 @media (max-width: 1399px){
