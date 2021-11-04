@@ -4,6 +4,8 @@ require_once "./connection/db.php";
 require_once "./helper/helpers.php";
 
 if (isset($_GET["category"])) {
+    $q = "";
+    $sortBy = "";
     $category = sanitizeText($_GET["category"]);
     $categoryHeader = getCategoryInfo($connection, $category);
     $categoryName = $categoryHeader["category"];
@@ -13,14 +15,28 @@ if (isset($_GET["category"])) {
         exit();
     }
     //
-    if (isset($_GET["q"]) && $_GET["q"] !== "") {
+    if (isset($_GET["q"])) {
         $q = sanitizeText($_GET["q"]);
-        $categoryArray = getCategoryProduct($connection, $category, $q);
-    } else {
-        $categoryArray = getCategoryProduct($connection, $category);
+    }
+
+
+    $categoryArray = getCategoryProduct($connection, $category, $q);
+
+
+    if(isset($_GET["filter"], $_GET["sortBy"])){
+        $sortBy = $_GET["sortBy"];
+        unset($_GET["sortBy"]);
+        $categoryArray = getCategoryProduct($connection, $category, $q, $sortBy);
     }
 } else {
     header("Location: ./index.php");
+    exit();
+}
+
+if(isset($_GET["clearFilter"])){
+    unset($_GET["clearFilter"]);
+    unset($_GET["sortBy"]);
+    header("Location: ./category.php?category=$category");
     exit();
 }
 ?>
@@ -43,38 +59,38 @@ if (isset($_GET["category"])) {
         <button type="button" class="btn-close text-reset " data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <form action="" class="filter-form">
+        <form action="" class="filter-form" method = "GET" id = "filter-form">
+            <input type="hidden" value="<?php echo $category; ?>" name="category">
+            <input type="hidden" value="<?php echo $q; ?>" name="q">
             <fieldset class="mb-3">
                 <legend>Sort By</legend>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortBy" id="sortHighestPrice">
+                    <input class="form-check-input" type="radio" name="sortBy" id="sortHighestPrice" value = "priceHigh" <?php if (strtolower($sortBy) === "pricehigh") echo "checked"?>>
                     <label class="form-check-label" for="sortHighestPrice">
                         Highest Price
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortBy" id="sortLowestPrice">
+                    <input class="form-check-input" type="radio" name="sortBy" id="sortLowestPrice" value = "priceLow" <?php if (strtolower($sortBy) === "pricelow") echo "checked"?>>
                     <label class="form-check-label" for="sortLowestPrice">
                         Lowest Price
                     </label>
                 </div>
-            </fieldset>
-            <fieldset>
-                <legend>Rating</legend>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ratingBy" id="ratingHighest">
+                    <input class="form-check-input" type="radio" name="sortBy" id="ratingHighest">
                     <label class="form-check-label" for="ratingHighest">
                         Highest Rating
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="ratingBy" id="ratingLowest">
+                    <input class="form-check-input" type="radio" name="sortBy" id="ratingLowest">
                     <label class="form-check-label" for="ratingLowest">
                         Lowest Rating
                     </label>
                 </div>
             </fieldset>
-            <button type="reset" class="mt-5 w-100 clear-filter-button">CLEAR FILTERS</button>
+            <button type="submit" class="mt-5 w-100 clear-filter-button-tempo" name = "clearFilter">CLEAR FILTERS</button>
+            <button type="submit" class="mt-5 w-100 clear-filter-button" name = "filter">SUBMIT FILTERS</button>
         </form>
     </div>
 </div>
@@ -118,6 +134,7 @@ if (isset($_GET["category"])) {
                 <form action="" class="search-form d-flex d-inline justify-content-between" method="GET">
                     <input type="text" class="form-control search-bar d-inline" id="inputFirstName"
                         placeholder="Search for Products" name="q" value="<?php if (isset($q)) echo $q ?>">
+                    <input type="hidden" value="<?php echo $sortBy; ?>" name="sortBy">
                     <input type="hidden" value="<?php echo $category; ?>" name="category">
                     <button class="btn search text-end" name="search"><img src="./svg/search (1).svg" alt=""></button>
                 </form>
@@ -139,7 +156,8 @@ if (isset($_GET["category"])) {
                     <?php include "./components/category_nav.php"; ?>
                 </div>
             </nav>
-            <div class="container d-flex flex-wrap">
+
+            <div class="container d-flex flex-wrap" id = "test">
                 <?php if (empty($categoryArray) && isset($_GET["q"])) : ?>
                 <p class='text-center lead'> There are no products that match your search</p>
                 <?php elseif (empty($categoryArray)) : ?>
@@ -177,10 +195,10 @@ if (isset($_GET["category"])) {
                             <div class="stars">
                                 <?php 
                                 $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
-                                if (in_array($cat["category"], $productArray)):
+                                if (in_array($categoryName, $productArray)):
                                 {
                                 $avgRating = getAvgRating($cat["id"], $connection);
-                                $totalReviews = getTotalProductReviews($cat["id"], $cat["category"], $connection);
+                                $totalReviews = getTotalProductReviews($cat["id"], $categoryName, $connection);
                                 }
                                 ?>
                                 <div class="stars">
@@ -210,17 +228,10 @@ if (isset($_GET["category"])) {
                                     <?php endif; ?>
                                 </div>
                                 <?php endif; ?>
-                                <!-- <img src="./svg/star-fill.svg" alt="">
-                                <img src="./svg/star-fill.svg" alt="">
-                                <img src="./svg/star-fill.svg" alt="">
-                                <img src="./svg/star-fill-white.svg" alt="">
-                                <img src="./svg/star-fill-white.svg" alt="">
-                                <small class=" align-bottom">1 out of 5</small> -->
                             </div>
                         </div>
                         <div class="card-price-section text-center">
                             <span><?php echo "RM" . number_format($cat["price"],2 , ".", ""); ?></span>
-
                         </div>
                     </div>
                 </div>
@@ -234,8 +245,120 @@ if (isset($_GET["category"])) {
     <img src="./svg/chevron-up.svg" alt="">
 </a>
 <?php require_once "./script/general_scripts.php"; ?>
+
+<script>
+
+    // const clearFilter = document.querySelector(".clear-filter-button-tempo")
+    // const filterForm = document.querySelector("#filter-form")
+
+    // clearFilter.addEventListener("click", function(){
+    //     filterForm.reset()
+    //     filterForm.submit()
+    // })
+    let params = (new URL(document.location)).searchParams;
+    let category = params.get('category'); // is the string "Jonathan Smith".
+    // let age = params.get('age'); // is the number 18
+    const categoryHeader = "<?php echo $categoryName;?>"
+
+    fetch("./ajax/get_category_fetch.php?" + new URLSearchParams({
+    categoryName: category
+    }), 
+    {
+    method: "get",
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    })
+    .then( response  => response.json())
+    .then(data => constructItem(data))
+
+</script>
 <script src="./js/aos.js"></script>
 <script src="./js/category.js"></script>
 </body>
 
 </html>
+
+
+<!-- <div class="container d-flex flex-wrap">
+    <?php if (empty($categoryArray) && isset($_GET["q"])) : ?>
+    <p class='text-center lead'> There are no products that match your search</p>
+    <?php elseif (empty($categoryArray)) : ?>
+    <p class='text-center lead'> There are no products in this category</p>
+    <?php else : ?>
+    <?php foreach ($categoryArray as $cat) : ?>
+    <div class="product-indi">
+        <div class="card-wrapper general">
+            <div class="card-main-section">
+                <img src="<?php echo "$cat[imagePath]"; ?>" alt="" class="img-fluid" id = "itemImage">
+                <div class="card-main-section-icon">
+                    <button class="btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-bag" viewBox="0 0 16 16">
+                            <path
+                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                        </svg>
+                    </button>
+                    <button class="btn card-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-share" viewBox="0 0 16 16">
+                            <path
+                                d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="card-content-section">
+                <a href="<?php echo "item.php?category=$categoryName&id=$cat[id]"; ?>"
+                    class="text-decoration-none text-dark">
+                    <h5 class="text-center mt-2 px-2 text-truncate"><?php echo $cat["name"]; ?></h5>
+                </a>
+            </div>
+            <div class="card-rating-section text-center">
+                <div class="stars">
+                    <?php 
+                    $productArray = ["Dog Food", "Cat Food", "Hamster Food", "Dog Care Products", "Cat Care Products", "Dog Accessories", "Cat Accessories"];
+                    if (in_array($categoryName, $productArray)):
+                    {
+                    $avgRating = getAvgRating($cat["id"], $connection);
+                    $totalReviews = getTotalProductReviews($cat["id"], $categoryName, $connection);
+                    }
+                    ?>
+                    <div class="stars">
+                        <?php 
+                        if ($totalReviews == 0){
+                            echo ("<small class='align-bottom'>No ratings</small>");  
+                        }
+                        if ($totalReviews != 0):
+                        ?>
+                        <?php
+                            $limit = floor($avgRating);
+                            $remainder = fmod($avgRating, $limit);
+                            for($i = 0; $i < $limit; $i++) {
+                                echo ("<img src='./svg/star-fill.svg' alt='Yellow Star'>");
+                            }
+                            if ($remainder >= 0.5){
+                                echo ("<img src='./svg/star-half.svg' alt='Half Star'>");
+                            } elseif ($remainder != 0){
+                                echo ("<img src='./svg/star-fill-white.svg' alt='Gray Star'>");
+                            }
+                            if($avgRating < 4.5){                 
+                                for($i = 0; $i < 5 - ceil($avgRating); $i++){
+                                    echo ("<img src='./svg/star-fill-white.svg' alt='Gray Star'>");
+                                }
+                            }
+                        ?>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="card-price-section text-center">
+                <span><?php echo "RM" . number_format($cat["price"],2 , ".", ""); ?></span>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+    <?php endif; ?>
+</div> -->
