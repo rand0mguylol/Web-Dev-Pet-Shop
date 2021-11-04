@@ -91,6 +91,7 @@ if(isset($_GET["clearFilter"])){
                 </div>
             </fieldset>
             <button type="reset" class="mt-5 w-100 clear-filter-button">CLEAR FILTERS</button>
+            <button type="submit" class="mt-5 w-100 clear-filter-button" name = "filter">CLEAR FILTERS</button>
         </form>
     </div>
 </div>
