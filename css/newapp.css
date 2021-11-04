@@ -90,6 +90,13 @@ input[type="number"] {
   z-index: 1000;
 }
 
+.payment-alert{
+  width: 500px;
+  top: 10%;
+  left: 38%;
+  z-index: 1000;
+}
+
 .logo img {
   width: 155px;
   height: 40px;
