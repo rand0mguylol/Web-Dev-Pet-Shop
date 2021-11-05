@@ -46,7 +46,7 @@ if (isset($_POST['add-to-cart-btn'])) {
             $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $subtotal, $connection);
         }
     } else{
-        $alertMessage[] = "Please log in or register to add to cart";
+        $_SESSION["alertMessage"][] = "Please log in or register to add to cart";
     }
 }
 ?>
