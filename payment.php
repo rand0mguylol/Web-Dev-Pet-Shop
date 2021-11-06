@@ -62,7 +62,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
             <section class="container">
                 <div class="row border-bottom mb-4">
                     <div class="col-1"></div>
-                    <h6 class=" col-6 text-center">Product</h6>
+                    <h6 class=" col-6 text-center">Item</h6>
                     <h6 class=" col-3 text-center">Quantity</h6>
                     <h6 class=" col-2 text-end">Total Price</h6>
                 </div>

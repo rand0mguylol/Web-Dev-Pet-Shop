@@ -120,7 +120,7 @@ function validateCreditCard($cardNumber, $cardType, $expiryMonth, $expiryYear, $
             $card = $key;
         }
     }
-    if(isset($card)){
+    if (isset($card)) {
         if ($card === $cardType) {
             $invalidCardMsg = NULL;
         }
@@ -147,7 +147,7 @@ function validateCreditCard($cardNumber, $cardType, $expiryMonth, $expiryYear, $
             unset($errMsgArray[$key]);
         }
     }
-    
+
     if (!empty($errMsgArray)) {
         return $errMsgArray;
     } else {
@@ -206,7 +206,7 @@ function getCategoryProduct($connection, $category, $searchKeyword = "", $filter
         return false;
     }
     //
-    switch ($filter){
+    switch ($filter) {
 
         case "priceHigh":
             $sql = substr_replace($sql, " ORDER BY price DESC;", -1, -1);
@@ -219,7 +219,7 @@ function getCategoryProduct($connection, $category, $searchKeyword = "", $filter
 
     $stmt = $connection->prepare($sql);
 
-  
+
 
     $searchKeyword = "%$searchKeyword%";
     $stmt->bind_param("ss", $category, $searchKeyword);
@@ -230,8 +230,7 @@ function getCategoryProduct($connection, $category, $searchKeyword = "", $filter
     }
     $stmt->close();
 
-    if (in_array($category, $productArray)){
-
+    if (in_array($category, $productArray)) {
     }
     return $categoryArray;
 }
@@ -382,42 +381,66 @@ function getCartItems($cartid, $connection)
             if (isset($row['petId'])) {
                 $id = $row['petId'];
                 $category = "pet";
-                $stmt2 = $connection->prepare('SELECT name, price FROM pets WHERE petId =?; ');
+                $stmt2 = $connection->prepare('SELECT name, price FROM pets WHERE petId =? AND status = 1; ');
                 $stmt2->bind_param("i", $id);
                 $stmt2->execute();
                 $result2 = $stmt2->get_result();
                 $row2 = $result2->fetch_assoc();
-                $itemName = $row2['name'];
-                $itemPrice = $row2['price'];
-                $image = getImage($id, $category, "Card", true, $connection);
+                if($row2){
+                    $isItem = true;
+                    $itemName = $row2['name'];
+                    $itemPrice = $row2['price'];
+                    $image = getImage($id, $category, "Card", true, $connection);
+                } else{
+                    $isItem = false;
+                }
             } else {
                 $id = $row['productId'];
                 $category = "product";
-                $stmt2 = $connection->prepare('SELECT name, price ,quantity as maxQuantity FROM products WHERE productId =?; ');
+                $stmt2 = $connection->prepare('SELECT name, price ,quantity as maxQuantity FROM products WHERE productId = ? AND status = 1; ');
                 $stmt2->bind_param("i", $id);
                 $stmt2->execute();
                 $result2 = $stmt2->get_result();
                 $row2 = $result2->fetch_assoc();
-                $itemName = $row2['name'];
-                $itemPrice = $row2['price'];
-                $itemMaxQuantity = $row2['maxQuantity'];
-                $image = getImage($id, $category, "Card", true, $connection);
+                if ($row2) {
+                    $isItem = true;
+                    $itemName = $row2['name'];
+                    $itemPrice = $row2['price'];
+                    $itemMaxQuantity = $row2['maxQuantity'];
+                    if($quantity > $itemMaxQuantity){
+                        $quantity = (int)$itemMaxQuantity;
+                    }
+                    $image = getImage($id, $category, "Card", true, $connection);
+                } else {
+                    $isItem = false;
+                }
             }
-            $cartitem = [
-                "cartItemId" => $cartItemId,
-                "id" => $id,
-                "category" => $category,
-                "name" => $itemName,
-                "quantity" => $quantity,
-                "maxQuantity" => $itemMaxQuantity ?? 1,
-                "price" => $itemPrice,
-                "subtotal" => $subtotal,
-                "image" => $image
-            ];
-            array_push($cartItemArray, $cartitem);
+            if($isItem){
+                $cartitem = [
+                    "cartItemId" => $cartItemId,
+                    "id" => $id,
+                    "category" => $category,
+                    "name" => $itemName,
+                    "quantity" => $quantity,
+                    "maxQuantity" => $itemMaxQuantity ?? 1,
+                    "price" => $itemPrice,
+                    "subtotal" => $subtotal,
+                    "image" => $image
+                ];
+                array_push($cartItemArray, $cartitem);
+            } else{
+                $stmt2 = $connection -> prepare('DELETE FROM cartitem WHERE cartItemId = ?;');
+                $stmt2 -> bind_param("i",$cartItemId);
+                $stmt2 -> execute();
+                $stmt2 -> close();
+            }
         }
         $stmt->close();
-        return $cartItemArray;
+        if(!empty($cartItemArray)){
+            return $cartItemArray;
+        } else {
+            return null;
+        }
     }
 }
 
@@ -768,16 +791,16 @@ function rateEligibility($orderItemId, $connection)
 
 
 function getTotalProductReviews($productId, $category, $connection)
-{   
+{
     $type = returnType($category);
     if (strtolower($type) === "product") {
-        $stmt = $connection -> prepare("SELECT review.reviewId FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
+        $stmt = $connection->prepare("SELECT review.reviewId FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
         WHERE orderitem.productId = ?");
-        $stmt -> bind_param("i", $productId);
-        $stmt -> execute();
-        $result = $stmt-> get_result();
+        $stmt->bind_param("i", $productId);
+        $stmt->execute();
+        $result = $stmt->get_result();
         $totalReviews = mysqli_num_rows($result);
-        $stmt -> close();
+        $stmt->close();
         return $totalReviews;
     }
 }
@@ -787,13 +810,13 @@ function getProductReviews($productId, $category, $connection)
     $type = returnType($category);
     if (strtolower($type) === "product") {
         $productReviewsArray = [];
-        $stmt = $connection -> prepare("SELECT user.firstName, user.lastName, review.rating, review.feedback, review.createdAt
+        $stmt = $connection->prepare("SELECT user.firstName, user.lastName, review.rating, review.feedback, review.createdAt
         FROM user INNER JOIN review ON user.userId = review.userId INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
         WHERE orderitem.productId = ? ORDER BY review.createdAt DESC LIMIT 3");
-        $stmt -> bind_param("i", $productId);
-        $stmt -> execute();
-        $result = $stmt -> get_result();
-        while($row = $result -> fetch_assoc()){
+        $stmt->bind_param("i", $productId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
             $productReview = [];
             $firstName = $row["firstName"];
             $lastName = $row["lastName"];
@@ -808,70 +831,71 @@ function getProductReviews($productId, $category, $connection)
                 "createdAt" => $createdAt,
             ];
             array_push($productReviewsArray, $productReview);
-        }       
-        $stmt -> close();
+        }
+        $stmt->close();
         return $productReviewsArray;
     }
 }
 
-function getEachRatingTotal($productId, $category, $connection){
+function getEachRatingTotal($productId, $category, $connection)
+{
     $type = returnType($category);
     if (strtolower($type) === "product") {
         $eachRatingTotalArray = [];
-        $stmt = $connection -> prepare("SELECT review.rating FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
+        $stmt = $connection->prepare("SELECT review.rating FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
         WHERE orderitem.productId = ?");
-        $stmt -> bind_param("i", $productId);
-        $stmt -> execute();
-        $result = $stmt -> get_result();
+        $stmt->bind_param("i", $productId);
+        $stmt->execute();
+        $result = $stmt->get_result();
         $totalOneStar = 0;
         $totalTwoStar = 0;
         $totalThreeStar = 0;
         $totalFourStar = 0;
         $totalFiveStar = 0;
-        while($row = $result -> fetch_assoc()){
+        while ($row = $result->fetch_assoc()) {
             $rating = $row["rating"];
-            if ($rating == 1){
+            if ($rating == 1) {
                 $totalOneStar++;
-            } elseif ($rating == 2){
+            } elseif ($rating == 2) {
                 $totalTwoStar++;
-            } elseif ($rating == 3){
+            } elseif ($rating == 3) {
                 $totalThreeStar++;
-            } elseif ($rating == 4){
+            } elseif ($rating == 4) {
                 $totalFourStar++;
             } else {
                 $totalFiveStar++;
             }
         }
         $eachTotalRating = [
-                "totalOneStar" => $totalOneStar,
-                "totalTwoStar" => $totalTwoStar,
-                "totalThreeStar" => $totalThreeStar,
-                "totalFourStar" => $totalFourStar,
-                "totalFiveStar" => $totalFiveStar,
-            ];
-        $stmt -> close();
+            "totalOneStar" => $totalOneStar,
+            "totalTwoStar" => $totalTwoStar,
+            "totalThreeStar" => $totalThreeStar,
+            "totalFourStar" => $totalFourStar,
+            "totalFiveStar" => $totalFiveStar,
+        ];
+        $stmt->close();
         return $eachTotalRating;
     }
 }
 
 function getAvgRating($productId, $connection)
 {
-    $stmt = $connection -> prepare("SELECT AVG(review.rating) as AverageRating FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
+    $stmt = $connection->prepare("SELECT AVG(review.rating) as AverageRating FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
     WHERE orderitem.productId = ?");
-    $stmt -> bind_param("i", $productId);
-    $stmt -> execute();
-    $result = $stmt -> get_result();
-    $row = $result -> fetch_assoc();
+    $stmt->bind_param("i", $productId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
     $avgRating = $row['AverageRating'];
-    $stmt -> close();
+    $stmt->close();
     return $avgRating;
 }
 
-function getAdminSearch($connection, $type, $q){
+function getAdminSearch($connection, $type, $q)
+{
     $adminSearchArray = [];
     if ($type === "pet") {
         $sql = "SELECT DISTINCT pets.petId as id, pets.name, pets.status, petcategory.category FROM pets, petcategory WHERE pets.petCatId = petcategory.petCatId   AND (pets.name LIKE ? OR petcategory.category LIKE ?);";
-
     } else if ($type === "product") {
         $sql = "SELECT DISTINCT products.productId as id, products.name, products.status, productcategory.category FROM products, productcategory WHERE products.productCatId = productcategory.productCatId  AND (products.name LIKE ? OR productcategory.category LIKE ?);";
     } else {
@@ -900,7 +924,8 @@ function getAdminSearch($connection, $type, $q){
     return $adminSearchArray;
 }
 
-function getAdminEditItem($connection, $type, $id){
+function getAdminEditItem($connection, $type, $id)
+{
     if ($type === "pet") {
         $sql = "SELECT name, price, status, gender, birthDate, weight, color, petCondition, vaccinated, dewormed  FROM  pets  WHERE petid = ? ;";
     } else if ($type === "product") {
@@ -926,14 +951,16 @@ function getAdminEditItem($connection, $type, $id){
     return $itemArray;
 }
 
-function isAssociativeArray($array){
-    if(count(array_filter(array_keys($array), 'is_string')) > 0){
+function isAssociativeArray($array)
+{
+    if (count(array_filter(array_keys($array), 'is_string')) > 0) {
         return true;
     }
     return false;
 }
 
-function adminValidatePet($postArray, $checkCategory = false){
+function adminValidatePet($postArray, $checkCategory = false)
+{
     $errorArray = [];
     $category = "";
     $sanitizeTextArray = [
@@ -948,58 +975,58 @@ function adminValidatePet($postArray, $checkCategory = false){
         "dewormed" => $postArray["dewormed"]
     ];
 
-    foreach ($sanitizeTextArray as $key => $value){
+    foreach ($sanitizeTextArray as $key => $value) {
         $sanitizeProducttArray[$key] = sanitizeText($value);
 
-        if(!$value){
-        array_push($errorArray, "Invalid $key");
+        if (!$value) {
+            array_push($errorArray, "Invalid $key");
         }
     }
 
-    foreach ($validateSelectArray as $key => $value){
+    foreach ($validateSelectArray as $key => $value) {
 
-        if(strtolower($value) !== "yes" && strtolower($value) !== "no"){
-        array_push($errorArray, "$key field has invalid value");
+        if (strtolower($value) !== "yes" && strtolower($value) !== "no") {
+            array_push($errorArray, "$key field has invalid value");
         }
     }
 
-    $status = filter_var($postArray["status"], FILTER_VALIDATE_INT, array("options" => array("min_range"=>0, "max_range"=>1)));
+    $status = filter_var($postArray["status"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 0, "max_range" => 1)));
 
-    if(!$status){
+    if (!$status) {
         array_push($errorArray, "Status field has invalid value");
     }
 
     $price = filter_var($postArray["price"], FILTER_VALIDATE_FLOAT);
 
-    if(!$price){
+    if (!$price) {
         array_push($errorArray, "Invalid Price");
-    }else{
+    } else {
         $price = round($price, 2);
     }
 
     $gender = ucfirst($postArray["gender"]);
 
-    if (strtolower($gender) !== "male" && strtolower($gender) !== 'female'){
+    if (strtolower($gender) !== "male" && strtolower($gender) !== 'female') {
         array_push($errorArray, "Invalid Gender");
     }
 
     $checkBirthDate = explode("-", $postArray["birthDate"]);
-    if(checkdate((int)$checkBirthDate[1], (int)$checkBirthDate[2], (int)$checkBirthDate[0])){
+    if (checkdate((int)$checkBirthDate[1], (int)$checkBirthDate[2], (int)$checkBirthDate[0])) {
         $new_date = date("Y-m-d", strtotime($_POST["birthDate"]));
-    }else{
+    } else {
         array_push($errorArray, "Invalid Birth Date");
     }
 
-    if($checkCategory){
+    if ($checkCategory) {
 
-        $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range"=>1, "max_range"=>3)));
-        
-        if(!$category){
+        $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => 3)));
+
+        if (!$category) {
             array_push($errorArray, "Invalid value in category field");
         }
     }
 
-    if($errorArray){
+    if ($errorArray) {
         return $errorArray;
     }
 
@@ -1021,17 +1048,31 @@ function adminValidatePet($postArray, $checkCategory = false){
 }
 
 
-function adminUpdatePet($connection, $petArray, $id){
-    $stmt = $connection -> prepare("UPDATE pets SET name= ?, price = ?,  status = ?, 
+function adminUpdatePet($connection, $petArray, $id)
+{
+    $stmt = $connection->prepare("UPDATE pets SET name= ?, price = ?,  status = ?, 
     gender = ? , birthDate = ? , weight = ?, color = ?, petCondition = ?, vaccinated = ?, dewormed = ? WHERE petId = ?");
 
-    $stmt->bind_param("ssisssssssi", $petArray["name"], $petArray["price"], $petArray["status"], $petArray["gender"], $petArray["birthDate"], $petArray["weight"], 
-    $petArray["color"],$petArray["petCondition"], $petArray["vaccinated"], $petArray["dewormed"], $id );
+    $stmt->bind_param(
+        "ssisssssssi",
+        $petArray["name"],
+        $petArray["price"],
+        $petArray["status"],
+        $petArray["gender"],
+        $petArray["birthDate"],
+        $petArray["weight"],
+        $petArray["color"],
+        $petArray["petCondition"],
+        $petArray["vaccinated"],
+        $petArray["dewormed"],
+        $id
+    );
     $stmt->execute();
     $stmt->close();
 }
 
-function adminValidateProduct($postArray, $checkCategory){
+function adminValidateProduct($postArray, $checkCategory)
+{
     $errorArray = [];
 
     $sanitizeProducttArray = [
@@ -1043,61 +1084,61 @@ function adminValidateProduct($postArray, $checkCategory){
         "productDimensions" => $postArray["productDimensions"]
     ];
 
-    foreach ($sanitizeProducttArray as $key => $value){
-        if($key === "description"){
-            $sanitizeProducttArray[$key]= str_replace("\n", "[NEWLINE]", $value);
+    foreach ($sanitizeProducttArray as $key => $value) {
+        if ($key === "description") {
+            $sanitizeProducttArray[$key] = str_replace("\n", "[NEWLINE]", $value);
         }
-            $sanitizeProducttArray[$key] = sanitizeText($value);
+        $sanitizeProducttArray[$key] = sanitizeText($value);
 
-        if(!$value){
-            array_push($errorArray,"Invalid ". strtolower($key));
+        if (!$value) {
+            array_push($errorArray, "Invalid " . strtolower($key));
         }
 
-        if($key === "description"){
-            $sanitizeProducttArray[$key]= str_replace("[NEWLINE]", "\n", $value);
+        if ($key === "description") {
+            $sanitizeProducttArray[$key] = str_replace("[NEWLINE]", "\n", $value);
         }
     }
 
     $price = filter_var($postArray["price"], FILTER_VALIDATE_FLOAT);
 
-    if(!$price){
+    if (!$price) {
         array_push($errorArray, "Invalid Price");
-    }else{
+    } else {
         $price = round($price, 2);
     }
 
-    $quantity= filter_var($postArray["quantity"], FILTER_VALIDATE_INT);
+    $quantity = filter_var($postArray["quantity"], FILTER_VALIDATE_INT);
 
-    if(!$quantity){
+    if (!$quantity) {
         array_push($errorArray, "Invalid Quantity");
     }
 
-    $status = filter_var($postArray["status"], FILTER_VALIDATE_INT, array("options" => array("min_range"=>0, "max_range"=>1)));
+    $status = filter_var($postArray["status"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 0, "max_range" => 1)));
 
-    if(!$status){
+    if (!$status) {
         array_push($errorArray, "Invalid value in status field");
     }
 
-    if($checkCategory){
+    if ($checkCategory) {
 
-        $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range"=>1, "max_range"=>7)));
-        
-        if(!$category){
+        $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => 7)));
+
+        if (!$category) {
             array_push($errorArray, "Invalid value in category field");
         }
     }
 
-    if($errorArray){
+    if ($errorArray) {
         return $errorArray;
     }
 
     $adminProductArray = [
-        "name" => $sanitizeProducttArray ["name"],
-        "description" => $sanitizeProducttArray ["description"],
-        "brand" => $sanitizeProducttArray ["brand"],
-        "weight" => $sanitizeProducttArray ["weight"],
-        "warrantyPeriod" => $sanitizeProducttArray ["warrantyPeriod"],
-        "productDimensions" => $sanitizeProducttArray ["productDimensions"],
+        "name" => $sanitizeProducttArray["name"],
+        "description" => $sanitizeProducttArray["description"],
+        "brand" => $sanitizeProducttArray["brand"],
+        "weight" => $sanitizeProducttArray["weight"],
+        "warrantyPeriod" => $sanitizeProducttArray["warrantyPeriod"],
+        "productDimensions" => $sanitizeProducttArray["productDimensions"],
         "price" => $price,
         "quantity" => $quantity,
         "status" => $status,
@@ -1107,30 +1148,67 @@ function adminValidateProduct($postArray, $checkCategory){
     return $adminProductArray;
 }
 
-function adminUpdateProduct($connection, $id, $productArray){
-    $stmt = $connection -> prepare("UPDATE products SET name= ?  ,price = ?, quantity = ?, status = ?, 
+function adminUpdateProduct($connection, $id, $productArray)
+{
+    $stmt = $connection->prepare("UPDATE products SET name= ?  ,price = ?, quantity = ?, status = ?, 
     description = ? , brand = ? , weight = ?, warrantyPeriod = ?, productDimensions = ? WHERE productId = ?");
 
-    $stmt->bind_param("ssiisssssi", $productArray["name"], $productArray["price"], $productArray["quantity"], $productArray['status'], 
-    $productArray["description"], $productArray["brand"], $productArray["weight"], $productArray["warrantyPeriod"], $productArray["productDimensions"], $id );
+    $stmt->bind_param(
+        "ssiisssssi",
+        $productArray["name"],
+        $productArray["price"],
+        $productArray["quantity"],
+        $productArray['status'],
+        $productArray["description"],
+        $productArray["brand"],
+        $productArray["weight"],
+        $productArray["warrantyPeriod"],
+        $productArray["productDimensions"],
+        $id
+    );
     $stmt->execute();
     $stmt->close();
 }
 
-function adminAddPet($connection, $petArray){
-    $stmt = $connection -> prepare( "INSERT INTO pets(name, price, status, gender, birthDate, weight, color, petCondition, vaccinated, dewormed, petCatId)  
+function adminAddPet($connection, $petArray)
+{
+    $stmt = $connection->prepare("INSERT INTO pets(name, price, status, gender, birthDate, weight, color, petCondition, vaccinated, dewormed, petCatId)  
                                     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-    $stmt->bind_param("ssisssssssi", $petArray["name"], $petArray["price"], $petArray["status"], $petArray['gender'], 
-    $petArray["birthDate"], $petArray["weight"], $petArray["color"], $petArray["petCondition"], $petArray["vaccinated"], $petArray["dewormed"], $petArray["category"]);
+    $stmt->bind_param(
+        "ssisssssssi",
+        $petArray["name"],
+        $petArray["price"],
+        $petArray["status"],
+        $petArray['gender'],
+        $petArray["birthDate"],
+        $petArray["weight"],
+        $petArray["color"],
+        $petArray["petCondition"],
+        $petArray["vaccinated"],
+        $petArray["dewormed"],
+        $petArray["category"]
+    );
     $stmt->execute();
     $stmt->close();
 }
 
-function adminAddProduct($connection, $productArray){
-    $stmt = $connection -> prepare( "INSERT INTO products(name, price, quantity, status, description, brand, weight, warrantyPeriod, productDimensions, productCatId)  
+function adminAddProduct($connection, $productArray)
+{
+    $stmt = $connection->prepare("INSERT INTO products(name, price, quantity, status, description, brand, weight, warrantyPeriod, productDimensions, productCatId)  
     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-    $stmt->bind_param("ssiisssssi", $productArray["name"], $productArray["price"], $productArray["quantity"], $productArray['status'], 
-    $productArray["description"], $productArray["brand"], $productArray["weight"], $productArray["warrantyPeriod"], $productArray["productDimensions"], $productArray["category"] );
+    $stmt->bind_param(
+        "ssiisssssi",
+        $productArray["name"],
+        $productArray["price"],
+        $productArray["quantity"],
+        $productArray['status'],
+        $productArray["description"],
+        $productArray["brand"],
+        $productArray["weight"],
+        $productArray["warrantyPeriod"],
+        $productArray["productDimensions"],
+        $productArray["category"]
+    );
     $stmt->execute();
     $stmt->close();
 }
@@ -1153,21 +1231,21 @@ function addNewItemCardImage($mimeType, $image, $connection, $id, $category, $na
             file_put_contents($cardPic, $image);
             break;
         case "image/jpg":
-            $cardPic= $cardImageDir . "/$name" . ".jpg";
+            $cardPic = $cardImageDir . "/$name" . ".jpg";
             file_put_contents($cardPic, $image);
             break;
         case "image/jpeg":
-            $cardPic= $cardImageDir .  "/$name" . ".jpeg";
+            $cardPic = $cardImageDir .  "/$name" . ".jpeg";
             file_put_contents($cardPic, $image);
             break;
     }
 
     $saveToDbImage = substr($cardPic, 1);
 
-    if($type === "pet"){
+    if ($type === "pet") {
         $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Card');");
         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
-    }elseif($type === "product"){
+    } elseif ($type === "product") {
         $stmt = $connection->prepare("INSERT INTO productimage(productid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Card');");
         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
     }
@@ -1179,7 +1257,7 @@ function addNewItemCardImage($mimeType, $image, $connection, $id, $category, $na
 
 function overwriteItemCardImage($mimeType, $image, $connection, $id,  $name, $currentImagePath, $type)
 {
-    
+
     $currentDirName = "." . dirname($currentImagePath) . "/";
     $files = glob("$currentDirName" . "*"); // get all file names
     foreach ($files as $file) { // iterate files
@@ -1195,11 +1273,11 @@ function overwriteItemCardImage($mimeType, $image, $connection, $id,  $name, $cu
             file_put_contents($cardPic, $image);
             break;
         case "image/jpg":
-            $cardPic= $currentDirName  . $name . "_Card_319_409" . ".jpg";
+            $cardPic = $currentDirName  . $name . "_Card_319_409" . ".jpg";
             file_put_contents($cardPic, $image);
             break;
         case "image/jpeg":
-            $cardPic= $currentDirName  .  $name . "_Card_319_409" . ".jpeg";
+            $cardPic = $currentDirName  .  $name . "_Card_319_409" . ".jpeg";
             file_put_contents($cardPic, $image);
             break;
     }
@@ -1207,10 +1285,10 @@ function overwriteItemCardImage($mimeType, $image, $connection, $id,  $name, $cu
     $saveToDbImage = substr($cardPic, 1);
 
 
-    if($type === "pet"){
+    if ($type === "pet") {
         $stmt = $connection->prepare("UPDATE petimage SET imagePath = ? WHERE petid = ? AND imageType = 'Card';");
         $stmt->bind_param("si", $saveToDbImage, $id);
-    }elseif($type === "product"){
+    } elseif ($type === "product") {
         $stmt = $connection->prepare("UPDATE productimage SET imagePath = ? WHERE productid = ? AND imageType = 'Card';");
         $stmt->bind_param("si", $saveToDbImage, $id);
     }
@@ -1261,7 +1339,7 @@ function overwriteItemCardImage($mimeType, $image, $connection, $id,  $name, $cu
 
 // function insertItemGalleryImage($mimeType, $image, $connection, $id,  $name, $currentImagePath, $type, $index)
 // {
-    
+
 //     $currentDirName = "." . dirname($currentImagePath) . "/";
 
 //     $name = str_replace(" ", "_", $name) . "_$index" . "_Gallery_550_550";
@@ -1305,21 +1383,21 @@ function addNewItemGalleryImage($mimeType, $image, $connection, $id, $dirName, $
             file_put_contents($cardPic, $image);
             break;
         case "image/jpg":
-            $cardPic= $dirName . "$name" . ".jpg";
+            $cardPic = $dirName . "$name" . ".jpg";
             file_put_contents($cardPic, $image);
             break;
         case "image/jpeg":
-            $cardPic= $dirName .  "$name" . ".jpeg";
+            $cardPic = $dirName .  "$name" . ".jpeg";
             file_put_contents($cardPic, $image);
             break;
     }
 
     $saveToDbImage = substr($cardPic, 1);
 
-    if($type === "pet"){
+    if ($type === "pet") {
         $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
-    }elseif($type === "product"){
+    } elseif ($type === "product") {
         $stmt = $connection->prepare("INSERT INTO productimage(productid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
     }
