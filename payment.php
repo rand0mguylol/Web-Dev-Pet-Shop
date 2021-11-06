@@ -346,7 +346,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
 <!-- End of Modal -->
 <?php require_once "./components/footer.php"; ?>
 <?php require_once "./script/general_scripts.php"; ?>
-<?php require_once "./js/aos.js"; ?>
+<script src="./js/aos.js"></script>
 <script src="./js/payment.js"></script>
 <script>
     <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>
