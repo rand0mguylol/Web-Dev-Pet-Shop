@@ -12,10 +12,10 @@ if (isset($_SESSION["user"]["userRole"]) && $_SESSION["user"]["userRole"] === "S
         $adminSearchArray = getAdminSearch($connection, $_GET["itemType"], $q);   
     } 
 
-    if(isset($_SESSION["alertMessage"])){
-      $alertMessage = $_SESSION["alertMessage"];
-      unset($_SESSION["alertMessage"]);
-    }
+    // if(isset($_SESSION["alertMessage"])){
+    //   $alertMessage = $_SESSION["alertMessage"];
+    //   unset($_SESSION["alertMessage"]);
+    // }
 
     // echo "<pre>";
     // var_dump($adminSearchArray);
@@ -32,12 +32,12 @@ else {
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
 
-<?php if (isset($alertMessage)) : ?>
+<!-- <?php if (isset($alertMessage)) : ?>
     <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
         <strong><?php echo $alertMessage; ?></strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-<?php endif; ?>
+<?php endif; ?> -->
 
 <!-- Delete Modal for Item -->
 <div class="modal fade" id="deleteItemModal"  tabindex="-1" aria-labelledby="deleteItemModalLabel" aria-hidden="true">

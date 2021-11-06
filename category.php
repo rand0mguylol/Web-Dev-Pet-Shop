@@ -25,6 +25,7 @@ if (isset($_GET["category"])) {
 
     $categoryArray = getCategoryProduct($connection, $category, $q, $sortBy);
 
+
 } else {
     header("Location: ./index.php");
     exit();

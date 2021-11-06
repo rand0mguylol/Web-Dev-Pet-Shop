@@ -201,7 +201,7 @@ function getCategoryProduct($connection, $category, $searchKeyword = "", $filter
     if (in_array($category, $petArray)) {
         $sql = "SELECT pets.petId as id , pets.name, pets.price, petimage.imagePath FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId INNER JOIN petimage ON pets.petId = petimage.petId WHERE petCategory.category = ? AND imageType = 'Card'  AND status = 1 AND pets.name LIKE ?;";
     } else if (in_array($category, $productArray)) {
-        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND status = 1 AND products.name LIKE ?;";
+        $sql = "SELECT products.productId as id, products.name, products.price, productimage.imagePath FROM products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId INNER JOIN productimage ON products.productId = productimage.productId WHERE productCategory.category = ? AND imageType = 'Card' AND status = 1 AND quantity > 0 AND products.name LIKE ?;";
     } else {
         return false;
     }
@@ -321,7 +321,7 @@ function getItemInfo($id,  $category, $connection)
     if (strtolower($type) === "pet") {
         $stmt = $connection->prepare("SELECT  pets.name, pets.price, pets.gender, pets.weight, pets.color, pets.petCondition, pets.vaccinated, pets.dewormed, pets.status, petcategory.category FROM  pets INNER JOIN petcategory ON pets.petCatId = petCategory.petCatId  WHERE pets.petID = ? AND pets.status = 1");
     } else if (strtolower($type) === "product") {
-        $stmt = $connection->prepare("SELECT products.name, products.price,products.quantity, products.description, products.brand,  products.weight, products.warrantyPeriod, products.productDimensions, products.status, productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1");
+        $stmt = $connection->prepare("SELECT products.name, products.price,products.quantity, products.description, products.brand,  products.weight, products.warrantyPeriod, products.productDimensions, products.status, productcategory.category FROM  products INNER JOIN productcategory ON products.productCatId = productCategory.productCatId  WHERE products.productId = ? AND products.status = 1 AND products.quantity > 0");
     }
 
     $stmt->bind_param("i", $id);
@@ -992,13 +992,13 @@ function adminValidatePet($postArray, $checkCategory = false)
 
     $status = filter_var($postArray["status"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 0, "max_range" => 1)));
 
-    if (!$status) {
+    if (!$status && $status !== 0) {
         array_push($errorArray, "Status field has invalid value");
     }
 
     $price = filter_var($postArray["price"], FILTER_VALIDATE_FLOAT);
 
-    if (!$price) {
+    if ($price === false) {
         array_push($errorArray, "Invalid Price");
     } else {
         $price = round($price, 2);
@@ -1071,7 +1071,7 @@ function adminUpdatePet($connection, $petArray, $id)
     $stmt->close();
 }
 
-function adminValidateProduct($postArray, $checkCategory)
+function adminValidateProduct($postArray, $checkCategory = false)
 {
     $errorArray = [];
 
@@ -1101,7 +1101,7 @@ function adminValidateProduct($postArray, $checkCategory)
 
     $price = filter_var($postArray["price"], FILTER_VALIDATE_FLOAT);
 
-    if (!$price) {
+    if ($price === false) {
         array_push($errorArray, "Invalid Price");
     } else {
         $price = round($price, 2);
@@ -1109,14 +1109,16 @@ function adminValidateProduct($postArray, $checkCategory)
 
     $quantity = filter_var($postArray["quantity"], FILTER_VALIDATE_INT);
 
-    if (!$quantity) {
+    if (!$quantity && $quantity !== 0) {
         array_push($errorArray, "Invalid Quantity");
     }
 
     $status = filter_var($postArray["status"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 0, "max_range" => 1)));
 
-    if (!$status) {
+    if (!$status && $status !== 0) {
         array_push($errorArray, "Invalid value in status field");
+    }else{
+        $status = ($quantity === 0) ? 0 : $status;
     }
 
     if ($checkCategory) {

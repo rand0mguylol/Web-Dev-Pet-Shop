@@ -20,10 +20,10 @@ if (isset($_SESSION["user"]["userRole"], $_GET["id"], $_GET["type"]) && $_SESSIO
     unset($_SESSION["updateItemError"]);
   }
 
-  if(isset($_SESSION["updateItemMessage"])){
-    $alertMessage= $_SESSION["updateItemMessage"];
-    unset($_SESSION["updateItemMessage"]);
-  }
+  // if(isset($_SESSION["alertMessage"])){
+  //   $alertMessage= $_SESSION["alertMessage"];
+  //   unset($_SESSION["updateItemMessage"]);
+  // }
 }
 else {
   header("Location: ./index.php");
@@ -35,12 +35,12 @@ else {
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
 
-<?php if (isset($alertMessage)) : ?>
+<!-- <?php if (isset($alertMessage)) : ?>
         <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
             <strong><?php echo $alertMessage; ?></strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
 <?php if(isset($errorArray)): ?>
 <div class="modal fade" id="editProductModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -48,7 +48,6 @@ else {
         <div class="modal-content">
             <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Update Failed</h5>
-            <button type="button" class="btn-close closeEditProductModal" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
             <?php foreach($errorArray as $err): ?>
@@ -186,7 +185,7 @@ else {
 </div>
 <?php require_once "./script/general_scripts.php"; ?>
 <script src="./js/aos.js"></script>
-<script src = "./js/edit_product.js"></script>
+<script src = "./js/admin_modal.js"></script>
 <!-- For Rating System -->
 <script src="./js/rating.js"></script>
 <?php require_once "./components/footer.php"; ?>

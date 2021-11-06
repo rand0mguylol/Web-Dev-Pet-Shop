@@ -9,7 +9,7 @@ if (isset($_POST["updateItem"]) && $_GET["type"] === "pet"){
 
   if(isAssociativeArray($result)){
     adminUpdatePet($connection, $result, $_GET["id"]);
-    $_SESSION["updateItemMessage"] = "Item Successfully Updated";
+    $_SESSION["alertMessage"][] = "Item Successfully Updated";
   }else{
     $_SESSION["updateItemError"] = $result;
   }
@@ -24,7 +24,7 @@ if (isset($_POST["updateItem"]) && $_GET["type"] === "product"){
 
   if(isAssociativeArray($result)){
     adminUpdateProduct($connection, $_GET["id"], $result);
-    $_SESSION["updateItemMessage"] = "Item Successfully Updated";
+    $_SESSION["alertMessage"][] = "Item Successfully Updated";
   }else{
     $_SESSION["updateItemError"] = $result;
   }
