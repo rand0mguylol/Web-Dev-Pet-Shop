@@ -11,7 +11,7 @@ if (isset($_POST["addProduct"])){
 
   if(isAssociativeArray($result)){
     adminAddProduct($connection, $result);
-    $_SESSION["addProductMessage"] = "Product Successfully Added";
+    $_SESSION["alertMessage"][] = "Product Successfully Added";
   }else{
     $_SESSION["addProductError"] = $result;
   }

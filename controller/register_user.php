@@ -45,7 +45,8 @@ if (isset($_POST["signup"])) {
         exit();
     } else {
         createUser($newUser, $connection);
-        $_SESSION["accountCreation"] = "success";
+        // $_SESSION["accountCreation"] = "success";
+        $_SESSION["alertMessage"][] = "Account Successfully Created";
         header("Location:  ../index.php");
         exit();
     }

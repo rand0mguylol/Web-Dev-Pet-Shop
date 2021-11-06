@@ -9,7 +9,7 @@ if (isset($_POST["addPet"])){
 
   if(isAssociativeArray($result)){
     adminAddPet($connection, $result);
-    $_SESSION["addPetMessage"] = "Successfully Added";
+    $_SESSION["alertMessage"][] = "Successfully Added";
   }else{
     $_SESSION["addPetError"] = $result;
   }

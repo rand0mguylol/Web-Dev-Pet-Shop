@@ -11,21 +11,12 @@ if (!isset($_SESSION["user"]["userRole"], $_GET["name"], $_GET["type"], $_GET["i
 
 $name = $_GET["name"];
 
-if(isset($_SESSION["alertMessage"])){
-  $alertMessage = $_SESSION["alertMessage"];
-  unset($_SESSION["alertMessage"]);
-}
+
 ?>
 
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
 
-<?php if (isset($alertMessage)) : ?>
-    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
-        <strong><?php echo $alertMessage; ?></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<?php endif; ?>
 
 <div class="container my-5 px-5">
     <h1 class = "text-center mt-5">Add Gallery Image</h1>

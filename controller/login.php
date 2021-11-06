@@ -52,7 +52,7 @@ if (isset($_POST["signin"]) && isset($_GET["page"])) {
         }
     } else {
         $_SESSION["loginErrorArray"] = $loginErrorArray;
-        $_SESSION["alertMessage"][] = "Invalid Detials";
+        $_SESSION["alertMessage"][] = "Invalid Details";
     }
     header("Location: ../$lastPage");
     exit();

@@ -9,10 +9,6 @@ if (!isset($_SESSION["user"]["userRole"]) || $_SESSION["user"]["userRole"] !== "
   exit();
 }
 
-if(isset($_SESSION["addProductMessage"])){
-  $alertMessage = $_SESSION["addProductMessage"];
-  unset($_SESSION["addProductMessage"]);
-}
 
 if(isset($_SESSION["addProductError"])){
   $errorArray= $_SESSION["addProductError"];
@@ -24,12 +20,6 @@ if(isset($_SESSION["addProductError"])){
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
 
-<?php if (isset($alertMessage)) : ?>
-    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
-        <strong><?php echo $alertMessage; ?></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<?php endif; ?>
 
 <?php if(isset($errorArray)): ?>
 <div class="modal fade" id="editProductModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

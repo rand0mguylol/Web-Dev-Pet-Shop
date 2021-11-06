@@ -267,8 +267,8 @@ function createUser($newUser, $connection)
     $userRole = "CUSTOMER";
     $imagePath =  "./svg/profile-pic-default.svg";
     $hashedPassword = password_hash($newUser["password"], PASSWORD_DEFAULT);
-    $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber, imagePath, userRole) VALUES (?, ?, ?, ?, ?, ?);");
-    $stmt->bind_param("ssssis", $newUser["firstName"], $newUser["lastName"], $newUser["email"], $hashedPassword, $newUser["mobileNumber"], $imagePath, $userRole);
+    $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber, imagePath, userRole) VALUES (?, ?, ?, ?, ?, ?, ?);");
+    $stmt->bind_param("ssssiss", $newUser["firstName"], $newUser["lastName"], $newUser["email"], $hashedPassword, $newUser["mobileNumber"], $imagePath, $userRole);
     $stmt->execute();
     $stmt->close();
 }
@@ -1090,7 +1090,7 @@ function adminValidateProduct($postArray, $checkCategory = false)
         }
         $sanitizeProducttArray[$key] = sanitizeText($value);
 
-        if (!$value) {
+        if ($value === false) {
             array_push($errorArray, "Invalid " . strtolower($key));
         }
 
