@@ -5,7 +5,7 @@ require_once "../connection/db.php";
 
 if (isset($_POST["addPet"])){
 
-  $result = adminValidatePet($_POST, true);
+  $result = adminValidatePet($_POST);
 
   if(isAssociativeArray($result)){
     adminAddPet($connection, $result);

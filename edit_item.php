@@ -12,6 +12,10 @@ if (isset($_SESSION["user"]["userRole"], $_GET["id"], $_GET["type"]) && $_SESSIO
     exit();
   }
 
+  define("PET_ARRAY", ["Dog", "Cat", "Hamster"]);
+  define("PRODUCT_ARRAY", ["Dog Food", "Dog Accessories",  "Dog Care Products",  "Cat Food", "Cat Accessories", "Cat Care Products", "Hamster Food"]);
+
+
   $type = sanitizeText($_GET["type"]);
   $itemArray = getAdminEditItem($connection, $type, $_GET["id"]);
 
@@ -20,10 +24,6 @@ if (isset($_SESSION["user"]["userRole"], $_GET["id"], $_GET["type"]) && $_SESSIO
     unset($_SESSION["updateItemError"]);
   }
 
-  // if(isset($_SESSION["alertMessage"])){
-  //   $alertMessage= $_SESSION["alertMessage"];
-  //   unset($_SESSION["updateItemMessage"]);
-  // }
 }
 else {
   header("Location: ./index.php");
@@ -34,13 +34,6 @@ else {
 
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
-
-<!-- <?php if (isset($alertMessage)) : ?>
-        <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
-            <strong><?php echo $alertMessage; ?></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    <?php endif; ?> -->
 
 <?php if(isset($errorArray)): ?>
 <div class="modal fade" id="editProductModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -134,7 +127,14 @@ else {
                     <option value="No"  <?php if (strtolower($itemArray["dewormed"] === "no"))  echo "selected";?>>No</option>
                   </select>
             </div>
-
+            <div class="col-md-6">
+              <label for="" class="form-label">Category</label>
+              <select class="form-select" aria-label="Default select example" name = "category">
+                <?php for($i = 1; $i <=count(PET_ARRAY); $i++): ?>
+                <option value = "<?php echo $i;?>" <?php if ($itemArray["petCatId"] === $i) echo "selected";?>><?php echo PET_ARRAY[$i-1];?></option>
+                <?php endfor; ?>          
+              </select>
+            </div>
           <?php else: ?>
               <div class="col-md-12">
                   <label for="inputFirstName" class="form-label">Name</label>
@@ -174,6 +174,14 @@ else {
               <div class="col-md-12">
                   <label for="inputEmail" class="form-label">Product Dimensions</label>
                   <input type="text" class="form-control" id="inputEmail" placeholder="Product Dimensions" name="productDimensions"  value = "<?php echo $itemArray["productDimensions"];?>"required>
+              </div>
+              <div class="col-md-6">
+                <label for="" class="form-label">Category</label>
+                <select class="form-select" aria-label="Default select example" name = "category">
+                <?php for($i = 1; $i <=count(PRODUCT_ARRAY); $i++): ?>
+                <option value = "<?php echo $i;?>" <?php if ($itemArray["productCatId"] === $i) echo "selected";?>><?php echo PRODUCT_ARRAY[$i-1];?></option>
+                <?php endfor; ?>        
+                </select>
               </div>
           <?php endif; ?>
             <button class = "btn btn-primary" type = "submit" name = "updateItem">Update Item</button>

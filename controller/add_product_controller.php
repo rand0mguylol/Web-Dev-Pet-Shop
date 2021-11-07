@@ -5,7 +5,7 @@ require_once "../connection/db.php";
 
 if (isset($_POST["addProduct"])){
 
-  $result = adminValidateProduct($_POST, true);
+  $result = adminValidateProduct($_POST);
 
   // var_dump($result);
 

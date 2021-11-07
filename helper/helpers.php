@@ -933,9 +933,11 @@ function getAdminSearch($connection, $type, $q)
 function getAdminEditItem($connection, $type, $id)
 {
     if ($type === "pet") {
-        $sql = "SELECT name, price, status, gender, birthDate, weight, color, petCondition, vaccinated, dewormed  FROM  pets  WHERE petid = ? ;";
+        $sql = "SELECT pets.name, pets.price, pets.status, pets.gender, pets.birthDate, pets.weight, pets.color, pets.petCondition, pets.vaccinated, pets.dewormed,  pets.petCatId, petCategory.category  
+        FROM  pets, petCategory  WHERE pets.petCatId = petCategory.petCatId AND petid = ? ;";
     } else if ($type === "product") {
-        $sql = "SELECT name, price, quantity, status, description, brand, weight, warrantyPeriod, productDimensions FROM products  WHERE productid = ?;";
+        $sql = "SELECT products.name, products.price, products.quantity, products.status, products.description, products.brand, products.weight, products.warrantyPeriod, products.productDimensions, products.productCatId, productCategory.category
+        FROM products, productCategory  WHERE products.productCatId = productCategory.productCatId AND  productid = ?;";
     } else {
         return false;
     }
@@ -965,7 +967,7 @@ function isAssociativeArray($array)
     return false;
 }
 
-function adminValidatePet($postArray, $checkCategory = false)
+function adminValidatePet($postArray)
 {
     $errorArray = [];
     $category = "";
@@ -1023,14 +1025,14 @@ function adminValidatePet($postArray, $checkCategory = false)
         array_push($errorArray, "Invalid Birth Date");
     }
 
-    if ($checkCategory) {
 
-        $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => 3)));
 
-        if (!$category) {
-            array_push($errorArray, "Invalid value in category field");
-        }
+    $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => 3)));
+
+    if (!$category) {
+        array_push($errorArray, "Invalid value in category field");
     }
+
 
     if ($errorArray) {
         return $errorArray;
@@ -1057,10 +1059,10 @@ function adminValidatePet($postArray, $checkCategory = false)
 function adminUpdatePet($connection, $petArray, $id)
 {
     $stmt = $connection->prepare("UPDATE pets SET name= ?, price = ?,  status = ?, 
-    gender = ? , birthDate = ? , weight = ?, color = ?, petCondition = ?, vaccinated = ?, dewormed = ? WHERE petId = ?");
+    gender = ? , birthDate = ? , weight = ?, color = ?, petCondition = ?, vaccinated = ?, dewormed = ?, petCatId = ? WHERE petId = ?");
 
     $stmt->bind_param(
-        "ssisssssssi",
+        "ssisssssssii",
         $petArray["name"],
         $petArray["price"],
         $petArray["status"],
@@ -1071,13 +1073,14 @@ function adminUpdatePet($connection, $petArray, $id)
         $petArray["petCondition"],
         $petArray["vaccinated"],
         $petArray["dewormed"],
+        $petArray["category"],
         $id
     );
     $stmt->execute();
     $stmt->close();
 }
 
-function adminValidateProduct($postArray, $checkCategory = false)
+function adminValidateProduct($postArray)
 {
     $errorArray = [];
 
@@ -1127,14 +1130,14 @@ function adminValidateProduct($postArray, $checkCategory = false)
         $status = ($quantity === 0) ? 0 : $status;
     }
 
-    if ($checkCategory) {
 
-        $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => 7)));
 
-        if (!$category) {
-            array_push($errorArray, "Invalid value in category field");
-        }
+    $category = filter_var($postArray["category"], FILTER_VALIDATE_INT, array("options" => array("min_range" => 1, "max_range" => 7)));
+
+    if (!$category) {
+        array_push($errorArray, "Invalid value in category field");
     }
+
 
     if ($errorArray) {
         return $errorArray;
@@ -1159,10 +1162,10 @@ function adminValidateProduct($postArray, $checkCategory = false)
 function adminUpdateProduct($connection, $id, $productArray)
 {
     $stmt = $connection->prepare("UPDATE products SET name= ?  ,price = ?, quantity = ?, status = ?, 
-    description = ? , brand = ? , weight = ?, warrantyPeriod = ?, productDimensions = ? WHERE productId = ?");
+    description = ? , brand = ? , weight = ?, warrantyPeriod = ?, productDimensions = ?, productCatId= ? WHERE productId = ?");
 
     $stmt->bind_param(
-        "ssiisssssi",
+        "ssiisssssii",
         $productArray["name"],
         $productArray["price"],
         $productArray["quantity"],
@@ -1172,6 +1175,7 @@ function adminUpdateProduct($connection, $id, $productArray)
         $productArray["weight"],
         $productArray["warrantyPeriod"],
         $productArray["productDimensions"],
+        $productArray["category"],
         $id
     );
     $stmt->execute();
