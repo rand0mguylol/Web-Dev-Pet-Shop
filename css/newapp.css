@@ -699,6 +699,11 @@ input[type="number"] {
   height: 480px;
 }
 
+.review-container{
+  max-height: 850px;
+  overflow: auto;
+}
+
 @media (max-width: 1399px){
   .view-button{
     display: inline;

@@ -28,11 +28,13 @@ function validateState($state)
     $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
     if (!$_POST["state"] !== "" && in_array($_POST["state"], $statesArray)) {
         return $state;
-    } elseif ($_POST["state"] === "") {
-        $state = "";
-    } else {
-        return false;
+    // } elseif ($_POST["state"] === "") {
+    //     $state = "";
+    // } else {
+    //     return false;
+    // }
     }
+    $state = $_POST["state"] === "" ? "" : false;
     return $state;
 }
 
@@ -524,32 +526,36 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection)
     $row = $result->fetch_assoc();
     $dbPassword = $row["userPassword"];
     $verifyPassword = password_verify($oldpass, $dbPassword);
-    if ($verifyPassword) {
-        $isSame = $oldpass === $newpass ? true : false;
-        $validatePassword = validatePassword($newpass);
-    } else {
+
+    if($verifyPassword === false){
         return "Invalid Password";
     }
+
+    $isSame = $oldpass === $newpass ? true : false;
+    $validatePassword = validatePassword($newpass);
+
     if ($isSame) {
         return "New Password cannot be the same as the old password";
     }
-    if ($validatePassword) {
-        $confirmPassword = $newpass === $confimpass ? true : false;
-    } else {
+
+    if($validatePassword === false) {
         return  "Length must be between 8 to 16 characters, 
-            including one digit, one uppercase, one lowecase 
-            character and may contain the following !@#$%&";
+        including one digit, one uppercase, one lowecase 
+        character and may contain the following !@#$%&";
     }
-    if ($confirmPassword) {
-        $hashedPassword = password_hash($newpass, PASSWORD_DEFAULT);
-        $stmt = $connection->prepare("UPDATE `user` SET `userPassword`= ?  WHERE userId = ?");
-        $stmt->bind_param("si", $hashedPassword, $id);
-        $stmt->execute();
-        $stmt->close();
-        return  "Password Changed Successfully";
-    } else {
+
+    $confirmPassword = $newpass === $confimpass ? true : false;
+
+    if($confirmPassword === false){
         return  "Password does not match";
     }
+
+    $hashedPassword = password_hash($newpass, PASSWORD_DEFAULT);
+    $stmt = $connection->prepare("UPDATE `user` SET `userPassword`= ?  WHERE userId = ?");
+    $stmt->bind_param("si", $hashedPassword, $id);
+    $stmt->execute();
+    $stmt->close();
+    return  "Password Changed Successfully";
 }
 
 function validateImage($image)

@@ -115,6 +115,10 @@ if (isset($_POST["submit"])) {
                                     name="lastName" value="<?php echo $_SESSION["user"]["lastName"];?>">
                             </div>
                             <div class="col-md-12">
+                                <input type="email" class="form-control" id="email" placeholder="Email"
+                                    name="email" value="<?php echo $_SESSION["user"]["email"];?>" readonly>
+                            </div>
+                            <div class="col-md-12">
                                 <div class="input-group">
                                     <div class="input-group-text">+60</div>
                                     <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name="mobileNumber" value="<?php echo $_SESSION["user"]["mobileNumber"]; ?>">
@@ -202,7 +206,7 @@ if (isset($_POST["submit"])) {
                     <!-- Order History Tab -->
                     <div class="tab-pane fade"  id="nav-order" role="tabpanel"
                         aria-labelledby="nav-order-tab">
-                        <div class="container">
+                        <div class="container review-container">
                             <!-- Container for each Order -->
                             <?php if (empty($orderId)) : ?>
                             <h2 class="text-center my-auto">No previous orders.</h2>
