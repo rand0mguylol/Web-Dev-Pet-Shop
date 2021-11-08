@@ -177,7 +177,7 @@ if (isset($_POST['add-to-cart-btn'])) {
     <section class="container mt-5">
         <nav class="specific-tabs-section">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class=" nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pet Info</button>
+                <button class=" nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Info</button>
                 <?php if ($itemType == "product") : ?>
                     <button class=" nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Description</button>
                 <?php endif; ?>

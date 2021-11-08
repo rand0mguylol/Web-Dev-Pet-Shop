@@ -102,7 +102,7 @@ if (isset($userid)) {
                     <a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">View Account</a>
                 </div>
                 <form action="<?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method="POST">
-                    <div class="col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name="logout">Log Out</button></div>
+                    <div class="col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name="logout">Sign Out</button></div>
                 </form>
             
             </div>

@@ -8,20 +8,10 @@ const image = document.querySelector("#cropBox")
     const outerCropWrapper = document.querySelector(".outer-crop-wrapper")
     const userProfilePicture = document.querySelector(".userProfilePicture")
 
-    console.dir(
-        userProfilePicture
-    )
-
-    console.log(typeof(userProfilePicture.src))
-
     if (userProfilePicture.src !== userProfilePicture.baseURI && userProfilePicture.src.includes(
             "/svg/profile-pic-default.svg") === false) {
         removePicBtn.classList.remove("hidden")
     }
-
-    // imageForm.addEventListener("submit", function(e){
-    //   e.preventDefault()
-    // })
 
     const imageCrop = new Cropper(image, {
         aspectRatio: 1,
