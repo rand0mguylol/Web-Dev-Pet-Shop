@@ -64,8 +64,12 @@ $('.quantity-input').change(function() {
     var updateBtn = $("button[name='quantityUpdateBtn'][data-field ='" + field + "']");
     updateBtn.click();
 });
+
 $('.quantity-input').keydown(function(e) {
     if (e.keyCode == 13) {
+        e.preventDefault();
+        var name = $(this).attr('name');
+        var field = name.split('[quantity]')[0];
         var updateBtn = $("button[name='quantityUpdateBtn'][data-field ='" + field + "']");
         updateBtn.click();
     }
