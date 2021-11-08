@@ -19,6 +19,11 @@ if (isset($_SESSION["user"]["userID"], $_POST["uploadPic"])) {
         exit();
     }
     //
+    $userImageDirectory = "../Images/User";
+    if (!is_dir($userImageDirectory)) {
+        mkdir($userImageDirectory);
+    }
+    
     $_SESSION["alertMessage"][] = "Image Updated";
     saveImage($imageMime, $image, $connection, $_SESSION["user"]["userID"], $hasImage);
     header("Location: ../profile.php");
