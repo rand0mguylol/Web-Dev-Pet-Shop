@@ -7,13 +7,20 @@ if (isset($_POST["signin"]) && isset($_GET["page"])) {
     require_once "../connection/db.php";
     $loginErrorArray = [];
     $lastPageQuery = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
-    $lastPage = !$lastPageQuery["page"] ? "" : $lastPageQuery["page"];
-    if (count($lastPageQuery) > 1) {
-        array_shift($_GET);
-        foreach ($_GET as $key => $value) {
-            $lastPage .= "&" . $key . "=" . $value;
-        }
-    }
+
+    // OLD WAY
+    // $lastPage = !$lastPageQuery["page"] ? "" : $lastPageQuery["page"];
+    // if (count($lastPageQuery) > 1) {
+    //     array_shift($_GET);
+    //     foreach ($_GET as $key => $value) {
+    //         $lastPage .= "&" . $key . "=" . $value;
+    //     }
+    // }
+
+    // NEW WAY
+    $lastPage = $lastPageQuery["page"];
+    $queryString = $lastPageQuery["queryString"];
+
 
     $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -54,20 +61,33 @@ if (isset($_POST["signin"]) && isset($_GET["page"])) {
         $_SESSION["loginErrorArray"] = $loginErrorArray;
         $_SESSION["alertMessage"][] = "Invalid Details";
     }
-    header("Location: ../$lastPage");
-    exit();
+   if (!$queryString){
+        header("Location: ../$lastPage");
+        exit();
+    } else {
+        header("Location: ../$lastPage?$queryString");
+        exit();
+    }
 }
 if (isset($_POST["logout"]) && isset($_GET["page"])) {
     $lastPageQuery = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
-    $lastPage = !$lastPageQuery["page"] ? "" : $lastPageQuery["page"];
+    $lastPage = $lastPageQuery["page"];
+    $queryString = $lastPageQuery["queryString"];
+    
+    // $lastPage = !$lastPageQuery["page"] ? "" : $lastPageQuery["page"];
     session_unset();
     session_destroy();
-    if (count($lastPageQuery) > 1) {
-        array_shift($_GET);
-        foreach ($_GET as $key => $value) {
-            $lastPage .= "&" . $key . "=" . $value;
-        }
+    // if (count($lastPageQuery) > 1) {
+    //     array_shift($_GET);
+    //     foreach ($_GET as $key => $value) {
+    //         $lastPage .= "&" . $key . "=" . $value;
+    //     }
+    // }
+    if (!$queryString){
+        header("Location: ../$lastPage");
+        exit();
+    } else {
+        header("Location: ../$lastPage?$queryString");
+        exit();
     }
-    header("Location: ../" . $lastPage);
-    exit();
 }

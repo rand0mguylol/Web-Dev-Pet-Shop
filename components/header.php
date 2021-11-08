@@ -3,11 +3,18 @@
 require_once "./helper/helpers.php";
 require_once "./connection/db.php";
 //
-$loginErrorArray = [];
-$folder = $_SERVER["REQUEST_URI"];
-$path = dirname($folder);
-$currentPage = $path !== "\\" ? basename($folder) : "";
-//
+// $loginErrorArray = [];
+
+// OLD WAY
+// $folder = $_SERVER["REQUEST_URI"];
+// $path = dirname($folder);
+// $currentPage = $path !== "\\" ? basename($folder) : "";
+
+//NEW WAY
+$queryString = $_SERVER["QUERY_STRING"];
+$folder = $_SERVER["SCRIPT_NAME"];
+$currentPage= basename($folder);
+
 $alertMessage = isset($_SESSION["alertMessage"]) ? $_SESSION["alertMessage"] : null;
 $loginErrorArray = isset($_SESSION["loginErrorArray"]) ? $_SESSION["loginErrorArray"] : [];
 unset($_SESSION["alertMessage"]);
@@ -56,7 +63,7 @@ if (isset($userid)) {
                     <div class="p-3 mb-2 bg-danger text-white text-center rounded-pill">INCORRECT LOGIN DETAILS</div>
                 <?php endif; ?>
                 <div>
-                    <form action=" <?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method="POST">
+                    <form action="<?php echo './controller/login.php?page=' . $currentPage . '&queryString=' . $queryString; ?>" class="row g-3 row-cols-1" method="POST">
                         <div class="col">
                             <label for="inputEmail" class="form-label">Email</label>
                             <input type="email" class="form-control" id="inputEmail" placeholder="Email Address" name="email" required>
@@ -101,7 +108,7 @@ if (isset($userid)) {
                 <div class="col-12 text-center">
                     <a class="btn  offcanvas-view-account rounded-pill px-5 mb-4" href="profile.php">View Account</a>
                 </div>
-                <form action="<?php echo './controller/login.php?page=' . $currentPage; ?>" class="row g-3 row-cols-1" method="POST">
+                <form action="<?php echo './controller/login.php?page=' . $currentPage . '&queryString=' . $queryString; ?>" class="row g-3 row-cols-1" method="POST">
                     <div class="col-12 text-center"><button type="submit" class="btn offcanvas-sign-in rounded-pill px-5" name="logout">Sign Out</button></div>
                 </form>
             
