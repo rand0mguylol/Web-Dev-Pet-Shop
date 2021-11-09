@@ -47,12 +47,12 @@ while($row= $result->fetch_assoc()){
     </form>
   </div>
 
-  <div class = "row row-cols-3 flex-wrap my-5">
+  <div class = "row my-5">
     <?php if (empty($imageArray)): ?>
     <p class = 'col-12 text-center lead'>This item has no images</p>
     <?php else: ?>
     <?php foreach ($imageArray  as $image): ?>
-    <div class = "col text-center">
+    <div class = "col mb-5 text-center">
       <div>
       <?php if(strtolower($imageType) === "gallery"):?>
         <img src="<?php echo $image["imagePath"];?>" alt="" class = "img-fluid shadow image-show" style ="width: 300px; height: 300px;"  onerror="this.alt='Image Not Found'">
@@ -60,7 +60,9 @@ while($row= $result->fetch_assoc()){
           <img src="<?php echo $image["imagePath"];?>" alt="" class = "img-fluid shadow image-show" style ="width: 319px; height: 409px;" onerror="this.alt='Image Not Found'">
           <?php endif; ?>
       </div>
-        <p class = "mt-5 text-center test"><?php echo $image["imageName"];?></p>
+        <!-- <p class = "mt-5 text-center"><?php echo $image["imageName"];?></p> -->
+        <!-- <div class = "mt-5 text-center"><?php echo $image["imageName"];?></div> -->
+        <div class = "mt-5 text-center"><small ><?php echo $image["imageName"];?></small></div>
     </div>
     <?php endforeach; ?>
     <?php endif; ?>

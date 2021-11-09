@@ -135,8 +135,8 @@ else {
                   <?php endif; ?>
                   <td><a href="./add_card_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&category=<?php echo $item["category"];?>&name=<?php echo $item["name"];?>" class = "text-decoration-none">Add Card Image</a></td>
                   <td><a href="./add_gallery_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&category=<?php echo $item["category"];?>&name=<?php echo $item["name"];?>" class = "text-decoration-none">Add Gallery Image</a></td>
-                  <td><a href="./delete_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&imageType=Card" class="btn btn-info">Delete Card Image</a></td>
-                  <td><a href="./delete_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&imageType=Gallery" class="btn btn-success">Delete Gallery Image</a></td>
+                  <td><a href="./delete_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&imageType=Card" class="text-decoration-none">Delete Card Image</a></td>
+                  <td><a href="./delete_image.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>&imageType=Gallery" class="text-decoration-none">Delete Gallery Image</a></td>
               </tr>
               <?php endforeach; ?>
               </tbody>
