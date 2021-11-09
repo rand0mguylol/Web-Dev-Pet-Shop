@@ -12,7 +12,7 @@ if (isset($_SESSION['payment']))
 
 $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
 
-// Return to index if not login
+// Return to index.php if not logged into account
 if (!isset($_SESSION["user"]["userID"])) {
     header("Location: index.php");
     exit();
@@ -23,14 +23,13 @@ if (isset($_SESSION["profileUpdateError"])) {
     unset($_SESSION["profileUpdateError"]);
 }
 
-// Order History
+// Get array of order IDs of current account
 $userid = $_SESSION['user']['userID'] ?? null;
 if (isset($userid)) {
     $orderId = getOrderId($userid, $connection);
 }
-?>
 
-<?php
+// Validation for review form submission
 if (isset($_POST["submit"])) {
     $errorArray = [];
     $userid = $_SESSION["user"]["userID"];
@@ -41,7 +40,6 @@ if (isset($_POST["submit"])) {
     } else {
         array_push($errorArray, "ratingErr");
         $_SESSION["alertMessage"][]= "Please select a rating";
-        // $rateError = "Select a rating";
     }
 
     if (strlen($_POST["feedback"]) <= 50) {
@@ -49,7 +47,6 @@ if (isset($_POST["submit"])) {
     } else {
         array_push($errorArray, "feedbackErr");
         $_SESSION["alertMessage"][] = "Feedback must not be over 50 characters long"; 
-        // $feedbackError = "Feedback must not be over 50 characters long";
     }
 
     if (empty($errorArray)) {
@@ -64,11 +61,8 @@ if (isset($_POST["submit"])) {
         exit();
     }
 }
-
-// if(isset($_POST["toRate"])){
-//     $reviewOrderItemId = "<script>document.write(reviewOrderItemId)</script>";
-// }
 ?>
+<!-- User Profile -->
 <?php $title = "Profile -" . $_SESSION['user']['firstName'] . " " . $_SESSION['user']['lastName']; ?>
 <?php require_once "./components/header.php"; ?>
 <div class="main-wrapper profile">
@@ -79,11 +73,12 @@ if (isset($_POST["submit"])) {
         <div class="row align-items-stretch">
             <div class="col-3 px-0  pb-5 nav-tab-container d-flex flex-column justify-content-center">
                 <div>
+                    <!-- Profile Picture -->
                     <div class="text-center mb-5">
                         <img src="<?php echo  $_SESSION["user"]["userPicture"] ?>" alt=""
                             class="img-fluid shadow rounded-circle userProfilePicture">
                     </div>
-                    <!-- Buttons to select tab -->
+                    <!-- Tab Buttons -->
                     <div class="nav nav-tabs profile-tab flex-column" id="nav-tab" role="tablist"> 
                         <button class=" nav-link active" id="nav-profile-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
@@ -159,7 +154,7 @@ if (isset($_POST["submit"])) {
                     </div>
                     <!-- End of Profile Tab -->
 
-                    <!-- Picture Tab -->
+                    <!-- Profile Picture Tab -->
                     <div class="tab-pane fade" id="nav-pic" role="tabpanel" aria-labelledby="nav-pic-tab">
                         <div class="outer-crop-wrapper text-center">
                             <div class="box mx-auto">
@@ -181,7 +176,7 @@ if (isset($_POST["submit"])) {
                             </form>
                         </div>
                     </div>
-                    <!-- End of Picture Tab -->
+                    <!-- End of Profile Picture Tab -->
 
                     <!-- Privacy Tab -->
                     <div class="tab-pane fade" id="nav-privacy" role="tabpanel" aria-labelledby="nav-privacy-tab">
@@ -200,7 +195,7 @@ if (isset($_POST["submit"])) {
                             </div>
                         </form>
                     </div>
-                    <!--  End of privacy tab-->
+                    <!--  End of Privacy Tab-->
 
 
                     <!-- Order History Tab -->

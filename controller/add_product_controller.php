@@ -1,4 +1,9 @@
 <?php
+
+// Add New Product
+// To handle request for adding new product
+// POST received from add_product.php
+
 session_start();
 require_once "../helper/helpers.php";
 require_once "../connection/db.php";

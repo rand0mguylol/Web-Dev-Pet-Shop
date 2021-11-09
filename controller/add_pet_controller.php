@@ -1,4 +1,9 @@
 <?php
+
+// Add New Pet
+// To handle request for adding new pet
+// POST received from add_pet.php
+
 session_start();
 require_once "../helper/helpers.php";
 require_once "../connection/db.php";

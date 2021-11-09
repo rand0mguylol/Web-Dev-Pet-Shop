@@ -1,5 +1,8 @@
 <?php
 
+// To handle request for adding card images for an item
+// POST received from add_card_image.php
+
 session_start();
 require_once "../helper/helpers.php";
 require_once "../connection/db.php";
@@ -8,6 +11,7 @@ if (!isset($_SESSION["user"]["userRole"], $_GET["type"], $_GET["id"], $_GET["cat
   header("Location: ../index.php");
   exit();
 }
+
 
 if($_GET["type"] === "pet"){
   $stmt = $connection->prepare("SELECT petimage.petid, petimage.imagePath FROM petimage WHERE petimage.petid = ? AND imageType = 'Card'");
@@ -20,20 +24,22 @@ if($_GET["type"] === "pet"){
   $checkIdExist= $result->fetch_assoc();
   $stmt->close();
 
+  // Get the dataURI of the image file submitted by the admin
   $dataURI = $_POST["cardImage"];
   $image = file_get_contents($dataURI);
   //
   $imageMime = validateImage($image);
-  //
+  //Check to see if correct file extension 
   if (!$imageMime) {
       $_SESSION["alertMessage"][] = "Invalid Image Type";
   }
 
+  // Check if the item has an existing card image
   if (!$checkIdExist) {
-    //
     $_SESSION["alertMessage"][] = "Image Updated";
     addNewItemCardImage($imageMime, $image, $connection, $_GET["id"], $_GET["category"], $_GET["name"], $_GET["type"]);
   }else{
+    // Get the correct image path from the current card image
     $currentImagePath = $checkIdExist["imagePath"];
     $_SESSION["alertMessage"][] = "Image Updated";
     overwriteItemCardImage($imageMime, $image, $connection, $_GET["id"], $_GET["name"], $currentImagePath, $_GET["type"]);  

@@ -1,6 +1,7 @@
 <?php
 
-use function PHPSTORM_META\override;
+// To handle request for adding gallery images for an item
+// POST received from add_gallery_image.php
 
 session_start();
 require_once "../helper/helpers.php";
@@ -26,9 +27,10 @@ $checkIdExistArray = [];
   }
   $stmt->close();
 
+    // Get the dataURI of the image file submitted by the admin
   $dataURI = $_POST["galleryImage"];
   $image = file_get_contents($dataURI);
-  //
+  //Check to see if correct file extension 
   $imageMime = validateImage($image);
   //
   if (!$imageMime) {
@@ -37,9 +39,9 @@ $checkIdExistArray = [];
 
   $index = count($checkIdExistArray) + 1;
 
-
+  // If count is zero, no gallery images exist for the item
   if (count($checkIdExistArray) === 0) {
-    //  $category = str_replace(" ", "_", $category);
+    // Will make a directory to store the gallery images if the directory does not exist
     $category = str_replace(" ", "_", $_GET["category"]);
     $name = str_replace(" ", "_", $_GET["name"]);
     $dirName = "../Images/$category/$name/Gallery/";
@@ -51,6 +53,7 @@ $checkIdExistArray = [];
 
     addNewItemGalleryImage($imageMime, $image, $connection, $_GET["id"], $dirName, $name, $_GET["type"]);
   }else{
+    // Get the current dir of the gallery images the item is stored in
     $currentImagePath = $checkIdExistArray[0]["imagePath"];
     $dirName = "." . dirname($currentImagePath) . "/";
     $name = str_replace(" ", "_", $_GET["name"]) . "_$index" . "_Gallery_550_550";

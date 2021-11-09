@@ -1,6 +1,7 @@
 <?php
 
-use function PHPSTORM_META\override;
+// To handle request for changing status of item to 1 
+// POST received from admin.php (ADD button)
 
 session_start();
 require_once "../helper/helpers.php";

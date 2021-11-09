@@ -75,7 +75,7 @@ else {
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
-            <form action="./controller/add_item_controller.php" method="POST">
+            <form action="./controller/change_item_status_controller.php" method="POST">
               <input type="hidden" name = "type" value = "" id = "addItemTypeInput">
               <input type="hidden" name = "id" id = "addItemIDInput" value = "">
               <button type="submit" class="btn btn-danger" name = "addItem">Yes, add it</button>
