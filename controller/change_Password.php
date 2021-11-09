@@ -1,4 +1,7 @@
 <?php
+
+// Handle request to change user password
+// POST received from profile.php (Privacy Tab) (Change Password Button)
 session_start();
 require_once "../connection/db.php";
 require_once "../helper/helpers.php";

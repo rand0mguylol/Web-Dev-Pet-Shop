@@ -72,26 +72,6 @@ while($row= $result->fetch_assoc()){
 
 <?php require_once "./script/general_scripts.php"; ?>
 <script src="./js/aos.js"></script>
-<script>
-  const imagePathInput = document.querySelector("#imagePathInput")
-  const imageSelect = document.querySelector("#imageSelect")
-
-
-
-  // imageSelect.addEventListener("change", function(){
-  //   // imagePathInput.value = this,dataset.imagePath
-  // })
-  function getImagePath(select){
-    let selectedIndex = select.selectedIndex
-    imagePathInput.value = select[selectedIndex].dataset.imagepath
-  }
-
-  window.addEventListener("load", function(){
-    getImagePath(imageSelect)
-  })
-
- 
-</script>
 <!-- For Rating System -->
 <script src="./js/rating.js"></script>
 <?php require_once "./components/footer.php"; ?>

@@ -6,13 +6,13 @@ if (isset($_POST["signup"])) {
     //Import db & helpers
     require_once "../connection/db.php";
     require_once "../helper/helpers.php";
-    //
     $errorArray = [];
     $firstName = sanitizeText($_POST["firstName"]);
     $lastName = sanitizeText($_POST["lastName"]);
     $mobileNumber = validateMobileNumber($_POST["mobileNumber"]);
     $password = validatePassword($_POST["password"]);
     $email = validateEmail($_POST["email"]);
+    
     // Check to see if email has been used
     $stmt = $connection->prepare("SELECT email FROM user WHERE email = ?");
     $stmt->bind_param("s", $email);
@@ -20,11 +20,10 @@ if (isset($_POST["signup"])) {
     $result = $stmt->get_result();
     $checkEmailTaken = $result->fetch_assoc();
     $stmt->close();
-    //
+
     if ($checkEmailTaken && $email !== false) {
         array_push($errorArray, "emailTaken");
     }
-    //
     $newUser = array(
         "firstName" => $firstName,
         "lastName" => $lastName,
@@ -45,7 +44,6 @@ if (isset($_POST["signup"])) {
         exit();
     } else {
         createUser($newUser, $connection);
-        // $_SESSION["accountCreation"] = "success";
         $_SESSION["alertMessage"][] = "Account Successfully Created";
         header("Location:  ../index.php");
         exit();

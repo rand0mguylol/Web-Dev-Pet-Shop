@@ -1,4 +1,5 @@
 <?php
+//Import required resources
 session_start();
 require_once "./connection/db.php";
 require_once "./helper/helpers.php";
@@ -15,8 +16,8 @@ if (isset($_GET["category"], $_GET["id"])) {
         header("Location: index.php");
         exit();
     } 
-    $itemGalleryArray = getImage($id,  $categoryClean, "Gallery", false, $connection);
-    $itemThumbnailArray = getImage($id, $categoryClean, "Thumbnail", false, $connection);
+    // Get the card gallery image for the specific item
+    $itemGalleryArray = getImage($id,  $categoryClean, "Gallery", false, $connection); 
     $quantity = $itemInfo['itemSubInfo']['quantity'] ?? 1;
     $others = getCategoryOther($connection, $categoryClean, $id);
     $productReviewsArray = getProductReviews($id, $categoryClean, $connection);
@@ -31,16 +32,18 @@ if (isset($_GET["category"], $_GET["id"])) {
     exit();
 }
 $userid = $_SESSION['user']['userID'] ?? NULL;
+//Handle add to cart request
 if (isset($_POST['add-to-cart-btn'])) {
     if (isset($userid)) {
         $itemID = $id;
         $itemQuantity = (int) $_POST['item_quantity'];
         $itemPrice = $itemInfo['itemMainInfo']['price'];
-        $subtotal = $itemQuantity * $itemPrice;
+        $subtotal = number_format((float)$itemQuantity * $itemPrice, 2, '.', '');
         $cartid = getCartId($userid, $connection);
         if (!$cartid) {
             $cartid = createCart($userid, $connection);
         }
+        //Check if the pet/product exists in the cart
         $validation = validateCartItem($cartid, $itemID, $itemQuantity, $categoryClean, $connection);
         if (!$validation) {
             $addCartItem = addCartitem($cartid, $itemID, $categoryClean, $itemQuantity, $subtotal, $connection);
@@ -121,6 +124,7 @@ if (isset($_POST['add-to-cart-btn'])) {
                 <div>
                     <div>
                         <div>
+                            <!-- Add to cart form -->
                             <form action="" method="POST">
                                 <div class=" item-quantity-section mb-3">
                                     <input type="hidden" name="productId" value="<?php echo $id ?>">
@@ -134,6 +138,8 @@ if (isset($_POST['add-to-cart-btn'])) {
                                     <button type="submit" class="rounded-pill btn btn-success add-to-cart-btn mb-3" name="add-to-cart-btn">Add to Cart</button>
                                 </div>
                             </form>
+                            <!-- End of the add to cart form -->
+                            <!-- Alert message -->
                             <?php
                             if (isset($_POST['add-to-cart-btn'], $_SESSION["user"])) {
                                 if ($validation) {
@@ -156,6 +162,7 @@ if (isset($_POST['add-to-cart-btn'])) {
                                 }
                             }
                             ?>
+                            <!-- End of alert message -->
                         </div>
                     </div>
                 </div>
@@ -174,6 +181,7 @@ if (isset($_POST['add-to-cart-btn'])) {
         </div>
     </section>
 
+    <!-- Nav and Tab for Info, Description, Review -->
     <section class="container mt-5">
         <nav class="specific-tabs-section">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -186,8 +194,8 @@ if (isset($_POST['add-to-cart-btn'])) {
                 <?php endif; ?>
             </div>
         </nav>
-
         <div class="tab-content mt-3" id="nav-tabContent">
+            <!-- Info Tab Content-->
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                 <div>
                     <div class="specific-item-info">
@@ -200,12 +208,16 @@ if (isset($_POST['add-to-cart-btn'])) {
                     </div>
                 </div>
             </div>
+            <!-- End of Info Tab Content -->
+
+            <!-- Description Tab Content -->
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                 <?php if (isset($itemInfo["itemMainInfo"]['description'])) : ?>
                     <p><?php echo nl2br(str_replace('\n', "<br>", $itemInfo["itemMainInfo"]['description'])); ?></p>
                 <?php endif; ?>
             </div>
-
+            <!-- End of Description Tab Content -->
+            
             <!-- Review Tab Content-->
             <?php if ($itemType == "product") : ?>
                 <div class="tab-pane fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
@@ -214,6 +226,7 @@ if (isset($_POST['add-to-cart-btn'])) {
                             <div class="review-header-section">
                                 <div class="ratings align-self-start">
                                     <h3>Ratings</h3>
+                                    <!-- 5 Star Icons & Total 5 Star Ratings-->
                                     <div class="mb-2">
                                         <img src="./svg/star-fill.svg" alt="">
                                         <img src="./svg/star-fill.svg" alt="">
@@ -222,6 +235,9 @@ if (isset($_POST['add-to-cart-btn'])) {
                                         <img src="./svg/star-fill.svg" alt="">
                                         <span class="ms-2">(<?php echo $eachRatingTotal["totalFiveStar"]; ?>)</span>
                                     </div>
+                                    <!-- End of 5 Star Icons & Total 5 Star Ratings-->
+                                    
+                                    <!-- 4 Star Icons & Total 4 Star Ratings-->
                                     <div class="mb-2">
                                         <img src="./svg/star-fill.svg" alt="">
                                         <img src="./svg/star-fill.svg" alt="">
@@ -230,6 +246,9 @@ if (isset($_POST['add-to-cart-btn'])) {
                                         <img src="./svg/star-fill-white.svg" alt="">
                                         <span class="ms-2">(<?php echo $eachRatingTotal["totalFourStar"]; ?>)</span>
                                     </div>
+                                    <!-- End of 4 Star Icons & Total 4 Star Ratings-->
+
+                                    <!-- 3 Star Icons & Total 3 Star Ratings-->
                                     <div class="mb-2">
                                         <img src="./svg/star-fill.svg" alt="">
                                         <img src="./svg/star-fill.svg" alt="">
@@ -238,6 +257,9 @@ if (isset($_POST['add-to-cart-btn'])) {
                                         <img src="./svg/star-fill-white.svg" alt="">
                                         <span class="ms-2">(<?php echo $eachRatingTotal["totalThreeStar"]; ?>)</span>
                                     </div>
+                                    <!-- End of 3 Star Icons & Total 3 Star Ratings-->
+
+                                    <!-- 2 Star Icons & Total 2 Star Ratings-->
                                     <div class="mb-2">
                                         <img src="./svg/star-fill.svg" alt="">
                                         <img src="./svg/star-fill.svg" alt="">
@@ -246,6 +268,9 @@ if (isset($_POST['add-to-cart-btn'])) {
                                         <img src="./svg/star-fill-white.svg" alt="">
                                         <span class="ms-2">(<?php echo $eachRatingTotal["totalTwoStar"]; ?>)</span>
                                     </div>
+                                    <!-- End of 2 Star Icons & Total 2 Star Ratings-->
+
+                                    <!-- 1 Star Icons & Total 1 Star Ratings-->
                                     <div class="mb-2">
                                         <img src="./svg/star-fill.svg" alt="">
                                         <img src="./svg/star-fill-white.svg" alt="">
@@ -254,10 +279,9 @@ if (isset($_POST['add-to-cart-btn'])) {
                                         <img src="./svg/star-fill-white.svg" alt="">
                                         <span class="ms-2">(<?php echo $eachRatingTotal["totalOneStar"]; ?>)</span>
                                     </div>
+                                    <!-- End of 1 Star Icons & Total 1 Star Ratings-->
                                 </div>
                             </div>
-
-                            <!-- <div class = "review-body-section"> -->
 
                             <!-- Product Reviews -->
                             <?php foreach ($productReviewsArray as $review) : ?>
@@ -283,16 +307,20 @@ if (isset($_POST['add-to-cart-btn'])) {
                                     </div>
                                 </div>
                             <?php endforeach; ?>
+                            <!-- End of Product Reviews -->
                         </div>
                     </div>
                 </div>
             <?php endif ?>
+            <!-- End of Review Tab Content-->
         </div>
     </section>
+    <!-- End of Nav and Tab for Info, Description, Review -->
 
+    <!-- Similar pets/products section-->
     <section class="other-products-section mt-5 pt-5">
         <div class="container">
-            <h3>Other Products in this Category</h3>
+            <h3>Other <?php echo ucfirst($itemType); ?>s in this Category</h3>
             <div class="glider-contain mt-5">
                 <div class="glider-other-products">
                     <?php foreach ($others as $cat) : ?>
@@ -367,7 +395,7 @@ if (isset($_POST['add-to-cart-btn'])) {
             </div>
         </div>
     </section>
-
+    <!-- End of similar product section -->
     <?php require_once "./components/footer.php"; ?>
 </div>
 <?php require_once "./script/general_scripts.php" ?>

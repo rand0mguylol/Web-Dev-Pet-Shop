@@ -1,5 +1,7 @@
 <?php session_start();
 
+// Handle update profile POST request from profile.php (Profile Tab) (Name of button = saveProfile )
+
 if (isset($_POST["saveProfile"], $_SESSION["user"]["userID"])) {
     require_once "../connection/db.php";
     require_once "../helper/helpers.php";

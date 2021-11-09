@@ -1,9 +1,11 @@
+<!-- Import required resources -->
 <?php session_start(); ?>
 <?php require_once "./connection/db.php"; ?>
 <?php $title = "Checkout Page"; ?>
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
 <?php
+//Get UserID,cartID, subtotal, cartitems and subtotal
 $userid = $_SESSION['user']['userID'] ?? null;
 if (isset($userid)) {
     $cartid = getCartId($userid, $connection);
@@ -11,7 +13,9 @@ if (isset($userid)) {
     $cartitems = getCartItems($cartid, $connection);
     $cartSubtotal = getCartTotal($cartid, $connection);
 }
+//Handle credit card payment
 if (isset($_POST['cardPaymentBtn'])) {
+    //Get payment info
     $cardNumber = str_replace("-", "", $_POST['cardNumber']);
     $paymentMethod = $_POST['paymentMethod'];
     $type = $_POST['cardType'];
@@ -20,6 +24,7 @@ if (isset($_POST['cardPaymentBtn'])) {
     $cvv = $_POST['cvv'];
     $deliveryMethod = $_POST['deliveryMethod'];
     $total = $_POST['total'];
+    //Handle errors
     $err = validateCreditCard($cardNumber, $type, $expiryMonth, $expiryYear, $cvv);
     if (!$err) {
         $orderid = createOrder($userid, $paymentMethod, $type, $deliveryMethod, $total, $connection);
@@ -36,11 +41,15 @@ if (isset($_POST['cardPaymentBtn'])) {
         $_SESSION['payment'] = NULL;
     }
 }
+
+//Handle banking payment
 if (isset($_POST['bankingPaymentBtn'])) {
+    //Get payment info
     $paymentMethod = $_POST['paymentMethod'];
     $type = $_POST['bank'];
     $deliveryMethod = $_POST['deliveryMethod'];
     $total = $_POST['total'];
+    //Create order
     $orderid = createOrder($userid, $paymentMethod, $type, $deliveryMethod, $total, $connection);
     if ($orderid) {
         addOrderItems($cartid, $orderid, $connection);
@@ -124,6 +133,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
             <section class="container mt-auto">
                 <div class="row">
                     <div class="row p-3 py-4 border-top border-bottom">
+                        <!-- Delivery Option & Subtotal & Shipping Fee -->
                         <div class="col-6">
                             <div class="row">
                                 <div class="row">
@@ -158,6 +168,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                             </div>
                         </div>
                     </div>
+                    <!-- Continue Shopping & Total section  -->
                     <div class="row p-4">
                         <div class="col-6 order-xs-2">
                             <a href="./index.php" class="btn btn-default"><i class="fas fa-arrow-left pe-2"></i>Continue Shopping</a>
@@ -173,6 +184,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                             </div>
                         </div>
                     </div>
+                    <!-- End of Continue Shopping & Total section -->
                 </div>
             </section>
         </section>
@@ -210,7 +222,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                                 <input type="hidden" name="total" class="paymentTotal" value="">
                                 <input type="hidden" name="deliveryMethod" class="orderDelivery" value="">
                                 <div class="form-group m-3">
-                                    <label for="cardType" class="pb-1">Payment method </label>
+                                    <label for="cardType" class="pb-1">Select Your Card Type</label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="cardType" id="visa-card" value="VISA Card" checked>
                                         <label class="form-check-label" for="visa-card">
@@ -301,6 +313,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
 <div class="modal fade" id="paymentReport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
+            <!-- Modal header -->
             <div class="modal-header <?php if (isset($_SESSION['payment'])) {
                                             echo "bg-success";
                                         } else {
@@ -317,6 +330,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                     </button>
                 <?php endif ?>
             </div>
+            <!-- Modal content -->
             <div class="modal-body">
                 <?php if (isset($_SESSION['payment'])) : ?>
                     <div class='container'>
@@ -332,6 +346,7 @@ if (isset($_POST['bankingPaymentBtn'])) {
                     <?php endforeach ?>
                 <?php endif ?>
             </div>
+            <!-- Modal Buttons -->
             <div class="modal-footer">
                 <?php if (isset($_SESSION['payment'])) {
                     echo "<a href='./index.php' class='btn btn-primary unset-session'>Back To Home</a>";
@@ -349,9 +364,11 @@ if (isset($_POST['bankingPaymentBtn'])) {
 <script src="./js/aos.js"></script>
 <script src="./js/payment.js"></script>
 <script>
+    //Toggle modal
     <?php if (isset($_POST['bankingPaymentBtn']) || isset($_POST['cardPaymentBtn']) || isset($_SESSION['payment'])) : ?>
         $('#paymentModalBtn').click();
     <?php endif ?>
+    //Unset payment session
     <?php if (isset($_SESSION['payment'])) : ?>
         $('.unset-session').click(
             deletePaymentSession

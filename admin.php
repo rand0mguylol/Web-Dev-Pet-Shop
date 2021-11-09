@@ -32,13 +32,6 @@ else {
 <?php require_once "./components/header.php"; ?>
 <?php require_once "./components/navbar.php"; ?>
 
-<!-- <?php if (isset($alertMessage)) : ?>
-    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
-        <strong><?php echo $alertMessage; ?></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<?php endif; ?> -->
-
 <!-- Delete Modal for Item -->
 <div class="modal fade" id="deleteItemModal"  tabindex="-1" aria-labelledby="deleteItemModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -62,7 +55,7 @@ else {
     </div>
 </div>
 
-
+<!-- Add Modal for Item -->
 <div class="modal fade" id="addItemModal"  tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -148,35 +141,34 @@ else {
 <script src="./js/aos.js"></script>
 <script>
     const searchButton = document.querySelector(".q")
-    // console.dir(searchButton)
-
+ 
+    // When the admin presses the remove button, the id, type and name of that
+    // info is retrieved from the dataset field and to be displayed in the Delete Item modal
     const deleteItemBtn = document.querySelectorAll(".deleteItemBtn")
     const deleteItemIDInput = document.querySelector("#deleteItemIDInput")
     const deleteItemTypeInput = document.querySelector("#deleteItemTypeInput")
     const deleteItemBody = document.querySelector("#deleteItemBody")
-    // const deleteCardImg = document.querySelector("#deleteCardImg")
 
     for(const btn of deleteItemBtn){
       btn.addEventListener("click", function(){
         deleteItemTypeInput.value = this.dataset.type
         deleteItemIDInput.value = this.dataset.id
         deleteItemBody.innerHTML = this.dataset.name
-        // deleteCardImg.src = this.dataset.image
       })
     }
 
+    // When the admin presses the add button, the id, type and name of that
+    // info is retrieved from the dataset field and to be displayed in the Delete Item modal
     const addItemBtn = document.querySelectorAll(".addItemBtn")
     const addItemIDInput = document.querySelector("#addItemIDInput")
     const addItemTypeInput = document.querySelector("#addItemTypeInput")
     const addItemBody = document.querySelector("#addItemBody")
-    // const deleteCardImg = document.querySelector("#deleteCardImg")
 
     for(const btn of addItemBtn){
       btn.addEventListener("click", function(){
         addItemTypeInput.value = this.dataset.type
         addItemIDInput.value = this.dataset.id
         addItemBody.innerHTML = this.dataset.name
-        // deleteCardImg.src = this.dataset.image
       })
     }
 

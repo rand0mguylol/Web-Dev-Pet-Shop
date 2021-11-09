@@ -10,7 +10,7 @@ if (!isset($_SESSION["user"]["userRole"]) && $_SESSION["user"]["userRole"] !== "
 }
 
 
-
+// Adding pet was not successful
 if(isset($_SESSION["addPetError"])){
   $errorArray= $_SESSION["addPetError"];
   unset($_SESSION["addPetError"]);
@@ -47,22 +47,22 @@ if(isset($_SESSION["addPetError"])){
   <form action="./controller/add_pet_controller.php" class = "row g-3" method="POST">
     <div class="col-md-12">
         <label for="inputFirstName" class="form-label">Name</label>
-        <input type="text" class="form-control" id="inputFirstName" placeholder="Name" name="name" >
+        <input type="text" class="form-control" id="inputFirstName" placeholder="Name" name="name"required >
       </div>
     <div class="col-md-12">
         <label for="inputLastName" class="form-label">Price</label>
-        <input type="number" class="form-control" id="inputLastName" placeholder="Price" name="price" >
+        <input type="number" min = '0' step = ".01" class="form-control" id="inputLastName" placeholder="Price" name="price" required>
     </div>
     <div class="col-md-6">
       <label for="inputTelephone" class="form-label">Status</label>
-      <select class="form-select" aria-label="Default select example" name = "status">
+      <select class="form-select" aria-label="Default select example" name = "status" required>
         <option value = "1" selected>Available</option>
         <option value="0"  >Not Available</option>
       </select>
     </div>
     <div class="col-md-6">
       <label class="form-label">Gender</label>
-      <select class="form-select" aria-label="Default select example" name = "gender">
+      <select class="form-select" aria-label="Default select example" name = "gender" required>
         <option value = "Male" sekected >Male</option>
         <option value="Female" >Female</option>
       </select>
@@ -92,14 +92,14 @@ if(isset($_SESSION["addPetError"])){
     </div>
     <div class="col-md-6">
       <label for="" class="form-label">Dewormed</label>
-      <select class="form-select" aria-label="Default select example" name = "dewormed">
+      <select class="form-select" aria-label="Default select example" name = "dewormed" required>
         <option value = "Yes"  selected>Yes</option>
         <option value="No">No</option>
       </select>
     </div>
     <div class="col-md-6">
       <label for="" class="form-label">Category</label>
-      <select class="form-select" aria-label="Default select example" name = "category">
+      <select class="form-select" aria-label="Default select example" name = "category" required>
         <option value = "1" selected>Dog</option>
         <option value="2" >Cat</option>
         <option value="3">Hamster</option>

@@ -3,10 +3,13 @@ session_start();
 require_once "../helper/helpers.php";
 require_once "../connection/db.php";
 
+
+// To handle edit item POST request from edit_item.php (name of button = "updateItem")
 if (isset($_POST["updateItem"]) && $_GET["type"] === "pet"){
 
   $result = adminValidatePet($_POST);
 
+  // If array is associative, it is an error array, means validation failed
   if(isAssociativeArray($result)){
     adminUpdatePet($connection, $result, $_GET["id"]);
     $_SESSION["alertMessage"][] = "Item Successfully Updated";

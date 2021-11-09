@@ -3,16 +3,14 @@
 require_once "./helper/helpers.php";
 require_once "./connection/db.php";
 //
-// $loginErrorArray = [];
-
-// OLD WAY
-// $folder = $_SERVER["REQUEST_URI"];
-// $path = dirname($folder);
-// $currentPage = $path !== "\\" ? basename($folder) : "";
+$loginErrorArray = [];
 
 //NEW WAY
+// Retrive the query string of the current page
 $queryString = $_SERVER["QUERY_STRING"];
 $folder = $_SERVER["SCRIPT_NAME"];
+
+// Get the current page
 $currentPage= basename($folder);
 
 $alertMessage = isset($_SESSION["alertMessage"]) ? $_SESSION["alertMessage"] : null;
@@ -53,6 +51,7 @@ if (isset($userid)) {
 <body>
     <!-- Offcanvas -->
     <?php if (!isset($_SESSION["user"]["userID"])) : ?>
+        <!-- Offcanvas for users that are not logged in -->
         <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
             <div class="offcanvas-header flex-column">
                 <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -89,7 +88,7 @@ if (isset($userid)) {
             </div>
         </div>
     <?php else : ?>
-        <!-- Offcanvas -->
+        <!-- Offcanvas for users that are logged in-->
         <div class="offcanvas offcanvas-end justify-content-center" tabindex="-1" id="accountCanvas" aria-labelledby="accountCanvasLabel">
             <div class="offcanvas-header flex-column">
                 <button type="button" class="btn-close text-reset align-self-end" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -181,22 +180,9 @@ if (isset($userid)) {
 </div>
 </div>
 <!-- End of Offcanvas -->
+
 <!-- Alert for pages. AOS CSS and JS required -->
 <!-- The variable depends on the page -->
-<?php if (isset($loginMessage)) : ?>
-    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
-        <strong><?php echo $loginMessage; ?></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<?php endif; ?>
-
-<!--  <?php if (isset($profileUpdateMsg)) : ?>
-    <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
-        <strong><?php echo $profileUpdateMsg; ?></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<?php endif; ?> -->
-
 <?php if (isset($alertMessage)) : ?>
     <div data-aos="fade-down" class="text-center alert alert-success alert-dismissible fade show position-fixed mx-auto login-alert" role="alert">
         <?php foreach($alertMessage as $alert): ?>
@@ -229,6 +215,7 @@ if (isset($userid)) {
                     <i class="fa fa-star fa-2x" data-index-num="4"></i>
                 </div>
                 <input type="hidden" id="rating" name="rating" value="-1">
+                <!-- Error Message for Rating -->
                 <?php if (isset($_POST["submit"]) && in_array("ratingErr", $errorArray)) :  ?>
                     <p class="mt-1 text-danger mb-0 text-center">Please select a rating</p>
                 <?php else : ?>
@@ -241,6 +228,7 @@ if (isset($userid)) {
                     <label for="feedback" class="form-label">Feedback:</label>
                     <textarea class="form-control" resize="none" id="feedback" name="feedback" rows="5" placeholder="Share your experience with the product and help others make better purchases!"></textarea>
                 </div>
+                <!-- Error Message for Feedback -->
                 <?php if (isset($_POST["submit"]) && in_array("feedbackErr", $errorArray)) :  ?>
                     <p class="mt-1 text-danger mb-0 text-center">Feedback must not be over 50 characters long</p>
                 <?php else : ?>

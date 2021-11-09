@@ -8,6 +8,7 @@
     const carousel = new Glider(document.querySelector('.glider-other-products'), {
         slidesToShow: 3,
         slidesToScroll: 1,
+        // Allow user to drag the carousel
         draggable: true,
         dots: '.dots',
         arrows: {
@@ -17,8 +18,10 @@
         dragVelocity: 2,
         scrollLock: true,
         resizeLock: true,
+        // Goes to the beginning of the carousel when user reach the end
         rewind: true,
 
+        // The amount of slides to display at once, dependant on the screen size
         responsive: [{
                 breakpoint: 0,
                 settings: {

@@ -108,11 +108,6 @@ if(isset($_GET["clearFilter"])){
     </section>
 
     <section class="search-section mt-5 position-sticky py-3">
-        <!-- <nav class ="navbar navbar-expand-xxl navbar-light bg-transparent d-inline-block ps-4 general-side-nav">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav> -->
         <div class="container medium-inner-wrapper d-flex justify-content-center align-items-baseline">
             <div>
                 <button class=" view-button" data-bs-toggle="offcanvas" data-bs-target="#sidenavCanvas"

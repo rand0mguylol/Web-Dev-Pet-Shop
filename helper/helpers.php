@@ -1,15 +1,23 @@
 <?php
 
 function sanitizeText($text)
-{
-    $text = trim($text);
+{   
+    // Remove trailing and leading whitespaces
+    $text = trim($text); 
+    // Remove html tags
     $text = strip_tags($text);
-    $text = filter_var($text, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+    // FILTER_FLAG_STRIP_LOW strips bytes in the input that have a numerical value <32,
+    //  most notably null bytes and other control characters such as the ASCII bell.
+    $text = filter_var($text, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW); 
     return $text;
 }
 
 function validatePassword($password)
 {
+    // Regular expression to check password:
+    // Length must be between 8 to 16 characters, 
+    // including one digit, one uppercase, one lowecase character 
+    // and may contain the following !@#$%&
     $passwordRegEx = '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z!@#$%&]{8,12}$/';
     $passwordValidate = filter_var($password, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => $passwordRegEx)));
     return $passwordValidate;
@@ -17,22 +25,22 @@ function validatePassword($password)
 
 function validateMobileNumber($mobileNumber)
 {
+    // Regular expression to check number
+    // Length must be between 9 - 10
+    // Must start with 1
+    // Must be digits only
     $mobileRegEx = "/^[1]{1}[0-9]{8,9}$/";
     $mobileValidate = filter_var($mobileNumber, FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => $mobileRegEx)));
     return $mobileValidate;
 }
 
 function validateState($state)
-{
+{   
+    // Remove trailing and leading spaces
     $state = trim($state);
     $statesArray = array("Johor", "Kedah", "Kelantan", "Malacca", "Negeri Sembilan", "Pahang", "Penang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur", "Putrajaya", "Labuan");
     if (!$_POST["state"] !== "" && in_array($_POST["state"], $statesArray)) {
         return $state;
-    // } elseif ($_POST["state"] === "") {
-    //     $state = "";
-    // } else {
-    //     return false;
-    // }
     }
     $state = $_POST["state"] === "" ? "" : false;
     return $state;
@@ -40,6 +48,9 @@ function validateState($state)
 
 function validatePostcode($postcode)
 {
+    // Regular expression to check postcode
+    // Length must be 5
+    // Must be digits
     $postRegEx = "/^[0-9]{5}$/";
     if ($postcode === "") {
         return "";
@@ -56,6 +67,7 @@ function validateEmail($email)
     return $email;
 }
 
+// To check if the pet/product is added into the cart. If product exists, add quantity for the product.
 function validateCartItem($cartid, $id, $quantity, $category, $connection)
 {
     $petArray  = ["Dog", "Cat", "Hamster"];
@@ -108,48 +120,58 @@ function validateCartItem($cartid, $id, $quantity, $category, $connection)
     }
 }
 
+// Validate credit card info
 function validateCreditCard($cardNumber, $cardType, $expiryMonth, $expiryYear, $cvv)
 {
+    // Error message
     $invalidCardMsg = "Invalid card number.";
     $expiredCardMsg = "Your card is expired.";
     $InvalidCVVMsg = "Invalid CVV.";
+    // Card format
     $cardValidationArray = [
         "VISA Card"  => "/^4[0-9]{12}(?:[0-9]{3})?$/",
         "MasterCard" => "/^5[1-5][0-9]{14}$/",
     ];
+    // Check for card type
     foreach ($cardValidationArray as $key => $value) {
         if (preg_match($value, $cardNumber)) {
             $card = $key;
         }
     }
+    // Invalid card type
     if (isset($card)) {
         if ($card === $cardType) {
             $invalidCardMsg = NULL;
         }
     }
+    // Check for card expiry month/year
     $cardExpiryDate = DateTime::createFromFormat('my', $expiryMonth . $expiryYear);
     $now = new DateTime();
     if ($cardExpiryDate > $now) {
         $expiredCardMsg = NULL;
     }
 
+    // Validate cvv format
     $cvvFormat = "/^[0-9]{3,4}$/";
     if (preg_match($cvvFormat, $cvv)) {
         $InvalidCVVMsg = NULL;
     }
 
+    // Compile error msg
     $errMsgArray = [
         "cardErr" => $invalidCardMsg,
         "expiryErr" => $expiredCardMsg,
         "CVVErr" => $InvalidCVVMsg
     ];
 
+    // Check error messages
     foreach ($errMsgArray as $key => $value) {
         if (is_null($value)) {
             unset($errMsgArray[$key]);
         }
     }
 
+    // Return result
     if (!empty($errMsgArray)) {
         return $errMsgArray;
     } else {
@@ -157,6 +179,7 @@ function validateCreditCard($cardNumber, $cardType, $expiryMonth, $expiryYear, $
     }
 }
 
+// Check to see the category of the item passed into the argument
 function returnType($category)
 {
     $petArray  = ["pet", "Dog", "Cat", "Hamster"];
@@ -171,6 +194,9 @@ function returnType($category)
     return $type;
 }
 
+
+// Get the info for the category 
+// For category.php
 function getCategoryInfo($connection, $category)
 {
     //
@@ -194,6 +220,9 @@ function getCategoryInfo($connection, $category)
     return $categoryHeader;
 }
 
+
+// Get the items from the category
+// For category.php
 function getCategoryProduct($connection, $category, $searchKeyword = "", $filter = false)
 {
     $categoryArray = [];
@@ -207,7 +236,7 @@ function getCategoryProduct($connection, $category, $searchKeyword = "", $filter
     } else {
         return false;
     }
-    //
+    //Add on to string if filter is set
     switch ($filter) {
 
         case "priceHigh":
@@ -220,8 +249,6 @@ function getCategoryProduct($connection, $category, $searchKeyword = "", $filter
     }
 
     $stmt = $connection->prepare($sql);
-
-
 
     $searchKeyword = "%$searchKeyword%";
     $stmt->bind_param("ss", $category, $searchKeyword);
@@ -237,6 +264,8 @@ function getCategoryProduct($connection, $category, $searchKeyword = "", $filter
     return $categoryArray;
 }
 
+// Display the items from the category excluding the one that is currently viewed in item.php
+// For item.php
 function getCategoryOther($connection, $category, $removeID)
 {
     $otherArray = [];
@@ -263,11 +292,12 @@ function getCategoryOther($connection, $category, $removeID)
     return $otherArray;
 }
 
-
+// Create new user for the system
 function createUser($newUser, $connection)
 {
     $userRole = "CUSTOMER";
-    $imagePath =  "./svg/profile-pic-default.svg";
+    // The default image when user sign up for an account
+    $imagePath =  "./svg/profile-pic-default.svg"; 
     $hashedPassword = password_hash($newUser["password"], PASSWORD_DEFAULT);
     $stmt = $connection->prepare("INSERT INTO user(firstName, lastName, email, userPassword, mobileNumber, imagePath, userRole) VALUES (?, ?, ?, ?, ?, ?, ?);");
     $stmt->bind_param("ssssiss", $newUser["firstName"], $newUser["lastName"], $newUser["email"], $hashedPassword, $newUser["mobileNumber"], $imagePath, $userRole);
@@ -276,6 +306,7 @@ function createUser($newUser, $connection)
 }
 
 
+// Get the images for the a specific item from the given category
 function getImage($id, $category, $imageType, $limit = false, $connection)
 {
     //
@@ -311,7 +342,7 @@ function getImage($id, $category, $imageType, $limit = false, $connection)
     }
 }
 
-
+// Get specific info of the item with the given id
 function getItemInfo($id,  $category, $connection)
 {
     $itemInfo = [
@@ -348,6 +379,7 @@ function getItemInfo($id,  $category, $connection)
     return $itemInfo;
 }
 
+// To get the cart id of the user
 function getCartId($userid, $connection)
 {
     $stmt = $connection->prepare("SELECT cartId FROM cart WHERE userId = ?;");
@@ -364,6 +396,7 @@ function getCartId($userid, $connection)
     }
 }
 
+// To get the cart items in the cart
 function getCartItems($cartid, $connection)
 {
     $cartItemArray = [];
@@ -372,6 +405,7 @@ function getCartItems($cartid, $connection)
     $stmt->execute();
     $result = $stmt->get_result();
     $length = mysqli_num_rows($result);
+    // Check if there is any cart item
     if ($length === 0) {
         return null;
     } else {
@@ -380,6 +414,7 @@ function getCartItems($cartid, $connection)
             $cartItemId = $row['cartItemId'];
             $quantity = $row['quantity'];
             $subtotal = $row['subtotal'];
+            // Get pet info that is added to the cart
             if (isset($row['petId'])) {
                 $id = $row['petId'];
                 $category = "pet";
@@ -388,6 +423,7 @@ function getCartItems($cartid, $connection)
                 $stmt2->execute();
                 $result2 = $stmt2->get_result();
                 $row2 = $result2->fetch_assoc();
+                // Get pet info if pet is available
                 if($row2){
                     $isItem = true;
                     $itemName = $row2['name'];
@@ -397,6 +433,7 @@ function getCartItems($cartid, $connection)
                     $isItem = false;
                 }
             } else {
+                // Get product info added into the cart
                 $id = $row['productId'];
                 $category = "product";
                 $stmt2 = $connection->prepare('SELECT name, price ,quantity as maxQuantity FROM products WHERE productId = ? AND status = 1; ');
@@ -404,6 +441,7 @@ function getCartItems($cartid, $connection)
                 $stmt2->execute();
                 $result2 = $stmt2->get_result();
                 $row2 = $result2->fetch_assoc();
+                // Get product info if product is available
                 if ($row2) {
                     $isItem = true;
                     $itemName = $row2['name'];
@@ -417,6 +455,7 @@ function getCartItems($cartid, $connection)
                     $isItem = false;
                 }
             }
+            // Add cart items into the cart
             if($isItem){
                 $cartitem = [
                     "cartItemId" => $cartItemId,
@@ -430,6 +469,7 @@ function getCartItems($cartid, $connection)
                     "image" => $image
                 ];
                 array_push($cartItemArray, $cartitem);
+            // Remove unavailable cartitems from cart
             } else{
                 $stmt2 = $connection -> prepare('DELETE FROM cartitem WHERE cartItemId = ?;');
                 $stmt2 -> bind_param("i",$cartItemId);
@@ -438,6 +478,7 @@ function getCartItems($cartid, $connection)
             }
         }
         $stmt->close();
+        // Return cart items
         if(!empty($cartItemArray)){
             return $cartItemArray;
         } else {
@@ -446,6 +487,7 @@ function getCartItems($cartid, $connection)
     }
 }
 
+// Update the total of the cart.
 function updateCartTotal($cartid, $connection)
 {
     $stmt = $connection->prepare("SELECT SUM(subtotal) as total FROM cartitem WHERE cartId = ? AND STATUS = 1;");
@@ -454,11 +496,12 @@ function updateCartTotal($cartid, $connection)
     $row = $stmt->get_result()->fetch_assoc();
     $newTotal = $row['total'];
     $stmt = $connection->prepare("UPDATE cart SET total = ? WHERE cartId = ?;");
-    $stmt->bind_param("ii", $newTotal, $cartid);
+    $stmt->bind_param("si", $newTotal, $cartid);
     $stmt->execute();
     $stmt->close();
 }
 
+// Get the latest cart total
 function getCartTotal($cartid, $connection)
 {
     updateCartTotal($cartid, $connection);
@@ -471,6 +514,7 @@ function getCartTotal($cartid, $connection)
     return $total;
 }
 
+// Create cart for new users
 function createCart($userid, $connection)
 {
     $stmt = $connection->prepare("INSERT INTO cart VALUES ('',?, 0);");
@@ -481,6 +525,7 @@ function createCart($userid, $connection)
     return $cartid;
 }
 
+// Add cart items into the cart
 function addCartitem($cartid, $id, $category, $quantity, $subtotal, $connection)
 {
     $type = returnType($category);
@@ -493,10 +538,10 @@ function addCartitem($cartid, $id, $category, $quantity, $subtotal, $connection)
     }
     $stmt = $connection->prepare($sql);
     if ($stmt) {
-        $stmt->bind_param("iiii", $id, $cartid, $quantity, $subtotal);
+        $stmt->bind_param("iiis", $id, $cartid, $quantity, $subtotal);
         $stmt->execute();
         $stmt = $connection->prepare("UPDATE cart SET total = total + ? WHERE cartId = ?;");
-        $stmt->bind_param("ii", $subtotal, $cartid);
+        $stmt->bind_param("si", $subtotal, $cartid);
         $stmt->execute();
         updateCartTotal($cartid, $connection);
         $stmt->close();
@@ -506,6 +551,7 @@ function addCartitem($cartid, $id, $category, $quantity, $subtotal, $connection)
     }
 }
 
+// Update the users value in the database and $_SESSION values
 function updateProfile($newInfo, $connection, $id)
 {
     $stmt = $connection->prepare("UPDATE user SET firstName = ?, lastName = ?, mobileNumber = ?, addressLine = ?, city = ?, userState = ?, postcode = ? WHERE userId = ?");
@@ -517,6 +563,7 @@ function updateProfile($newInfo, $connection, $id)
     }
 }
 
+// Allows user to change their password
 function changePassword($oldpass, $newpass, $confimpass, $id, $connection)
 {
     $stmt = $connection->prepare("SELECT userPassword FROM user WHERE userId = ?;");
@@ -558,6 +605,7 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection)
     return  "Password Changed Successfully";
 }
 
+// Ensure the images uploaded by the user is valid
 function validateImage($image)
 {
     $getImageString = getimagesizefromstring($image);
@@ -573,7 +621,7 @@ function validateImage($image)
     return $mimeType;
 }
 
-
+// Saves the image uploaded by the user to the database
 function saveImage($mimeType, $image, $connection, $id, $hasImage)
 {
     $userDir = "../Images/User/user_" . $_SESSION["user"]["userID"];
@@ -607,12 +655,13 @@ function createOrder($userid, $paymentMethod, $type = null, $deliveryMethod, $to
 {
     $stmt = $connection->prepare("INSERT INTO orders (userId, paymentMethod, deliveryMethod, total)  VALUES(?,?,?,?);");
     $paymentMethod = "$paymentMethod - $type";
-    $stmt->bind_param("issi", $userid, $paymentMethod, $deliveryMethod, $total);
+    $stmt->bind_param("isss", $userid, $paymentMethod, $deliveryMethod, $total);
     $stmt->execute();
     $orderid = $connection->insert_id;
     return $orderid;
 }
 
+// Reduce quantity when order is created
 function reduceItemQuantity($id, $category, $quantity, $connection)
 {
     if ($category === "pet") {
@@ -629,7 +678,7 @@ function reduceItemQuantity($id, $category, $quantity, $connection)
     $stmt->close();
 }
 
-//test
+// Add items into created order
 function addOrderItems($cartid, $orderid, $connection)
 {
     $pets = [];
@@ -639,6 +688,7 @@ function addOrderItems($cartid, $orderid, $connection)
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {
+        // Add pet into pet array
         if ($row['petId']) {
             $petid = $row['petId'];
             $quantity = $row["quantity"];
@@ -650,6 +700,7 @@ function addOrderItems($cartid, $orderid, $connection)
             ];
             array_push($pets, $pet);
         } else {
+            // Add product into product array
             $productid = $row['productId'];
             $quantity = $row["quantity"];
             $subtotal = $row["subtotal"];
@@ -661,9 +712,11 @@ function addOrderItems($cartid, $orderid, $connection)
             array_push($products, $product);
         }
     }
+    // Set cartitem to unavailable in the cart
     $stmt = $connection->prepare("UPDATE cartitem SET status = 0 WHERE cartId = ?;");
     $stmt->bind_param("i", $cartid);
     $stmt->execute();
+    // Insert pets into order
     if (!empty($pets)) {
         foreach ($pets as $pet) {
             $id = $pet['id'];
@@ -672,10 +725,11 @@ function addOrderItems($cartid, $orderid, $connection)
             $subtotal = $pet['subtotal'];
             reduceItemQuantity($id, $category, $quantity, $connection);
             $stmt = $connection->prepare("INSERT INTO orderitem (petId,orderId,quantity,subtotal)VALUES(?,?,?,?);");
-            $stmt->bind_param("iiii", $id, $orderid, $quantity, $subtotal);
+            $stmt->bind_param("iiis", $id, $orderid, $quantity, $subtotal);
             $stmt->execute();
         }
     }
+    // Insert products into order
     if (!empty($products)) {
         foreach ($products as $product) {
             $id = $product['id'];
@@ -684,13 +738,14 @@ function addOrderItems($cartid, $orderid, $connection)
             $subtotal = $product['subtotal'];
             reduceItemQuantity($id, $category, $quantity, $connection);
             $stmt = $connection->prepare("INSERT INTO orderitem (productId,orderId,quantity,subtotal)VALUES(?,?,?,?);");
-            $stmt->bind_param("iiii", $id, $orderid, $quantity, $subtotal);
+            $stmt->bind_param("iiis", $id, $orderid, $quantity, $subtotal);
             $stmt->execute();
         }
     }
     $stmt->close();
 }
 
+// Get array of order IDs of current account
 function getOrderId($userid, $connection)
 {
     $stmt = $connection->prepare("SELECT orderId FROM orders WHERE userId = ? ORDER BY orderId DESC;");
@@ -706,6 +761,7 @@ function getOrderId($userid, $connection)
     return $orderIdArray;
 }
 
+// Get order total
 function getOrderTotal($orderid, $connection)
 {
     $stmt = $connection->prepare("SELECT total FROM orders WHERE orderid = ?;");
@@ -718,10 +774,10 @@ function getOrderTotal($orderid, $connection)
     return $total;
 }
 
+// Get order item details in an array
 function getOrderItems($orderId, $connection)
 {
     $orderItemArray = [];
-    // foreach($orderIdArray as $orderId){}
     $stmt = $connection->prepare("SELECT orderItemId, petId, productId, quantity, subtotal FROM orderitem WHERE orderid = ?;");
     $stmt->bind_param("i", $orderId);
     $stmt->execute();
@@ -731,6 +787,7 @@ function getOrderItems($orderId, $connection)
         if (isset($row['petId'])) {
             $orderItemId = $row["orderItemId"];
             $id = $row['petId'];
+            $itemType = 'pet';//
             $quantity = $row['quantity'];
             $subtotal = $row['subtotal'];
             $category = "pet";
@@ -744,6 +801,7 @@ function getOrderItems($orderId, $connection)
         } else {
             $orderItemId = $row["orderItemId"];
             $id = $row['productId'];
+            $itemType = 'product';//
             $quantity = $row['quantity'];
             $subtotal = $row['subtotal'];
             $category = "product";
@@ -758,6 +816,7 @@ function getOrderItems($orderId, $connection)
         $orderitem = [
             "orderItemId" => $orderItemId,
             "id" => $id,
+            "itemType" => $itemType,//
             "category" => $category,
             "name" => $itemName,
             "quantity" => $quantity,
@@ -771,10 +830,7 @@ function getOrderItems($orderId, $connection)
     return $orderItemArray;
 }
 
-// function getOrderItemId($orderItemId){
-//     return $orderItemId;
-// }
-
+// Insert review record into review table in database
 function createReview($orderItemId, $newReview, $connection)
 {
     $stmt = $connection->prepare("INSERT INTO review(userId, orderItemId, rating, feedback) VALUES (?, ?, ?, ?);");
@@ -783,7 +839,7 @@ function createReview($orderItemId, $newReview, $connection)
     $stmt->close();
 }
 
-// If Order Item is already rated, return 1, else 0
+// Check if order item has been rated
 function rateEligibility($orderItemId, $connection)
 {
     $stmt = $connection->prepare("SELECT reviewId FROM review WHERE orderItemId = ?;");
@@ -795,7 +851,7 @@ function rateEligibility($orderItemId, $connection)
     return $length;
 }
 
-
+// Get total reviews of product
 function getTotalProductReviews($productId, $category, $connection)
 {
     $type = returnType($category);
@@ -811,6 +867,7 @@ function getTotalProductReviews($productId, $category, $connection)
     }
 }
 
+// Get array of review details of product
 function getProductReviews($productId, $category, $connection)
 {
     $type = returnType($category);
@@ -843,6 +900,7 @@ function getProductReviews($productId, $category, $connection)
     }
 }
 
+// Get an array of the total for each star rating value (1-5) of a product
 function getEachRatingTotal($productId, $category, $connection)
 {
     $type = returnType($category);
@@ -884,6 +942,7 @@ function getEachRatingTotal($productId, $category, $connection)
     }
 }
 
+// Get average rating of a product
 function getAvgRating($productId, $connection)
 {
     $stmt = $connection->prepare("SELECT AVG(review.rating) as AverageRating FROM review INNER JOIN orderitem ON review.orderItemId = orderitem.orderItemId 
@@ -897,6 +956,7 @@ function getAvgRating($productId, $connection)
     return $avgRating;
 }
 
+// Get the search results for admin.php
 function getAdminSearch($connection, $type, $q)
 {
     $adminSearchArray = [];
@@ -909,9 +969,6 @@ function getAdminSearch($connection, $type, $q)
     }
     //
     $stmt = $connection->prepare($sql);
-    // if(!$stmt){
-    //   return false;
-    // }
 
     $searchKeyword = "%$q%";
 
@@ -930,6 +987,7 @@ function getAdminSearch($connection, $type, $q)
     return $adminSearchArray;
 }
 
+// Get the info of the item admin would like to edit
 function getAdminEditItem($connection, $type, $id)
 {
     if ($type === "pet") {
@@ -943,22 +1001,16 @@ function getAdminEditItem($connection, $type, $id)
     }
     //
     $stmt = $connection->prepare($sql);
-    // if(!$stmt){
-    //   return false;
-    // }
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
     $itemArray = $result->fetch_assoc();
     $stmt->close();
-    // $resultArray = [
-    //   "categoryArray" => $categoryArray,
-    //   "categoryDescription" => $categoryDescription,
-    //   "categoryName" => $categoryName
-    // ];
+    
     return $itemArray;
 }
 
+// Check if an array is an associative array
 function isAssociativeArray($array)
 {
     if (count(array_filter(array_keys($array), 'is_string')) > 0) {
@@ -967,6 +1019,8 @@ function isAssociativeArray($array)
     return false;
 }
 
+// Check to see if the values enter by admin for pet is valid
+// For edit item and add pet
 function adminValidatePet($postArray)
 {
     $errorArray = [];
@@ -1018,6 +1072,7 @@ function adminValidatePet($postArray)
         array_push($errorArray, "Invalid Gender");
     }
 
+    // Separate the string from -, will have an array with 3 values.
     $checkBirthDate = explode("-", $postArray["birthDate"]);
     if (checkdate((int)$checkBirthDate[1], (int)$checkBirthDate[2], (int)$checkBirthDate[0])) {
         $new_date = date("Y-m-d", strtotime($_POST["birthDate"]));
@@ -1055,7 +1110,7 @@ function adminValidatePet($postArray)
     return $adminPetArray;
 }
 
-
+// Insert updated values of pet to the database
 function adminUpdatePet($connection, $petArray, $id)
 {
     $stmt = $connection->prepare("UPDATE pets SET name= ?, price = ?,  status = ?, 
@@ -1080,6 +1135,8 @@ function adminUpdatePet($connection, $petArray, $id)
     $stmt->close();
 }
 
+// Check to see if the values enter by admin for product is valid
+// For edit item and add product
 function adminValidateProduct($postArray)
 {
     $errorArray = [];
@@ -1159,6 +1216,7 @@ function adminValidateProduct($postArray)
     return $adminProductArray;
 }
 
+// Insert updated values of product to the database
 function adminUpdateProduct($connection, $id, $productArray)
 {
     $stmt = $connection->prepare("UPDATE products SET name= ?  ,price = ?, quantity = ?, status = ?, 
@@ -1182,6 +1240,8 @@ function adminUpdateProduct($connection, $id, $productArray)
     $stmt->close();
 }
 
+// Insert new pet into the database
+// For add_pet.php
 function adminAddPet($connection, $petArray)
 {
     $stmt = $connection->prepare("INSERT INTO pets(name, price, status, gender, birthDate, weight, color, petCondition, vaccinated, dewormed, petCatId)  
@@ -1204,6 +1264,9 @@ function adminAddPet($connection, $petArray)
     $stmt->close();
 }
 
+
+// Insert new product into the database
+// For add_product.php
 function adminAddProduct($connection, $productArray)
 {
     $stmt = $connection->prepare("INSERT INTO products(name, price, quantity, status, description, brand, weight, warrantyPeriod, productDimensions, productCatId)  
@@ -1225,11 +1288,12 @@ function adminAddProduct($connection, $productArray)
     $stmt->close();
 }
 
-// Doesnt Exist
+// Insert new card image for the item
 function addNewItemCardImage($mimeType, $image, $connection, $id, $category, $name, $type)
 {
     $category = str_replace(" ", "_", $category);
     $name = str_replace(" ", "_", $name);
+    // Check to see if dir exists, if not, create one
     $cardImageDir = "../Images/$category/$name/Card";
     if (!is_dir($cardImageDir)) {
         mkdir($cardImageDir, 0777, true);
@@ -1266,10 +1330,11 @@ function addNewItemCardImage($mimeType, $image, $connection, $id, $category, $na
     $stmt->close();
 }
 
-
+// Update the imagePath of the card image of the item in the database
 function overwriteItemCardImage($mimeType, $image, $connection, $id,  $name, $currentImagePath, $type)
 {
 
+    // Get the dir where the old image is stored in
     $currentDirName = "." . dirname($currentImagePath) . "/";
     $files = glob("$currentDirName" . "*"); // get all file names
     foreach ($files as $file) { // iterate files
@@ -1308,85 +1373,7 @@ function overwriteItemCardImage($mimeType, $image, $connection, $id,  $name, $cu
     $stmt->execute();
     $stmt->close();
 }
-
-// function addNewItemGalleryImage($mimeType, $image, $connection, $id, $category, $name, $type)
-// {
-//     $category = str_replace(" ", "_", $category);
-//     $name = str_replace(" ", "_", $name);
-//     $cardImageDir = "../Images/$category/$name/Gallery";
-//     if (!is_dir($cardImageDir)) {
-//         mkdir($cardImageDir, 0777, true);
-//     }
-
-//     $name .=  "_Gallery_550_550";
-
-//     switch ($mimeType) {
-//         case "image/png":
-//             $cardPic = $cardImageDir .  "/$name" . ".png";
-//             file_put_contents($cardPic, $image);
-//             break;
-//         case "image/jpg":
-//             $cardPic= $cardImageDir . "/$name" . ".jpg";
-//             file_put_contents($cardPic, $image);
-//             break;
-//         case "image/jpeg":
-//             $cardPic= $cardImageDir .  "/$name" . ".jpeg";
-//             file_put_contents($cardPic, $image);
-//             break;
-//     }
-
-//     $saveToDbImage = substr($cardPic, 1);
-
-//     if($type === "pet"){
-//         $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
-//         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
-//     }elseif($type === "product"){
-//         $stmt = $connection->prepare("INSERT INTO productimage(productid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
-//         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
-//     }
-
-//     $stmt->execute();
-//     $stmt->close();
-// }
-
-// function insertItemGalleryImage($mimeType, $image, $connection, $id,  $name, $currentImagePath, $type, $index)
-// {
-
-//     $currentDirName = "." . dirname($currentImagePath) . "/";
-
-//     $name = str_replace(" ", "_", $name) . "_$index" . "_Gallery_550_550";
-
-//     switch ($mimeType) {
-//         case "image/png":
-//             $cardPic = $currentDirName .  $name  . ".png";
-//             file_put_contents($cardPic, $image);
-//             break;
-//         case "image/jpg":
-//             $cardPic= $currentDirName  . $name  . ".jpg";
-//             file_put_contents($cardPic, $image);
-//             break;
-//         case "image/jpeg":
-//             $cardPic= $currentDirName  .  $name  . ".jpeg";
-//             file_put_contents($cardPic, $image);
-//             break;
-//     }
-
-//     $saveToDbImage = substr($cardPic, 1);
-
-
-//     if($type === "pet"){
-//         $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
-//         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
-//     }elseif($type === "product"){
-//         $stmt = $connection->prepare("INSERT INTO petimage(petid, imageName, imagePath, imageType) VALUES (?, ?, ?, 'Gallery');");
-//         $stmt->bind_param("iss", $id, $name, $saveToDbImage);
-//     }
-
-//     $stmt->execute();
-//     $stmt->close();
-// }
-
-
+// Insert new gallery image for an item into the database
 function addNewItemGalleryImage($mimeType, $image, $connection, $id, $dirName, $name, $type)
 {
     switch ($mimeType) {

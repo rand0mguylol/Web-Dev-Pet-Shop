@@ -19,6 +19,7 @@ if (isset($_SESSION["user"]["userRole"], $_GET["id"], $_GET["type"]) && $_SESSIO
   $type = sanitizeText($_GET["type"]);
   $itemArray = getAdminEditItem($connection, $type, $_GET["id"]);
 
+  // Update for item failed
   if(isset($_SESSION["updateItemError"])){
     $errorArray = $_SESSION["updateItemError"];
     unset($_SESSION["updateItemError"]);

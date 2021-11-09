@@ -11,6 +11,9 @@ if (!isset($_SESSION["user"]["userRole"], $_POST["type"], $_POST["id"], $_POST["
   exit();
 }
 
+
+// To handle delete item POST request from admin.php (name of button = "deleteImage")
+
 $id = filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT);
 
 if($_POST["type"] === "pet"){

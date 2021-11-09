@@ -1,9 +1,11 @@
+//Remove payment key from session
 function deletePaymentSession() {
     $.post('./controller/session_killer.php', {
         destroyPaymentSession: 1
     });
 }
 
+//Add or reduce item quantity
 $('.quantity-changer').click(function(e) {
     e.preventDefault();
     var targetData = $(this).attr('data-field');
@@ -12,7 +14,7 @@ $('.quantity-changer').click(function(e) {
     var QuantityInput = $("input[name='" + targetData + "[quantity]']");
     var oldQuantity = parseInt(QuantityInput.val());
     var subtotal = parseFloat($("#subtotal").text());
-    var itemSubtotal = parseFloat($("#itemSubtotal[data-field='" + targetData + "']").val());
+    var itemSubtotal = parseFloat($("#itemSubtotal[data-field='" + targetData + "']").text());
     if (!isNaN(oldQuantity)) {
         if (operation == 'minus') {
             if (oldQuantity > QuantityInput.attr('min')) {
@@ -21,7 +23,8 @@ $('.quantity-changer').click(function(e) {
                 var newSubtotal = subtotal - price;
                 $("#totalAmount").text(newSubtotal.toFixed(2));
                 $("#subtotal").text(newSubtotal.toFixed(2));
-                $("#itemSubtotal[data-field='" + targetData + "']").val(itemSubtotal - price);
+                $("#itemSubtotal[data-field='" + targetData + "']").text((itemSubtotal - price).toFixed(2));
+                console.log($("#itemSubtotal[data-field='" + targetData + "']"));
             }
             if (parseInt(QuantityInput.val()) == QuantityInput.attr('min')) {
                 $("button[data-field ='" + targetData + "'][data-type ='minus']").attr('disabled', true);
@@ -33,7 +36,7 @@ $('.quantity-changer').click(function(e) {
                 var newSubtotal = subtotal + price;
                 $("#totalAmount").text(newSubtotal.toFixed(2));
                 $("#subtotal").text(newSubtotal.toFixed(2));
-                $("#itemSubtotal[data-field='" + targetData + "']").val(itemSubtotal + price);
+                $("#itemSubtotal[data-field='" + targetData + "']").text((itemSubtotal + price).toFixed(2));
             }
             if (parseInt(QuantityInput.val()) == QuantityInput.attr('max')) {
                 $("button[data-field ='" + targetData + "'][data-type ='plus']").attr('disabled', true);
@@ -45,6 +48,8 @@ $('.quantity-changer').click(function(e) {
         QuantityInput.val(1);
     }
 })
+
+//Disable add/minus button
 $('.quantity-input').change(function() {
     var minQuantity = parseInt($(this).attr('min'));
     var maxQuantity = parseInt($(this).attr('max'));
@@ -54,7 +59,7 @@ $('.quantity-input').change(function() {
     if (currentQuantity > minQuantity) {
         $(".btn-number[data-type='minus'][data-field='" + field + "']").removeAttr('disabled')
     } else {
-        $(this).val(min);
+        $(this).val(minQuantity);
     }
     if (currentQuantity < maxQuantity) {
         $(".btn-number[data-type='plus'][data-field='" + field + "']").removeAttr('disabled')
@@ -65,6 +70,7 @@ $('.quantity-input').change(function() {
     updateBtn.click();
 });
 
+//Update quantity if enter key entered
 $('.quantity-input').keydown(function(e) {
     if (e.keyCode == 13) {
         e.preventDefault();
@@ -75,6 +81,7 @@ $('.quantity-input').keydown(function(e) {
     }
 })
 
+//Disable confirm payment button when delivery option is not selected
 $("#deliveryOption").change(function() {
     var subtotal = parseFloat($("#subtotal").text());
     var deliveryOptions = ["J&T", "PosLaju", "NinjaVan"];

@@ -2,23 +2,15 @@
 
 session_start();
 
-// var_dump(($_GET));
+// To handle user login request sent from header,php (name of button = "signin")
 if (isset($_POST["signin"]) && isset($_GET["page"])) {
     require_once "../connection/db.php";
     $loginErrorArray = [];
     $lastPageQuery = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
 
-    // OLD WAY
-    // $lastPage = !$lastPageQuery["page"] ? "" : $lastPageQuery["page"];
-    // if (count($lastPageQuery) > 1) {
-    //     array_shift($_GET);
-    //     foreach ($_GET as $key => $value) {
-    //         $lastPage .= "&" . $key . "=" . $value;
-    //     }
-    // }
-
-    // NEW WAY
+    // Get the last page the user was on before signing in
     $lastPage = $lastPageQuery["page"];
+    // Get the query string from the last page the user was on before signing in
     $queryString = $lastPageQuery["queryString"];
 
 
@@ -71,18 +63,15 @@ if (isset($_POST["signin"]) && isset($_GET["page"])) {
 }
 if (isset($_POST["logout"]) && isset($_GET["page"])) {
     $lastPageQuery = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
+
+     // Get the last page the user was on before logging out
     $lastPage = $lastPageQuery["page"];
+    // Get the query string from the last page the user was on before  logging out
     $queryString = $lastPageQuery["queryString"];
     
-    // $lastPage = !$lastPageQuery["page"] ? "" : $lastPageQuery["page"];
     session_unset();
     session_destroy();
-    // if (count($lastPageQuery) > 1) {
-    //     array_shift($_GET);
-    //     foreach ($_GET as $key => $value) {
-    //         $lastPage .= "&" . $key . "=" . $value;
-    //     }
-    // }
+
     if (!$queryString){
         header("Location: ../$lastPage");
         exit();

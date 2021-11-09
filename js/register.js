@@ -1,8 +1,11 @@
-function viewPassword() {
-  const password = document.querySelector("#inputPassword")
-  if (password.type === "password") {
-      password.type = "text";
-  } else {
-      password.type = "password"
+//Get ViewPassword Button and password field
+const password = document.querySelector("#registerPassword")
+const viewPasswordBtn = document.querySelector(".view-Password");
+//View password
+viewPasswordBtn.addEventListener("change",function(){
+  if(this.checked){
+    password.type = "text";
+  }else{
+    password.type = "password";
   }
-}
+})

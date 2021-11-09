@@ -13,6 +13,7 @@ const image = document.querySelector("#cropBox")
         removePicBtn.classList.remove("hidden")
     }
 
+    // Initialised the Cropper object
     const imageCrop = new Cropper(image, {
         aspectRatio: 1,
         viewMode: 2,
@@ -29,7 +30,7 @@ const image = document.querySelector("#cropBox")
         minCanvasHeight: 550
     })
 
-
+    // Destroy the Cropper object
     resetImageBtn.addEventListener("click", function() {
         uploadPicBtn.classList.add("hidden")
         imageCrop.destroy()
@@ -63,6 +64,7 @@ const image = document.querySelector("#cropBox")
     inputImageErrorMessage.innerHTML = "Only images are allowed"
     inputImageErrorMessage.classList.add("d-block")
 
+    // Get the crop image as Canvas type
     uploadPicBtn.addEventListener("click", function() {
         const cropImage = imageCrop.getCroppedCanvas({
             width: 200,
@@ -71,7 +73,8 @@ const image = document.querySelector("#cropBox")
             imageSmoothingEnabled: false,
             imageSmoothingQuality: 'low',
         })
-
+        
+        // Check if the data is valid
         if (!cropImage) {
 
             if (outerCropWrapper.contains(inputImageErrorMessage) === false) {
@@ -79,6 +82,8 @@ const image = document.querySelector("#cropBox")
             }
 
         } else {
+            // Convert Canvas into dataURI
+            // An input element with type text is created to be appended to the form with the value being the dataURI
             const finalImage = cropImage.toDataURL();
             const inputWithImageData = document.createElement("input")
             inputWithImageData.type = "text"
@@ -89,6 +94,7 @@ const image = document.querySelector("#cropBox")
         }
     })
 
+    // Get the url of the image that was selected by the user from the Choose File button
     function getImageURL(input) {
         const reader = new FileReader()
         reader.addEventListener("load", function(e) {

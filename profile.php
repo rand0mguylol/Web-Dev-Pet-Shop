@@ -34,6 +34,7 @@ if (isset($_POST["submit"])) {
     $errorArray = [];
     $userid = $_SESSION["user"]["userID"];
 
+    // Rating Validation
     if ($_POST["rating"] != -1) {
         $rating = $_POST["rating"];
         $rating++;
@@ -42,6 +43,7 @@ if (isset($_POST["submit"])) {
         $_SESSION["alertMessage"][]= "Please select a rating";
     }
 
+    // Feedback Validation
     if (strlen($_POST["feedback"]) <= 50) {
         $feedback = sanitizeText($_POST["feedback"]);
     } else {
@@ -49,6 +51,7 @@ if (isset($_POST["submit"])) {
         $_SESSION["alertMessage"][] = "Feedback must not be over 50 characters long"; 
     }
 
+    // If no validation error, create the review
     if (empty($errorArray)) {
         $newReview = array(
             "userId" => $userid,
@@ -56,7 +59,7 @@ if (isset($_POST["submit"])) {
             "feedback" => $feedback
         );
         createReview($_POST["reviewItemId"], $newReview, $connection);
-        echo "Review successfully added";
+        $_SESSION["alertMessage"][] = "Review Submission Successful";
         header("Location:  ./profile.php");
         exit();
     }
@@ -157,10 +160,12 @@ if (isset($_POST["submit"])) {
                     <!-- Profile Picture Tab -->
                     <div class="tab-pane fade" id="nav-pic" role="tabpanel" aria-labelledby="nav-pic-tab">
                         <div class="outer-crop-wrapper text-center">
+                            <!-- Image Box to preview new profile picture -->
                             <div class="box mx-auto">
                                 <img src="" alt="" id="cropBox" style="display: block; max-width: 100%;">
                             </div>
                             <small class="imageExtensionMessage">Only jpg, png and jpeg are accepted</small>
+                            <!-- End of Image Box -->
                         </div>
 
                         <div class="mt-5">
@@ -235,24 +240,28 @@ if (isset($_POST["submit"])) {
                                                 </div>
                                                 <div class="d-flex justify-content-end">
 
-                                                    <!-- To Rate Button -->
+                                                    <!-- Rate Button to toggle review form off-canvas -->
                                                     <?php $rateEligibility = rateEligibility($item["orderItemId"], $connection);
-                                                    if ($rateEligibility == 0):?>
-                                                    <button class="btn btn-warning" data-bs-toggle="offcanvas"
-                                                        href="#reviewCanvas" id="<?php echo $item["orderItemId"]?>"
-                                                        onClick="clickForId(this.id)" name="toRate" role="button"
-                                                        aria-controls="reviewCanvasExample">Rate</button>
-                                                    <?php else: ?>
-                                                    <button class="btn btn-light border" role="button"
-                                                        aria-disabled="true" disabled>Rated</button>
+                                                    if ($item["itemType"] == "product"):
+                                                        if ($rateEligibility == 0):?>
+                                                        <button class="btn btn-warning" data-bs-toggle="offcanvas"
+                                                            href="#reviewCanvas" id="<?php echo $item["orderItemId"]?>"
+                                                            onClick="clickForId(this.id)" name="toRate" role="button"
+                                                            aria-controls="reviewCanvasExample">Rate</button>
+                                                        <?php else: ?>
+                                                        <button class="btn btn-light border" role="button"
+                                                            aria-disabled="true" disabled>Rated</button>
+                                                        <?php endif;?>
                                                     <?php endif;?>
-                                                    <!-- End of To Rate Button -->
+                                                
+                                                    <!-- End of Rate Button -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <?php endforeach;?>
+                                <!-- End of Row for each Order Item in Order -->
                                 <div class="card-footer">
                                     <p class="text-end">
                                         OrderID: <?php echo $order;?><br>
@@ -262,6 +271,7 @@ if (isset($_POST["submit"])) {
                             </div>
                             <?php endforeach;?>
                             <?php endif;?>
+                            <!-- End of Container for each Order -->
                         </div>
                     </div>
                     <!-- End of Order History Tab -->
@@ -273,9 +283,7 @@ if (isset($_POST["submit"])) {
 <?php require_once "./script/general_scripts.php"; ?>
 <script src="./js/profile.js"></script>
 <script src="./js/aos.js"></script>
-<!-- For Rating System -->
 <script src="./js/rating.js"></script>
 <?php require_once "./components/footer.php"; ?>
 </body>
-
 </html>
