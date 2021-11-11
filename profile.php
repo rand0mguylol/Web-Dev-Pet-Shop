@@ -82,7 +82,7 @@ if (isset($_POST["submit"])) {
                             class="img-fluid shadow rounded-circle userProfilePicture">
                     </div>
                     <!-- Tab Buttons -->
-                    <div class="nav nav-tabs profile-tab flex-column" id="nav-tab" role="tablist"> 
+                    <div class="nav nav-tabs profile-tab flex-column" id="nav-tab" role="tablist">
                         <button class=" nav-link active" id="nav-profile-tab" data-bs-toggle="tab"
                             data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
                             aria-selected="true">Profile</button>
@@ -93,7 +93,8 @@ if (isset($_POST["submit"])) {
                             data-bs-target="#nav-privacy" type="button" role="tab" aria-controls="nav-privacy"
                             aria-selected="false">Privacy</button>
                         <button class=" nav-link" id="nav-order-tab" data-bs-toggle="tab" data-bs-target="#nav-order"
-                            type="button" role="tab" aria-controls="nav-order" aria-selected="false">Order</button>
+                            type="button" role="tab" aria-controls="nav-order" aria-selected="false">Order
+                            History</button>
                     </div>
                 </div>
             </div>
@@ -113,46 +114,55 @@ if (isset($_POST["submit"])) {
                                     name="lastName" value="<?php echo $_SESSION["user"]["lastName"];?>">
                             </div>
                             <div class="col-md-12">
-                                <input type="email" class="form-control" id="email" placeholder="Email"
-                                    name="email" value="<?php echo $_SESSION["user"]["email"];?>" readonly>
+                                <input type="email" class="form-control" id="email" placeholder="Email" name="email"
+                                    value="<?php echo $_SESSION["user"]["email"];?>" readonly>
                             </div>
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <div class="input-group-text">+60</div>
-                                    <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name="mobileNumber" value="<?php echo $_SESSION["user"]["mobileNumber"]; ?>">
+                                    <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789"
+                                        name="mobileNumber" value="<?php echo $_SESSION["user"]["mobileNumber"]; ?>">
                                 </div>
                                 <?php if (isset($profileErrorArray) && in_array("mobileNumber", $profileErrorArray)) :  ?>
-                                    <p class="mt-1 text-danger mb-0 d-block">Please enter a valid mobile number</p>
+                                <p class="mt-1 text-danger mb-0 d-block">Please enter a valid mobile number</p>
                                 <?php endif; ?>
                             </div>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" id="inputAddressLine" placeholder="Address Line" name="addressLine" value="<?php echo $_SESSION["user"]["addressLine"]; ?>">
+                                <input type="text" class="form-control" id="inputAddressLine" placeholder="Address Line"
+                                    name="addressLine" value="<?php echo $_SESSION["user"]["addressLine"]; ?>">
                             </div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control" id="inputPostcode" placeholder="Postcode" name="postcode" value="<?php echo isset($_SESSION["user"]["postcode"]) &&  ($_SESSION["user"]["postcode"]) !== 0 ? $_SESSION["user"]["postcode"] : ""; ?>">
+                                <input type="text" class="form-control" id="inputPostcode" placeholder="Postcode"
+                                    name="postcode"
+                                    value="<?php echo isset($_SESSION["user"]["postcode"]) &&  ($_SESSION["user"]["postcode"]) !== 0 ? $_SESSION["user"]["postcode"] : ""; ?>">
                                 <?php if (isset($profileErrorArray) && in_array("postcode", $profileErrorArray)) :  ?>
-                                    <p class="mt-1 text-danger mb-0 d-block">Please enter a valid postcode</p>
+                                <p class="mt-1 text-danger mb-0 d-block">Please enter a valid postcode</p>
                                 <?php endif; ?>
                             </div>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" id="inputCity" placeholder="City" name="city" value="<?php echo  $_SESSION["user"]["city"]; ?>">
+                                <input type="text" class="form-control" id="inputCity" placeholder="City" name="city"
+                                    value="<?php echo  $_SESSION["user"]["city"]; ?>">
                             </div>
                             <div class="col-md-12">
                                 <select id="inputState" class="form-select" name="state">
                                     <?php if (!$_SESSION["user"]["userState"]) : ?>
-                                        <option selected value="">Select State</option>
+                                    <option selected value="">Select State</option>
                                     <?php endif; ?>
                                     <?php foreach ($statesArray as $s) : ?>
-                                        <option value="<?php echo $s; ?>" <?php if ($_SESSION["user"]["state"] === $s) echo "selected"; ?>><?php echo $s; ?>
-                                        </option>
+                                    <option value="<?php echo $s; ?>"
+                                        <?php if ($_SESSION["user"]["state"] === $s) echo "selected"; ?>>
+                                        <?php echo $s; ?>
+                                    </option>
                                     <?php endforeach; ?>
                                 </select>
                                 <?php if (isset($profileErrorArray) && in_array("state", $profileErrorArray)) :  ?>
-                                    <p class="mt-1 text-danger mb-0">Please select a valid state</p>
+                                <p class="mt-1 text-danger mb-0">Please select a valid state</p>
                                 <?php endif; ?>
                             </div>
 
-                            <div class="col-12 text-center"><button type="submit" class="btn offcanvas-save-profile rounded-pill mt-5 px-5" name="saveProfile">Save</button></div>
+                            <div class="col-12 text-center"><button type="submit"
+                                    class="btn offcanvas-save-profile rounded-pill mt-5 px-5"
+                                    name="saveProfile">Save</button></div>
                         </form>
                     </div>
                     <!-- End of Profile Tab -->
@@ -177,7 +187,8 @@ if (isset($_POST["submit"])) {
                             </form>
 
                             <form action="./controller/change_Profile_Pic.php" class="" method="POST">
-                                <button class="hidden btn btn-danger removePicBtn" type="submit" name="removeProfilePic">Remove Current Pic</button>
+                                <button class="hidden btn btn-danger removePicBtn" type="submit"
+                                    name="removeProfilePic">Remove Current Pic</button>
                             </form>
                         </div>
                     </div>
@@ -185,18 +196,23 @@ if (isset($_POST["submit"])) {
 
                     <!-- Privacy Tab -->
                     <div class="tab-pane fade" id="nav-privacy" role="tabpanel" aria-labelledby="nav-privacy-tab">
-                        <form action="./controller/change_Password.php" class="row g-3 justify-content-center" id="password-form" method="POST">
+                        <form action="./controller/change_Password.php" class="row g-3 justify-content-center"
+                            id="password-form" method="POST">
                             <div class="col-md-12">
-                                <input type="password" class="form-control" placeholder="Old Password" name="oldPassword">
+                                <input type="password" class="form-control" placeholder="Old Password"
+                                    name="oldPassword">
                             </div>
                             <div class="col-md-12">
-                                <input type="password" class="form-control" placeholder="New Password" name="newPassword">
+                                <input type="password" class="form-control" placeholder="New Password"
+                                    name="newPassword">
                             </div>
                             <div class="col-md-12">
-                                <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword">
+                                <input type="password" class="form-control" placeholder="Confirm Password"
+                                    name="confirmPassword">
                             </div>
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn offcanvas-save-profile rounded-pill mt-5 px-5" name="changePass">Change Password</button>
+                                <button type="submit" class="btn offcanvas-save-profile rounded-pill mt-5 px-5"
+                                    name="changePass">Change Password</button>
                             </div>
                         </form>
                     </div>
@@ -204,8 +220,7 @@ if (isset($_POST["submit"])) {
 
 
                     <!-- Order History Tab -->
-                    <div class="tab-pane fade"  id="nav-order" role="tabpanel"
-                        aria-labelledby="nav-order-tab">
+                    <div class="tab-pane fade" id="nav-order" role="tabpanel" aria-labelledby="nav-order-tab">
                         <div class="container review-container">
                             <!-- Container for each Order -->
                             <?php if (empty($orderId)) : ?>
@@ -244,16 +259,16 @@ if (isset($_POST["submit"])) {
                                                     <?php $rateEligibility = rateEligibility($item["orderItemId"], $connection);
                                                     if ($item["itemType"] == "product"):
                                                         if ($rateEligibility == 0):?>
-                                                        <button class="btn btn-warning" data-bs-toggle="offcanvas"
-                                                            href="#reviewCanvas" id="<?php echo $item["orderItemId"]?>"
-                                                            onClick="clickForId(this.id)" name="toRate" role="button"
-                                                            aria-controls="reviewCanvasExample">Rate</button>
-                                                        <?php else: ?>
-                                                        <button class="btn btn-light border" role="button"
-                                                            aria-disabled="true" disabled>Rated</button>
-                                                        <?php endif;?>
+                                                    <button class="btn btn-warning" data-bs-toggle="offcanvas"
+                                                        href="#reviewCanvas" id="<?php echo $item["orderItemId"]?>"
+                                                        onClick="clickForId(this.id)" name="toRate" role="button"
+                                                        aria-controls="reviewCanvasExample">Rate</button>
+                                                    <?php else: ?>
+                                                    <button class="btn btn-light border" role="button"
+                                                        aria-disabled="true" disabled>Rated</button>
                                                     <?php endif;?>
-                                                
+                                                    <?php endif;?>
+
                                                     <!-- End of Rate Button -->
                                                 </div>
                                             </div>
@@ -286,4 +301,5 @@ if (isset($_POST["submit"])) {
 <script src="./js/rating.js"></script>
 <?php require_once "./components/footer.php"; ?>
 </body>
+
 </html>
