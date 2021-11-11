@@ -9,7 +9,6 @@
 $userid = $_SESSION['user']['userID'] ?? null;
 if (isset($userid)) {
     $cartid = getCartId($userid, $connection);
-    $subtotal = getCartTotal($cartid, $connection);
     $cartitems = getCartItems($cartid, $connection);
     $cartSubtotal = getCartTotal($cartid, $connection);
 }
