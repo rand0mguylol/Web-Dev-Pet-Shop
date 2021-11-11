@@ -122,7 +122,7 @@ else {
                   <td><?php echo $item["name"]?></td>
                   <td><a href="./edit_item.php?id=<?php echo $item["id"];?>&type=<?php echo $_GET["itemType"]?>" class = "text-decoration-none">Edit</a></td>
                   <?php if($item["status"] === 1): ?>
-                  <td><button type="button" class="btn btn-danger deleteItemBtn" data-bs-toggle="modal" data-bs-target="#deleteItemModal" data-type = "<?php echo $_GET["itemType"];?>" data-id = "<?php echo $item["id"];?>"  data-name = "<?php echo $item["name"];?>">Remove</button></td>
+                  <td><button type="button" class="btn btn-danger deleteItemBtn" data-bs-toggle="modal" data-bs-target="#deleteItemModal" data-type = "<?php echo $_GET["itemType"];?>" data-id = "<?php echo $item["id"];?>"  data-name = "<?php echo $item["name"];?>">Delete</button></td>
                   <?php else: ?>
                   <td><button type="button" class="btn btn-danger addItemBtn" data-bs-toggle="modal" data-bs-target="#addItemModal" data-type = "<?php echo $_GET["itemType"];?>" data-id = "<?php echo $item["id"];?>"  data-name = "<?php echo $item["name"];?>">Add</button></td>
                   <?php endif; ?>
