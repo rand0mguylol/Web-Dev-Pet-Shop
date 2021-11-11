@@ -31,6 +31,9 @@
 </div>
 
 <?php require_once "./components/footer.php"; ?>
+
+<?php require_once "./script/general_scripts.php"; ?>
+<script src="./js/aos.js"></script>
 </body>
 
 </html>
