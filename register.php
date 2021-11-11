@@ -18,19 +18,22 @@ $title = "Register Account";
 
         <div class="col-md-12">
             <label for="inputFirstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" name="firstName" value="<?php echo isset($_POST['firstName']) && !in_array("firstName", $errorArray) ? htmlspecialchars($firstName) : ''; ?>">
+            <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" 
+            name="firstName" value="">
         </div>
 
         <div class="col-md-12">
             <label for="inputLastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" name="lastName" value="<?php echo isset($_POST['lastName']) && !in_array("lastName", $errorArray) ? htmlspecialchars($lastName) : ''; ?>">
+            <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" 
+            name="lastName" value="">
         </div>
 
         <div class="col-md-12">
             <label for="inputTelephone" class="form-label">Mobile Number*</label>
             <div class="input-group">
                 <div class="input-group-text">+60</div>
-                <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" name="mobileNumber" value="<?php echo isset($_POST['mobileNumber']) && !in_array("mobileNumber", $errorArray) ? htmlspecialchars($mobileNumber) : ''; ?>" required>
+                <input type="tel" class="form-control" id="inputTelephone" placeholder="123456789" 
+                name="mobileNumber" value="" required>
                 <?php if (in_array("mobileNumber", $errorArray)) :  ?>
                     <p class="mt-1 text-danger mb-0 ps-3 d-block">Please enter a valid mobile number</p>
                 <?php endif; ?>
@@ -39,7 +42,8 @@ $title = "Register Account";
 
         <div class="col-md-12">
             <label for="registerEmail" class="form-label">Email*</label>
-            <input type="email" class="form-control" id="registerEmail" placeholder="Email Address" name="email" value="<?php echo isset($_POST['email']) && !in_array("email", $errorArray) ? htmlspecialchars($email) : '' ?>" required>
+            <input type="email" class="form-control" id="registerEmail" placeholder="Email Address" 
+            name="email" value="" required>
             <?php if (in_array("email", $errorArray)) :  ?>
                 <p class="mt-1 text-danger mb-0">Please enter a valid email</p>
             <?php endif; ?>
@@ -51,7 +55,12 @@ $title = "Register Account";
         <div class="col-md-12">
             <label for="registerPassword" class="form-label">Password*</label>
             <input type="password" class="form-control" id="registerPassword" placeholder="Password" name="password" required>
-            <div class="<?php if (in_array("password", $errorArray))  echo "border border-danger ps-3 rounded mt-3"; ?>"><small class="fs-6  fst-italic fw-lighter <?php if (in_array("password", $errorArray))  echo "text-danger"; ?>">Length must be between 8 to 16 characters, including one digit, one uppercase, one lowecase character and may contain the following !@#$%& </small></div>
+            <div class="<?php if (in_array("password", $errorArray))  echo "border border-danger ps-3 rounded mt-3"; ?>">
+                <small class="fs-6  fst-italic fw-lighter <?php if (in_array("password", $errorArray))  echo "text-danger"; ?>">
+                Length must be between 8 to 16 characters, including one digit, 
+                one uppercase, one lowecase character and may contain the following !@#$%& 
+                </small>
+            </div>
         </div>
 
         <div class="col-md-12">

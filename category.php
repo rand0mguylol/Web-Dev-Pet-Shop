@@ -118,11 +118,11 @@ if(isset($_GET["clearFilter"])){
             </div>
             <div class="search-container">
                 <form action="" class="search-form d-flex d-inline justify-content-between" method="GET">
-                    <input type="text" class="form-control search-bar d-inline" id="inputFirstName"
+                    <input type="text" class="form-control search-bar d-inline " 
                         placeholder="Search for Products" name="q" value="<?php if (isset($q)) echo $q ?>">
                         <input type="hidden" value="<?php echo $sortBy; ?>" name="sortBy">
                     <input type="hidden" value="<?php echo $category; ?>" name="category">
-                    <button class="btn search text-end"><img src="./svg/search (1).svg" alt=""></button>
+                    <button class="btn  text-end "><img src="./svg/search (1).svg" alt="" class = "search"></button>
                 </form>
             </div>
             <div class="filter-container">
