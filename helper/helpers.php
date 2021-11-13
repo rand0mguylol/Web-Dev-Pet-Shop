@@ -677,7 +677,7 @@ function createOrder($userid, $paymentMethod, $type = null, $deliveryMethod, $to
 function reduceItemQuantity($id, $category, $quantity, $connection)
 {
     if ($category === "pet") {
-        $stmt = $connection->prepare("DELETE FROM pets WHERE petId = ?");
+        $stmt = $connection->prepare("UPDATE pets SET status = 0 WHERE petId = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
     } else {
@@ -836,9 +836,9 @@ function getOrderItems($orderId, $connection)
             "image" => $image
         ];
         array_push($orderItemArray, $orderitem);
+        $stmt2->close();
     }
     $stmt->close();
-    $stmt2->close();
     return $orderItemArray;
 }
 
