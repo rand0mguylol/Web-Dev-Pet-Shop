@@ -78,22 +78,22 @@ else {
           <?php if ($_GET["type"] === "pet"): ?>
               <div class="col-md-12">
                   <label for="inputFirstName" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="inputFirstName" placeholder="Name" name="name" value = "<?php echo $itemArray["name"];?>">
+                  <input type="text" class="form-control" id="inputFirstName" placeholder="Name" name="name" value = "<?php echo $itemArray["name"];?>" required>
               </div>
               <div class="col-md-12">
                   <label for="inputLastName" class="form-label">Price</label>
-                  <input type="number" class="form-control" id="inputLastName" placeholder="Price" name="price" value = "<?php echo $itemArray["price"];?>">
+                  <input type="number" class="form-control" id="inputLastName" placeholder="Price" name="price" value = "<?php echo $itemArray["price"];?>" required>
               </div>
               <div class="col-md-6">
                   <label for="inputTelephone" class="form-label">Status</label>
-                  <select class="form-select" aria-label="Default select example" name = "status">
+                  <select class="form-select" aria-label="Default select example" name = "status" required>
                     <option value = "1" <?php if ($itemArray["status"] === 1)  echo "selected";?> >Available</option>
                     <option value="0" <?php if ($itemArray["status"] === 0)  echo "selected";?> >Not Available</option>
                   </select>
               </div>
               <div class="col-md-6">
                   <label for="inputEmail" class="form-label">Gender</label>
-                  <select class="form-select" aria-label="Default select example" name = "gender">
+                  <select class="form-select" aria-label="Default select example" name = "gender" required>>
                     <option value = "Male" <?php if (strtolower($itemArray["gender"] === "male"))  echo "selected";?> >Male</option>
                     <option value="Female" <?php if (strtolower($itemArray["gender"] === "female"))  echo "selected";?>>Female</option>
                   </select>
@@ -112,25 +112,25 @@ else {
               </div>
               <div class="col-md-12">
                   <label for="inputEmail" class="form-label">Pet Condition</label>
-                  <input type="text" class="form-control" id="inputEmail" placeholder="Pet Condition" name="petCondition"  value = "<?php echo $itemArray["petCondition"];?>"required>
+                  <input type="text" class="form-control" id="inputEmail" placeholder="Pet Condition" name="petCondition"  value = "<?php echo $itemArray["petCondition"];?>" required>
               </div>
               <div class="col-md-6">
                   <label for="inputEmail" class="form-label">Vaccinated</label>
-                  <select class="form-select" aria-label="Default select example" name = "vaccinated">
+                  <select class="form-select" aria-label="Default select example" name = "vaccinated" required>
                     <option value = "Yes" <?php if (strtolower($itemArray["vaccinated"] === "yes"))  echo "selected";?>>Yes</option>
                     <option value="No" <?php if (strtolower($itemArray["vaccinated"] === "no"))  echo "selected";?>>No</option>
                   </select>
               </div>
               <div class="col-md-6">
                   <label for="inputEmail" class="form-label">Dewormed</label>
-                  <select class="form-select" aria-label="Default select example" name = "dewormed">
+                  <select class="form-select" aria-label="Default select example" name = "dewormed"  required>
                     <option value = "Yes"  <?php if (strtolower($itemArray["dewormed"] === "yes"))  echo "selected";?>>Yes</option>
                     <option value="No"  <?php if (strtolower($itemArray["dewormed"] === "no"))  echo "selected";?>>No</option>
                   </select>
             </div>
             <div class="col-md-6">
               <label for="" class="form-label">Category</label>
-              <select class="form-select" aria-label="Default select example" name = "category">
+              <select class="form-select" aria-label="Default select example" name = "category"  required>
                 <?php for($i = 1; $i <=count(PET_ARRAY); $i++): ?>
                 <option value = "<?php echo $i;?>" <?php if ($itemArray["petCatId"] === $i) echo "selected";?>><?php echo PET_ARRAY[$i-1];?></option>
                 <?php endfor; ?>          
@@ -139,26 +139,26 @@ else {
           <?php else: ?>
               <div class="col-md-12">
                   <label for="inputFirstName" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="inputFirstName" placeholder="Name" name="name" value = "<?php echo $itemArray["name"];?>">
+                  <input type="text" class="form-control" id="inputFirstName" placeholder="Name" name="name" value = "<?php echo $itemArray["name"];?>"  required>
               </div>
               <div class="col-md-12">
                   <label for="inputLastName" class="form-label">Price</label>
-                  <input type="number" step = ".01" class="form-control" id="inputLastName" placeholder="Price" name="price" value = "<?php echo $itemArray["price"];?>">
+                  <input type="number" step = ".01" class="form-control" id="inputLastName" placeholder="Price" name="price" value = "<?php echo $itemArray["price"];?>"  required>
               </div>
               <div class="col-md-12">
                   <label for="inputLastName" class="form-label">Quantity</label>
-                  <input type="number" class="form-control" id="inputLastName" placeholder="Quantity" name="quantity" value = "<?php echo $itemArray["quantity"];?>">
+                  <input type="number" class="form-control" id="inputLastName" placeholder="Quantity" name="quantity" value = "<?php echo $itemArray["quantity"];?>"  required>
               </div>
               <div class="col-md-6">
                   <label for="inputTelephone" class="form-label">Status</label>
-                  <select class="form-select" aria-label="Default select example" name = "status">
+                  <select class="form-select" aria-label="Default select example" name = "status"  required>
                     <option value = "1" <?php if ($itemArray["status"] === 1)  echo "selected";?> >Available</option>
                     <option value="0" <?php if ($itemArray["status"] === 0)  echo "selected";?> >Not Available</option>
                   </select>
               </div>
               <div class="col-md-12">
                   <label for="inputEmail" class="form-label">Description</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="25" name = "description"><?php echo  htmlspecialchars(str_replace('\n', "\n", $itemArray["description"]))?></textarea>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="25" name = "description"  required><?php echo  htmlspecialchars(str_replace('\n', "\n", $itemArray["description"]))?></textarea>
               </div>
               <div class="col-md-12">
                   <label for="inputEmail" class="form-label">Brand</label>
@@ -178,7 +178,7 @@ else {
               </div>
               <div class="col-md-6">
                 <label for="" class="form-label">Category</label>
-                <select class="form-select" aria-label="Default select example" name = "category">
+                <select class="form-select" aria-label="Default select example" name = "category"  required>
                 <?php for($i = 1; $i <=count(PRODUCT_ARRAY); $i++): ?>
                 <option value = "<?php echo $i;?>" <?php if ($itemArray["productCatId"] === $i) echo "selected";?>><?php echo PRODUCT_ARRAY[$i-1];?></option>
                 <?php endfor; ?>        

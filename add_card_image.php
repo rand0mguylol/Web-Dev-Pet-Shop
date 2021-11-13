@@ -32,7 +32,7 @@ $name = $_GET["name"];
     <div class="mt-5 text-center">
         <form action="./controller/add_card_image_controller.php?id=<?php echo $_GET["id"];?>&category=<?php echo $_GET["category"];?>&type=<?php echo $_GET["type"];?>&name=<?php echo $_GET["name"];?>" class="imageForm" method="POST">
             <input type="hidden" name="addCardImage" value="">
-            <input type="file" class="fileInput" accept="image/png, image/jpg, image/jpeg">
+            <input type="file" class="fileInput" accept="image/png, image/jpg, image/jpeg" required>
             <button type="reset" class="btn btn-dark fileInputResetBtn">Reset</button>
             <button class="hidden uploadPicBtn btn" type="button">Upload</button>
         </form>

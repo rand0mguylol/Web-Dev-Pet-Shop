@@ -85,7 +85,7 @@ if(isset($_SESSION["addPetError"])){
     </div>
     <div class="col-md-6">
       <label for="" class="form-label">Vaccinated</label>
-      <select class="form-select" aria-label="Default select example" name = "vaccinated">
+      <select class="form-select" aria-label="Default select example" name = "vaccinated" required>
         <option value = "Yes" selected>Yes</option>
         <option value="No">No</option>
       </select>

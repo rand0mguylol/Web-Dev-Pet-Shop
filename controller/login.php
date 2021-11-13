@@ -45,7 +45,7 @@ if (isset($_POST["signin"]) && isset($_GET["page"])) {
                 "postcode" => $row["postcode"],
                 "userRole" => $row["userRole"]
             );
-            $_SESSION["alertMessage"][] = "Login Successful";
+            $_SESSION["alertMessage"][] = "Signin Successful";
         } else {
             $_SESSION["alertMessage"][] = "Incorrect Login Details";
         }

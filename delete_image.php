@@ -38,7 +38,7 @@ while($row= $result->fetch_assoc()){
     <input type="hidden" name = "imageType" value = "<?php echo $imageType;?>">
       <input type="hidden" name = "type" value = "<?php echo $type;?>">
       <input type="hidden" name = "imagePath" value ="" id = "imagePathInput">
-      <select class="form-select d-inline-block w-50" aria-label="Default select example" name = "imageid" id = "imageSelect"  onchange="getImagePath(this)">
+      <select class="form-select d-inline-block w-50" aria-label="Default select example" name = "imageid" id = "imageSelect"  onchange="getImagePath(this)" required>
         <?php foreach ($imageArray  as $image): ?>
         <option value="<?php echo $image["imageid"];?>" data-imagepath = "<?php echo $image["imagePath"];?>"><?php echo $image["imageName"];?></option>
         <?php endforeach; ?>
