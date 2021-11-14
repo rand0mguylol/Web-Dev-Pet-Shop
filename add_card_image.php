@@ -120,7 +120,7 @@ uploadPicBtn.addEventListener("click", function() {
     } else {
         const finalImage = cropImage.toDataURL();
         const inputWithImageData = document.createElement("input")
-        inputWithImageData.type = "text"
+        inputWithImageData.type = "hidden"
         inputWithImageData.name = "cardImage"
         inputWithImageData.setAttribute("value", finalImage)
         imageForm.appendChild(inputWithImageData)

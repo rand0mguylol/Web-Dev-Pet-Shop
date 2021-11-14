@@ -2,7 +2,7 @@
 $dbHost = "localhost";
 $dbUsername = "root";
 $dbPassword = "";
-$dbName = "wdtpetshop";
+$dbName = "pettertogether";
 
 $connection = mysqli_connect($dbHost, $dbUsername, $dbPassword, $dbName);
 if (!$connection) {

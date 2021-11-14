@@ -11,8 +11,9 @@ if (isset($_GET["category"], $_GET["id"])) {
     $id = filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT);
     $id = (int) $id;
     $itemInfo = getItemInfo($id, $categoryClean, $connection);
+    $checkGallery = getImage($id,  $categoryClean, "Card", false, $connection); 
 
-    if(!$itemInfo){
+    if(!$itemInfo || !$checkGallery){
         header("Location: index.php");
         exit();
     } 

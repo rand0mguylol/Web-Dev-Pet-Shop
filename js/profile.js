@@ -86,7 +86,7 @@ const image = document.querySelector("#cropBox")
             // An input element with type text is created to be appended to the form with the value being the dataURI
             const finalImage = cropImage.toDataURL();
             const inputWithImageData = document.createElement("input")
-            inputWithImageData.type = "text"
+            inputWithImageData.type = "hidden"
             inputWithImageData.name = "newProfilePic"
             inputWithImageData.setAttribute("value", finalImage)
             imageForm.appendChild(inputWithImageData)
