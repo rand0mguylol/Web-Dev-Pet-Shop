@@ -1,12 +1,12 @@
 <?php
-
+$title = "Admin - Delete Image";
 session_start();
 require_once "./helper/helpers.php";
 require_once "./connection/db.php";
 
 // var_dump($_POST);
 if (!isset($_SESSION["user"]["userRole"], $_GET["type"], $_GET["id"]) || $_SESSION["user"]["userRole"] !== "STAFF") {
-  header("Location: ../index.php");
+  header("Location: ./index.php");
   exit();
 }
 $imageArray = [];

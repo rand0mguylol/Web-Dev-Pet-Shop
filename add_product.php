@@ -1,6 +1,6 @@
 <?php 
 session_start();
-$title = "Admin Panel - Edit Product";
+$title = "Admin Panel - Add Product";
 require_once "./helper/helpers.php";
 require_once "./connection/db.php";
 

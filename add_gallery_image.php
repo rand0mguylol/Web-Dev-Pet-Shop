@@ -1,5 +1,5 @@
 <?php session_start(); 
-$title = "Admin Panel";
+$title = "Admin Panel - Add Gallery Image";
 
 require_once "./helper/helpers.php";
 require_once "./connection/db.php";
