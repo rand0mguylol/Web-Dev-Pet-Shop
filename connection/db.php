@@ -1,8 +1,8 @@
 <?php
 $dbHost = "localhost";
-$dbUsername = "root";
+$dbUsername = "";
 $dbPassword = "";
-$dbName = "pettertogether";
+$dbName = ""; // The name of your database
 
 $connection = mysqli_connect($dbHost, $dbUsername, $dbPassword, $dbName);
 if (!$connection) {

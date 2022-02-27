@@ -621,6 +621,8 @@ function changePassword($oldpass, $newpass, $confimpass, $id, $connection)
 function validateImage($image)
 {
     $getImageString = getimagesizefromstring($image);
+
+
     // Using this method to check if content is image
     if (!$getImageString) {
         return false;

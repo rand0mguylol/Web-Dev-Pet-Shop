@@ -10,10 +10,12 @@ if (isset($_SESSION["user"]["userID"], $_POST["uploadPic"])) {
     require_once "../connection/db.php";
     //Get submitted image file from user
     $dataURI = $_POST["newProfilePic"];
+
     $image = file_get_contents($dataURI);
-    //
+
+    
     $imageMime = validateImage($image);
-    //
+    //exit();
     if (!$imageMime) {
         $_SESSION["alertMessage"][] = "Invalid Image Type";
         header("Location: ../profile.php");

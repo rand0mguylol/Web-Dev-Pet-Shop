@@ -20,7 +20,7 @@
                 <h6>Contact Us</h6>
                 <div>
                     <ul class="social p-0">
-                        <li><img src="./svg/telephone-fill.svg" alt="Phone Logo"> 012-367-2831</li>
+                        <li><img src="./svg/telephone-fill.svg" alt="Phone Logo"> 012-345-6789</li>
                         <li><img src="./svg/envelope-fill.svg" alt="Email Logo"> pettertogether@gmail.com</li>
                     </ul>
                 </div>
